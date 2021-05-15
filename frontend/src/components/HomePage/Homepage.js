@@ -6,6 +6,29 @@ import {showCartInfo} from '../../redux/actions/index'
 import RightCartInfo from '../RightCartInfo/RightCartInfo'
 import './Homepage.css'
 
+export function addToCart(e,products,dispatch,props) {
+    let cart = getCartInfo()
+    const item = e.currentTarget.getAttribute("item")
+    let product = products[item]
+
+    if (cart) {
+        if (product.id in cart) {
+            if (product.stock !== cart[product.id].quantity) {
+                cart[product.id].quantity++;
+                localStorage.setItem("cart", JSON.stringify(cart))
+            }
+        } else {
+            product.quantity = 1
+            cart[product.id] = product
+            localStorage.setItem("cart", JSON.stringify(cart))
+        }
+    } else {
+        product.quantity = 1
+        localStorage.setItem("cart", JSON.stringify({ [product.id]: product }))
+    }
+    props.updateCartInfo()
+    dispatch(showCartInfo())
+}
 
 export default function HomePage(props) {
     const [products, setProducts] = useState()
@@ -16,28 +39,9 @@ export default function HomePage(props) {
             setProducts(data.products)
         })
     }
-    function addToCart(e) {
-        let cart = getCartInfo()
-        const item = e.currentTarget.getAttribute("item")
-        let product = products[item]
 
-        if (cart) {
-            if (product.id in cart) {
-                if (product.stock !== cart[product.id].quantity) {
-                    cart[product.id].quantity++;
-                    localStorage.setItem("cart", JSON.stringify(cart))
-                }
-            } else {
-                product.quantity = 1
-                cart[product.id] = product
-                localStorage.setItem("cart", JSON.stringify(cart))
-            }
-        } else {
-            product.quantity = 1
-            localStorage.setItem("cart", JSON.stringify({ [product.id]: product }))
-        }
-        props.updateCartInfo()
-        dispatch(showCartInfo())
+    function AddItem(e){
+        addToCart(e,products,dispatch,props);
     }
 
     function closeOverlay(e) {
@@ -58,7 +62,7 @@ export default function HomePage(props) {
                         <div className="product-info-container">
                             <div className="product-info-add-container">
                                 <h1 className="product-name">{product.name}</h1>
-                                <button item={i} className="nav-buttons product-cart" onClick={addToCart}>Cart</button>
+                                <button item={i} className="nav-buttons product-cart" onClick={AddItem}>Cart</button>
                             </div>
 
                             <span className="product-price">${product.price}</span>

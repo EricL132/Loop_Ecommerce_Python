@@ -55,19 +55,24 @@ export default function RightCartInfo(props) {
 
     }
     function changeQuantity(e){
-        console.log(props)
-        if(e.code==='Enter' || e.type==='blur'){
+        if(e.code==="Enter"){
+            e.target.blur()
+        }
+        if(e.type==='blur'){
             setErrorMessage()
             const itemID = e.target.parentNode.getAttribute("item")
             const newAmount =  parseInt(e.target.value)
             if (newAmount <= cartInfo[itemID].stock) {
                 cartInfo[itemID].quantity = newAmount
                 localStorage.setItem("cart", JSON.stringify(cartInfo))
+                setCartInfo({ ...cartInfo })
                 props.updateCartInfo()
     
             }else{
+                e.target.value = cartInfo[itemID].stock
                 cartInfo[itemID].quantity = cartInfo[itemID].stock
                 localStorage.setItem("cart", JSON.stringify(cartInfo))
+                setCartInfo({ ...cartInfo })
                 props.updateCartInfo()
                 setErrorMessage("Max quantity reached")
             }

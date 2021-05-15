@@ -12,6 +12,9 @@ class Product(models.Model):
     image=models.CharField(max_length=200)
     price=models.FloatField()
     stock=models.IntegerField()
+    itemCategory=models.CharField(max_length=100,default="Other")
+    itemType=models.CharField(max_length=100,default="Other")
+    size=models.FloatField(default=0)
     def __str__(self):
         return self.name
 

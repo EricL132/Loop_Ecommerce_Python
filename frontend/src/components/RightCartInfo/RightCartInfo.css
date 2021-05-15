@@ -13,7 +13,7 @@
 }
 
 #cartInfo-overlay #left-container {
-    width: 240px;
+    width: 340px;
     height: inherit;
     background-color: white;
     float: right;
@@ -62,14 +62,16 @@
 
 .cartInfo-product-container {
     height: 80px;
+    margin-top: 5px;
     position: relative;
 }
 
 .cartInfo-product-container img {
     margin-left: .5rem;
-    width: 50px;
-    height: 50px;
+    width: 60px;
+    height: 60px;
     float: left;
+    cursor: pointer;
 }
 
 .middle-row {
@@ -79,10 +81,10 @@
 }
 
 .cartInfo-info-container {
-    font-size: .5rem;
+    font-size: .7rem;
     float: right;
     margin-left: 5px;
-    width: 140px;
+    width: 200px;
 }
 
 .cartInfo-info-container .product-name {
@@ -93,7 +95,7 @@
     font-size: .7rem;
     bottom: 0;
     position: absolute;
-    width: 140px;
+    width: 85%;
 }
 
 .product-row button {
@@ -106,8 +108,7 @@
 }
 
 .product-quantity {
-    width: 20px;
-    max-width: 30px;
+    width: 30px;
     border: none;
     outline: none;
     text-align: center;
@@ -145,7 +146,7 @@
 }
 
 #shipping-text {
-    font-size: .6rem;
+    font-size: .8rem;
     width: 100%;
     margin-top: .5rem;
     text-align: center;
@@ -178,7 +179,7 @@
 
 .error-span{
     position: absolute;
-    font-size: .5rem;
+    font-size: .7rem;
     width: 100%;
     text-align: center;
     color: rgb(204, 102, 255);

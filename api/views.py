@@ -13,3 +13,8 @@ class GetProducts(APIView):
     def get(self,request,format=None):
         products = Product.objects
         return Response({"products":list(products.values())},status=status.HTTP_200_OK)
+
+class GetMensSneakers(APIView):
+    def get(self,request,format=None):
+        products = Product.objects.filter(itemCategory="mens",itemType="sneakers")
+        return Response({"products":list(products.values())},status=status.HTTP_200_OK)
