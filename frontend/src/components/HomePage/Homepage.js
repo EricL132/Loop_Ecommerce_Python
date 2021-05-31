@@ -57,7 +57,7 @@ export default function HomePage(props) {
         <div id="all-product-container">
             {products ?
                 products.map((product, i) => {
-                    return <div key={i} className="product-container">
+                    return <div key={i} className="home-product-container">
                         <img className="product-image" src={product.image}></img>
                         <div className="product-info-container">
                             <div className="product-info-add-container">

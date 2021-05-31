@@ -1,12 +1,17 @@
 body, html, #root {
   margin: 0;
   background-color: rgb(230, 230, 230);
+
 }
 
 * {
   box-sizing: border-box;
 }
 
+html{
+  overflow-y:overlay;
+
+}
 .main {
   margin-top: 60px;
 }

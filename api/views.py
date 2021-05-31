@@ -14,7 +14,21 @@ class GetProducts(APIView):
         products = Product.objects
         return Response({"products":list(products.values())},status=status.HTTP_200_OK)
 
-class GetMensSneakers(APIView):
+class GetMensProducts(APIView):
     def get(self,request,format=None):
-        products = Product.objects.filter(itemCategory="mens",itemType="sneakers")
-        return Response({"products":list(products.values())},status=status.HTTP_200_OK)
+        products = Product.objects.filter(itemCategory="mens",itemType=request.GET.get('type'))
+        productsList = list(products.values())
+
+        newList = []
+        for k in productsList:
+            for m in newList:
+                print(k.get("productID"))
+                if k.get("productID") != m.get("productID") or k.get("productID")==None:
+                    newList.append(k)
+                    break
+                else:
+                    m["size"] = m.get("size")+","+k.get("size")
+                    break
+            if len(newList)==0:
+                newList.append(k)
+        return Response({"products":newList},status=status.HTTP_200_OK)

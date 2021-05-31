@@ -33,7 +33,7 @@ export default function Navbar(props) {
     }
 
     function goToPage(){
-        history.push("/pages/men")
+        history.push("/pages/men/sneakers")
     }
     function goToHome(){
         history.push("/")

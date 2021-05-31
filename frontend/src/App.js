@@ -4,7 +4,7 @@ import Navbar from './components/Navbar/Navbar'
 import Home from './components/HomePage/Homepage'
 import { useDispatch } from 'react-redux'
 import { updateCart, bagCount } from './redux/actions/index'
-import SpecificPage from './components/SpecificPage/SpecificPage'
+import MensPage from './components/mensPage/mensPage'
 function App(props) {
   const dispatch = useDispatch()
 
@@ -26,7 +26,8 @@ function App(props) {
       <Navbar updateCartInfo={updateCartInfo}></Navbar>
       <Switch>
         <Route path="/" exact render={() => (<Home updateCartInfo={updateCartInfo}></Home>)}></Route>
-        <Route path="/pages/men" component={SpecificPage}></Route>
+        <Route path="/pages/men/" component={MensPage}></Route>
+
       </Switch>
     </BrowserRouter>
   );
