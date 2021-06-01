@@ -1,6 +1,17 @@
 from django.db import models
 from django.contrib.auth.models import User
-# Create your models here.
+from django.contrib.postgres.fields import ArrayField
+from django.utils.crypto import get_random_string
+def randomProductID():
+    while True:
+        productID= get_random_string(8)
+        productExistCheck = Product.objects.filter(productID=productID)
+        if len(productExistCheck)==0:
+            break
+    return productID
+
+
+
 class Customer(models.Model):
     user = models.OneToOneField(User,on_delete=models.CASCADE,blank=True,null=True)
     name = models.CharField(max_length=200)
@@ -10,12 +21,13 @@ class Customer(models.Model):
 class Product(models.Model):
     name=models.CharField(max_length=200)
     image=models.CharField(max_length=200)
+    images=ArrayField(models.CharField(max_length=200),blank=True,null=True,default=list)
     price=models.FloatField()
     stock=models.IntegerField()
     itemCategory=models.CharField(max_length=100,default="Other")
     itemType=models.CharField(max_length=100,default="Other")
     size=models.CharField(max_length=50,default=0,blank=True,null=True)
-    productID=models.IntegerField(null=True,blank=True)
+    productID=models.CharField(max_length=20,default=randomProductID)
     def __str__(self):
         return self.name
 
