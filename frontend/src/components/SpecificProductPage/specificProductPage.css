@@ -44,7 +44,7 @@
 .all-photos-container {
     width: 600px;
     height: 125px;
-    background-color: black;
+    background-color: transparent;
     position: absolute;
     bottom: 0;
 

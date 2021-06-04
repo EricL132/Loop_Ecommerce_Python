@@ -33,7 +33,6 @@ export default function ProductsPage(props) {
                 })
                 
             }
-            console.log(data.products)
             setProductsToShow(data.products)
             changeImageSize(currentType[currentType.length - 1])
         })
@@ -41,7 +40,6 @@ export default function ProductsPage(props) {
     }
     useEffect(() => {
         getProducts()
-        console.log(props)
     }, [])
     function changeImageSize(currentType) {
         if (currentType === "sunglasses" || currentType === "socks") {
@@ -60,10 +58,7 @@ export default function ProductsPage(props) {
 
         history.push(`/pages/${props.typeOfPage}/${e.target.getAttribute("name")}`)
 
-        fetch(`/api/${props.typeOfPage}?type=${e.target.getAttribute("name")}`).then((res) => res.json()).then((data) => {
-            setProductsToShow(data.products)
-            changeImageSize(e.target.getAttribute("name"))
-        })
+        getProducts()
 
     }
 
@@ -90,6 +85,12 @@ export default function ProductsPage(props) {
           
             
         }
+    }
+
+
+    function loadProductPage(e){
+        const product = productsToShow[e.target.getAttribute("item")][0].productID
+        history.push(`/pages/product/${product}`)
     }
     return (
         <>
@@ -143,7 +144,7 @@ export default function ProductsPage(props) {
                         {productsToShow ?
                             productsToShow.map((product, i) => {
                                 return <div key={i} className="product-container">
-                                    <img className="product-image" src={product[0].image}></img>
+                                    <img item={i} className="product-image" src={product[0].image} onClick={loadProductPage}></img>
                                     <div className="product-info-container">
                                         <div className="product-info-add-container">
                                             <h1 className="product-name">{product[0].name}</h1>
@@ -160,9 +161,9 @@ export default function ProductsPage(props) {
                                                        <label className="product-size-label">Size:</label>
 
                                                         {product.map((np,i)=>{
-                                                            if(i===0) return <span className="product-size product-size-selected" item={np.id} style={{marginLeft:"3px"}} onClick={changeSelectedSize}>{np.size}</span>
-                                                            return <><span className="product-size" style={{marginLeft:"3px"}} item={np.id} onClick={changeSelectedSize}>{np.size}</span>
-                                                            </>
+                                                            if(i===0) return <span key={i} className="product-size product-size-selected" item={np.id} style={{marginLeft:"3px"}} onClick={changeSelectedSize}>{np.size}</span>
+                                                            return <span key={i} className="product-size" style={{marginLeft:"3px"}} item={np.id} onClick={changeSelectedSize}>{np.size}</span>
+                                                           
                                                         })}
                                                         </>
 

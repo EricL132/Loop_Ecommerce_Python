@@ -15,14 +15,19 @@ export default function addToCart(e, products, dispatch, id) {
     if (products[item].length === 1) {
         product = products[item]
     } else {
-        product = products[item].filter((item) => {
-            return item.id == id
-        })
+        if (Array.isArray(products[item])) {
+            product = products[item].filter((item) => {
+                return item.id == id
+            })
+        }else{
+            product=products
+        }
+
     }
     product = product[0]
 
     if (cart) {
-        for (var i=0;i<Object.keys(cart).length;i++) {
+        for (var i = 0; i < Object.keys(cart).length; i++) {
             if (cart[i].id === product.id) {
                 console.log('vcxvcx')
                 if (product.stock !== cart[i].quantity) {
@@ -31,14 +36,14 @@ export default function addToCart(e, products, dispatch, id) {
                 }
                 break;
             }
-            if(i===Object.keys(cart).length-1){
+            if (i === Object.keys(cart).length - 1) {
                 product.quantity = 1
-                cart[i+1] = product
+                cart[i + 1] = product
                 localStorage.setItem("cart", JSON.stringify(cart))
                 break;
             }
         }
-       
+
 
     } else {
         product.quantity = 1

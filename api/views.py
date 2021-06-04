@@ -18,26 +18,22 @@ class GetProducts(APIView):
 class GetMensProducts(APIView):
     def get(self,request,format=None):
         products = Product.objects.filter(itemCategory="mens",itemType=request.GET.get('type'))
-        productsList = list(products.values())
-        
-        newList = []
-        for k in productsList:
-            for m in newList:
-                if k.get("productID") != m.get("productID") or k.get("productID")==None:
-                    newList.append(k)
-                    break
-                else:
-                    m["size"] = m.get("size")+","+k.get("size")
-                    break
-            if len(newList)==0:
-                newList.append(k)
-        print(newList)
-        return Response({"products":newList},status=status.HTTP_200_OK)
+        return Response({"products":list(products.values())},status=status.HTTP_200_OK)
 
 class GetProduct(APIView):
     def get(self,request,format=None):
         product = Product.objects.filter(productID=request.GET.get("productid"))
-        return Response(list(product.values()))
+        val = list(product.values())
+        for i in val:
+            if i.get("images")!=None:
+                newlist = ",".join(i.get("images")).split("https")
+                newlist.remove("")
+                for j in range(len(newlist)):
+                    if newlist[j][len(newlist[j])-1] == ",":
+                        newlist[j] = newlist[j][0 : len(newlist[j])-1]
+                    newlist[j] = "https"+newlist[j]
+                i["images"] = newlist
+        return Response(val)
 
 class PopulateOldWithProductID(APIView):
     productExistCheck = Product.objects.filter()
