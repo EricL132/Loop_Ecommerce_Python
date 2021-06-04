@@ -1,28 +1,48 @@
-import {showCartInfo} from '../../redux/actions/index'
+import { showCartInfo } from '../../redux/actions/index'
 import updateCartInfo from './updateCartInfo'
 export function getCartInfo() {
     return JSON.parse(localStorage.getItem("cart"))
 }
-export default function addToCart(e,products,dispatch) {
-    
+export default function addToCart(e, products, dispatch, id) {
     let cart = getCartInfo()
-    const item = e.currentTarget.getAttribute("item")
-    let product = products[item]
+    let item = ""
+    try {
+        item = e.currentTarget.getAttribute("item")
+    } catch (err) {
+        item = e.getAttribute("item")
+    }
+    let product;
+    if (products[item].length === 1) {
+        product = products[item]
+    } else {
+        product = products[item].filter((item) => {
+            return item.id == id
+        })
+    }
+    product = product[0]
 
     if (cart) {
-        if (product.id in cart) {
-            if (product.stock !== cart[product.id].quantity) {
-                cart[product.id].quantity++;
-                localStorage.setItem("cart", JSON.stringify(cart))
+        for (var i=0;i<Object.keys(cart).length;i++) {
+            if (cart[i].id === product.id) {
+                console.log('vcxvcx')
+                if (product.stock !== cart[i].quantity) {
+                    cart[i].quantity++;
+                    localStorage.setItem("cart", JSON.stringify(cart))
+                }
+                break;
             }
-        } else {
-            product.quantity = 1
-            cart[product.id] = product
-            localStorage.setItem("cart", JSON.stringify(cart))
+            if(i===Object.keys(cart).length-1){
+                product.quantity = 1
+                cart[i+1] = product
+                localStorage.setItem("cart", JSON.stringify(cart))
+                break;
+            }
         }
+       
+
     } else {
         product.quantity = 1
-        localStorage.setItem("cart", JSON.stringify({ [product.id]: product }))
+        localStorage.setItem("cart", JSON.stringify({ [0]: product }))
     }
     updateCartInfo(dispatch)
     dispatch(showCartInfo())

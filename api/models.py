@@ -21,13 +21,14 @@ class Customer(models.Model):
 class Product(models.Model):
     name=models.CharField(max_length=200)
     image=models.CharField(max_length=200)
-    images=ArrayField(models.CharField(max_length=200),blank=True,null=True,default=list)
+    images=ArrayField(models.TextField(max_length=200),blank=True,null=True,default=list)
     price=models.FloatField()
     stock=models.IntegerField()
     itemCategory=models.CharField(max_length=100,default="Other")
     itemType=models.CharField(max_length=100,default="Other")
     size=models.CharField(max_length=50,default=0,blank=True,null=True)
     productID=models.CharField(max_length=20,default=randomProductID)
+    colors=models.CharField(max_length=50,blank=True,null=True,default="")
     def __str__(self):
         return self.name
 

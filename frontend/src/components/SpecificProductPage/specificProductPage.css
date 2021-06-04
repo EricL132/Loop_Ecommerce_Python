@@ -1,0 +1,151 @@
+
+.product-page-mid{
+    width: 1230px;
+}
+.product-photos-container {
+    position: relative;
+    width: 600px;
+    float: left;
+}
+
+.product-image {
+    width: 100%;
+    height: 550px;
+}
+
+
+
+
+.photo-button {
+    position: absolute;
+    width: 40px;
+    height: 60px;
+    cursor: pointer;
+    display: none;
+}
+
+.right-button {
+    right: 1rem;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+.left-button {
+    left: 1rem;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+
+.product-photos-container:hover > .photo-button {
+    display: block;
+}
+
+.all-photos-container {
+    width: 600px;
+    height: 125px;
+    background-color: black;
+    position: absolute;
+    bottom: 0;
+
+}
+
+.left-product-container{
+    position: relative;
+    height: 680px;
+    float: left;
+    margin:2rem;
+}
+
+.smaller-product-image {
+    width: 120px;
+    height: 100%;
+    background-color: white;
+    cursor: pointer;
+    border: 1px solid rgba(0, 0, 0, .25);
+}
+
+.product-info-container-s{
+    width: 500px;
+    height: 500px;
+    background-color: rgba;
+    float: left;
+    margin: 2rem;
+    padding: 1rem;
+}
+
+.product-info-container-s .product-name{
+    font-weight: normal;
+    font-size: 30px;
+    margin-top: -10px;
+    width: fit-content;
+}
+
+.product-info-container-s .product-price{
+    font-weight: bold;
+    font-size: 18px;
+    width: fit-content;
+}
+
+.product-info-container-s .product-type{
+    font-weight: normal;
+    font-size: 15px;
+    margin-top: 0;
+    width: fit-content;
+}
+
+.select-size-span{
+    font-size: 15px;
+    font-weight: bold;
+}
+
+.sizes-available-container{
+    width: 500px;
+    height: 80px;
+    margin-top: 10px;
+}
+
+.size-container{
+    width: 100px;
+    height: 40px;
+    background-color: white;
+    border: 1px solid rgba(0, 0, 0, .2);
+    float: left;
+    position: relative;
+}
+
+.size-span{
+    font-size: 15px;
+    text-align: center;
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    cursor: pointer;
+    outline: none;
+    border: none;
+}
+
+.size-span:hover{
+    background-color: black;
+    color: white;
+}
+
+.add-to-bag-button{
+    cursor: pointer;
+    outline: none;
+    border: none;
+    background-color: black;
+    color: white;
+    height: 50px;
+    width: 300px;
+}
+
+.add-to-bag-button:hover{
+    color: rgba(255, 255, 255, .9);
+}
+
+.product-info-container-s .size_selected{
+    color: white;
+    background-color: black;
+}
+    

@@ -12,6 +12,28 @@ export default function ProductsPage(props) {
     function getProducts() {
         const currentType = window.location.pathname.split("/")
         fetch(`/api/${props.typeOfPage}?type=${currentType[currentType.length - 1]}`).then((res) => res.json()).then((data) => {
+            for (var i = 0; i < data.products.length; i++) {
+                const pID = data.products[i].productID
+                for (var j = 0; j < data.products.length; j++) {
+                    if (i !== j && pID === data.products[j].productID) {
+                        if (Array.isArray(data.products[i])) {
+                            data.products[i].push(data.products[j])
+                        } else {
+                            data.products[i] = [data.products[i], data.products[j]]
+                        }
+                    }
+                }
+                if(Array.isArray(data.products[i])){
+                    data.products[i].sort((a,b)=>a.size-b.size)
+                }else{
+                    data.products[i] = [data.products[i]]
+                }
+                data.products = data.products.filter((product, slot) => {
+                    return product.productID !== pID || slot === i
+                })
+                
+            }
+            console.log(data.products)
             setProductsToShow(data.products)
             changeImageSize(currentType[currentType.length - 1])
         })
@@ -53,15 +75,25 @@ export default function ProductsPage(props) {
                 e.target.classList.add("product-size-selected")
             }
         }
-
     }
 
     function addItem(e) {
-        addToCart(e, productsToShow, dispatch)
+        const ele = e.target.parentNode.parentNode.childNodes[1].children[1].children
+        for(var i in ele){
+            if(ele[i].classList){
+                if(ele[i].classList.contains("product-size-selected")){
+                    const size = ele[i].getAttribute("item")
+                    addToCart(e, productsToShow, dispatch, size)
+                }
+                
+            }
+          
+            
+        }
     }
     return (
         <>
-            <div className="main mid-container">
+            <div className="main mid-container products-page-mid">
                 <div className="list-container">
                     {props.typeOfPage === "men" ?
                         <h1 className="section-header">Men</h1>
@@ -111,39 +143,35 @@ export default function ProductsPage(props) {
                         {productsToShow ?
                             productsToShow.map((product, i) => {
                                 return <div key={i} className="product-container">
-                                    <img className="product-image" src={product.image}></img>
+                                    <img className="product-image" src={product[0].image}></img>
                                     <div className="product-info-container">
                                         <div className="product-info-add-container">
-                                            <h1 className="product-name">{product.name}</h1>
+                                            <h1 className="product-name">{product[0].name}</h1>
                                             <button item={i} className="nav-buttons product-cart" onClick={addItem}>Cart</button>
                                         </div>
 
                                         < div >
-                                            <span className="product-price">${product.price}</span>
-                                            {product.size !== "0.0" ?
+                                            <span className="product-price">${product[0].price}</span>
+                                            {product[0].size !== "0.0" ?
                                                 <div className="product-size-container">
-                                                    {!product.size.includes(",") ?
+                                                    {product.length > 1 ?
                                                         <>
+                                                       
+                                                       <label className="product-size-label">Size:</label>
 
-                                                            <span className="product-size product-size-selected" >{product.size}</span>
-                                                            <label className="product-size-label" style={{ float: "right" }}>Size:</label>
+                                                        {product.map((np,i)=>{
+                                                            if(i===0) return <span className="product-size product-size-selected" item={np.id} style={{marginLeft:"3px"}} onClick={changeSelectedSize}>{np.size}</span>
+                                                            return <><span className="product-size" style={{marginLeft:"3px"}} item={np.id} onClick={changeSelectedSize}>{np.size}</span>
+                                                            </>
+                                                        })}
                                                         </>
+
                                                         :
                                                         <>
-                                                            {
-                                                                product.size.split(",").map((size, i) => {
-                                                                    if (i === product.size.split(",").length - 1) {
-                                                                        return <span className="product-size  product-size-selected" style={{ float: "right", marginLeft: "2px" }} onClick={changeSelectedSize}>{size}</span>
-                                                                    } else {
-                                                                        return <span className="product-size" style={{ float: "right", marginLeft: "2px" }} onClick={changeSelectedSize}>{size}</span>
+                                                         <label className="product-size-label" >Size:</label>
 
-                                                                    }
-
-                                                                })
-                                                            }
-                                                            < label className="product-size-label" style={{ float: "right" }}>Size:</label>
-                                                        </>
-                                                    }
+                                                        <span className="product-size product-size-selected" item={product[0].id}>{product[0].size}</span>
+                                                            </>}
                                                 </div>
                                                 : null}
                                         </div>
@@ -153,6 +181,8 @@ export default function ProductsPage(props) {
 
                                     </div>
                                 </div>
+
+
                             })
 
                             : null}

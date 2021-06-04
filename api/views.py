@@ -19,7 +19,7 @@ class GetMensProducts(APIView):
     def get(self,request,format=None):
         products = Product.objects.filter(itemCategory="mens",itemType=request.GET.get('type'))
         productsList = list(products.values())
-
+        
         newList = []
         for k in productsList:
             for m in newList:
@@ -31,6 +31,7 @@ class GetMensProducts(APIView):
                     break
             if len(newList)==0:
                 newList.append(k)
+        print(newList)
         return Response({"products":newList},status=status.HTTP_200_OK)
 
 class GetProduct(APIView):

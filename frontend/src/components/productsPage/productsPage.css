@@ -1,5 +1,7 @@
-.mid-container {
+.products-page-mid{
     width: 1150px;
+}
+.mid-container {
     left: 50%;
     position: relative;
     transform: translateX(-50%);
@@ -69,7 +71,7 @@
 .products-container{
     width: 950px;
     min-height: calc(100vh - 60px);
-    float: right;
+    float: left;
 
 }
 
@@ -102,7 +104,7 @@
     cursor: pointer;
     position: relative;
     margin: 1.4rem;
-    float: left;
+    float: right;
 }
 
 
@@ -126,13 +128,13 @@
 .product-size{
     font-size: 13px;
     font-weight: bold;
-    float: right;
+    float: left;
     text-align: center;
 }
 .product-size-label{
     font-size: 13px;
     font-weight: bold;
-    float: right;
+    float: left;
 }
 .product-size-selected{
     text-decoration: underline;

@@ -39,35 +39,46 @@ export default function RightCartInfo() {
     }
     function IncrementItem(e) {
         setErrorMessage()
-        const itemID = e.target.parentNode.getAttribute("item")
-        const newAmount = cartInfo[itemID].quantity + 1
-        if (newAmount <= cartInfo[itemID].stock) {
-            cartInfo[itemID].quantity = newAmount
-            e.target.previousElementSibling.value = newAmount
+        const itemID = parseInt(e.target.parentNode.getAttribute("item"))
+        for (var i = 0; i < Object.keys(cartInfo).length; i++) {
+            if (cartInfo[i].id === itemID) {
+                const newAmount = cartInfo[i].quantity + 1
+                if (newAmount <= cartInfo[i].stock) {
+                    cartInfo[i].quantity = newAmount
+                    e.target.previousElementSibling.value = newAmount
 
-            dispatch(updateCart(cartInfo))
-            dispatch(IncrementBagCount())
-            localStorage.setItem("cart", JSON.stringify(cartInfo))
+                    dispatch(updateCart(cartInfo))
+                    dispatch(IncrementBagCount())
+                    localStorage.setItem("cart", JSON.stringify(cartInfo))
 
-        } else {
-            setErrorMessage("Max quantity reached")
+                } else {
+                    setErrorMessage("Max quantity reached")
+                }
+            }
+
         }
+
 
     }
 
     function DecrementItem(e) {
         setErrorMessage()
-        const itemID = e.target.parentNode.getAttribute("item")
-        const newAmount = cartInfo[itemID].quantity - 1
-        if (newAmount <= cartInfo[itemID].stock) {
-            cartInfo[itemID].quantity = newAmount
-            e.target.nextElementSibling.value = newAmount
-            dispatch(updateCart(cartInfo))
-            dispatch(DecrementBagCount())
-            localStorage.setItem("cart", JSON.stringify(cartInfo))
+        const itemID = parseInt(e.target.parentNode.getAttribute("item"))
 
-        } else {
-            setErrorMessage("Max quantity reached")
+        for (var i = 0; i < Object.keys(cartInfo).length; i++) {
+            if (cartInfo[i].id === itemID) {
+                const newAmount = cartInfo[i].quantity - 1
+                if (newAmount <= cartInfo[i].stock) {
+                    cartInfo[i].quantity = newAmount
+                    e.target.nextElementSibling.value = newAmount
+                    dispatch(updateCart(cartInfo))
+                    dispatch(DecrementBagCount())
+                    localStorage.setItem("cart", JSON.stringify(cartInfo))
+
+                } else {
+                    setErrorMessage("Max quantity reached")
+                }
+            }
         }
 
     }
@@ -77,21 +88,31 @@ export default function RightCartInfo() {
         }
         if (e.type === 'blur') {
             setErrorMessage()
-            const itemID = e.target.parentNode.getAttribute("item")
-            const newAmount = parseInt(e.target.value)
-            if (newAmount <= cartInfo[itemID].stock) {
-                cartInfo[itemID].quantity = newAmount
-                localStorage.setItem("cart", JSON.stringify(cartInfo))
-                updateCartInfo(dispatch)
+            const itemID = parseInt(e.target.parentNode.getAttribute("item"))
 
-            } else {
-                e.target.value = cartInfo[itemID].stock
-                cartInfo[itemID].quantity = cartInfo[itemID].stock
-                localStorage.setItem("cart", JSON.stringify(cartInfo))
-                updateCartInfo(dispatch)
-                setErrorMessage("Max quantity reached")
+            for (var i = 0; i < Object.keys(cartInfo).length; i++) {
+                if (cartInfo[i].id === itemID) {
+                    const newAmount = parseInt(e.target.value)
+
+                    if (newAmount <= cartInfo[i].stock) {
+                        cartInfo[i].quantity = newAmount
+                        localStorage.setItem("cart", JSON.stringify(cartInfo))
+                        updateCartInfo(dispatch)
+
+                    } else {
+                        e.target.value = cartInfo[i].stock
+                        cartInfo[i].quantity = cartInfo[i].stock
+                        localStorage.setItem("cart", JSON.stringify(cartInfo))
+                        updateCartInfo(dispatch)
+                        setErrorMessage("Max quantity reached")
+                    }
+                }
             }
         }
+    }
+
+    function removeItem(){
+        
     }
     return (
         <>
@@ -111,6 +132,7 @@ export default function RightCartInfo() {
                                             <img alt="" src={item[1].image}></img>
                                             <div className="cartInfo-info-container">
                                                 <span className="product-name">{item[1].name}</span>
+                                                <span style={{ display: "block" }}>{item[1].size}</span>
                                                 <div item={item[1].id} className="product-row">
                                                     <button onClick={DecrementItem}>-</button>
                                                     <input className="product-quantity" type="number" defaultValue={item[1].quantity} onKeyDown={changeQuantity} onBlur={changeQuantity}></input>
