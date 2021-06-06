@@ -42,3 +42,11 @@ class PopulateOldWithProductID(APIView):
             k.productID = randomProductID()
             k.save()
     
+
+class GetFeatured(APIView):
+    def get(self,request,format=None):
+        feature = Featured.objects.all()
+        feature = list(feature.values())
+        for k in feature:
+            k["pid"] = Product.objects.filter(id=k.get("product_id")).values("productID")[0].get("productID")
+        return Response(list(feature),status=status.HTTP_200_OK)

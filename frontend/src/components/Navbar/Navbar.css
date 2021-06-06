@@ -119,3 +119,9 @@ header #nav-left-container{
     display: none;
     z-index: 100;
 }
+
+#nav-pages-container{
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+}

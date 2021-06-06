@@ -1,8 +1,10 @@
 import { useEffect, useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import { getCart } from '../../redux/actions/index'
-import {showCartInfo} from '../../redux/actions/index'
+import { showCartInfo } from '../../redux/actions/index'
 import RightCartInfo from '../RightCartInfo/RightCartInfo'
+import {useHistory} from 'react-router'
+import { Link } from 'react-router-dom'
 import addToCart from '../utils/addToCart'
 import './Homepage.css'
 
@@ -10,43 +12,83 @@ import './Homepage.css'
 
 export default function HomePage(props) {
     const [products, setProducts] = useState()
+    const [currentShowing, setCurrentShowing] = useState()
     const dispatch = useDispatch()
-/*     function getProducts() {
-        fetch('/api/products').then((res) => res.json()).then((data) => {
-            setProducts(data.products)
+    const history = useHistory()
+    function getFeature() {
+        fetch("/api/feature").then((res) => res.json()).then((data) => {
+            setCurrentShowing(0)
+            setProducts(data)
+            
+
         })
     }
 
-    function AddItem(e){
-        addToCart(e,products,dispatch);
+    function nextPhoto() {
+        if(products){
+            let photo;
+             if(currentShowing===products.length-1){
+                photo=0;
+                setCurrentShowing(0)
+            }else{
+                photo = currentShowing+1
+
+                setCurrentShowing(photo);
+            }   
+            let con = document.getElementById("bottom-container-images")
+            document.getElementsByClassName("selected_different_feature_button")[0].classList.remove("selected_different_feature_button")
+            con.childNodes[photo].classList.add("selected_different_feature_button")
+        }
     }
-
-
+    function changeCurrent(e){
+        setCurrentShowing(parseInt(e.target.getAttribute("item")));
+        document.getElementsByClassName("selected_different_feature_button")[0].classList.remove("selected_different_feature_button")
+        e.target.classList.add("selected_different_feature_button")
+    }
+    function goToItem(){
+        history.push(`/pages/product/${products[currentShowing].pid}`)
+    }
     useEffect(() => {
-        getProducts()
-    }, []) */
+        getFeature()
+    }, [])
+
+    useEffect(()=>{
+        const interval = setInterval(()=>{nextPhoto()},5000) 
+        return ()=>{
+            clearInterval(interval)
+        }
+    },[products,currentShowing])
+
     return (
-        <div id="all-product-container">
-            {/* {products ?
-                products.map((product, i) => {
-                    return <div key={i} className="home-product-container">
-                        <img className="product-image" src={product.image}></img>
-                        <div className="product-info-container">
-                            <div className="product-info-add-container">
-                                <h1 className="product-name">{product.name}</h1>
-                                <button item={i} className="nav-buttons product-cart" onClick={AddItem}>Cart</button>
-                            </div>
+        <div id="home-container">
+            {products && currentShowing!==undefined ?
+                <img id="featured-item" src={products[currentShowing].image} onClick={goToItem}></img>
+                : null}
 
-                            <span className="product-price">${product.price}</span>
 
-                        </div>
-                    </div>
-                })
+            <div className="home-mid-container">
+                <span className="coupon-span">Use code JGFNB3 for 20% off</span>
+                <div>
+                    <Link to="/pages/men/sneakers"><button className="home-button mens-button">Mens</button></Link>
+                    <Link to="/pages/women/sneakers"><button className="home-button womens-button">Womens</button></Link>
+                    <Link to="/pages/kids/sneakers"><button className="home-button kids-button">Kids</button></Link>
+                </div>
 
-                : null} */}
-            
-                <RightCartInfo updateCartInfo={props.updateCartInfo}></RightCartInfo>
-                
+            </div>
+            {products ?
+                <div id="bottom-container-images">
+                    {products.map((product,i)=>{
+                        if(i===0){
+                            return <button key = {i} item={i} className="different_feature_button selected_different_feature_button" onClick={changeCurrent}></button>
+                        }
+                        return <button key = {i} item={i} className="different_feature_button" onClick={changeCurrent}></button>
+                    })}
+                    
+                </div>
+                : null}
+
+            <RightCartInfo updateCartInfo={props.updateCartInfo}></RightCartInfo>
+
 
         </div>
     )
