@@ -1,0 +1,90 @@
+#login_container{
+    width: 300px;
+    height: 400px;
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    margin-top: 3rem;
+
+}
+
+#login_h1{
+    font-weight: 500;
+    border-bottom: 1px solid rgba(0, 0, 0, .5);
+    margin-top: 0;
+    margin-bottom: 0;
+}
+
+.login_input{
+    width: 100%;
+    outline: none;
+    border: 1px solid transparent;
+    border-bottom: 1px solid black;
+    font-size: 15px;
+    padding: 5px;
+    margin-top: 15px;
+    background-color: rgb(230, 230, 230);
+
+}
+
+.login_input:focus{
+    border: 1px solid black;
+}
+
+#forgotpass{
+    border: none;
+    background-color: transparent;
+    padding: 0;
+    cursor: pointer;
+    margin-top: 40px;
+    font-size: 11px;
+}
+
+#register{
+    border: none;
+    background-color: transparent;
+    padding: 0;
+    cursor: pointer;
+    font-size: 11px;
+    float: right;
+    margin-top: 20px;
+}
+
+#register:hover{
+    text-decoration: underline;
+}
+
+#forgotpass:hover{
+    text-decoration: underline;
+
+}
+
+#signin{
+    cursor: pointer;
+    float: right;
+    background-color: #333;
+    outline: none;
+    border: none;
+    color: white;
+    padding: 10px 20px;
+    font-weight: bolder;
+    margin-top: 20px;
+}
+
+
+#signin:hover{
+    background: white;
+    color: #333;
+
+}
+
+
+.login_error{
+    width: 100%;
+    text-align: center;
+    display: block;
+    position: absolute;
+    color: rgb(255, 26, 26);
+    font-size: 12px;
+    margin-top: 3px;
+}

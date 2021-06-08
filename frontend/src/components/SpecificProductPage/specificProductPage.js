@@ -58,6 +58,7 @@ export default function SpecificProductPage() {
             setErrorMessage("Please select your size")
         }
     }
+
     useEffect(() => {
         getProduct()
     }, [])
@@ -75,8 +76,12 @@ export default function SpecificProductPage() {
                                         <button className="photo-button right-button" onClick={nextPhoto}><i className="fas fa-arrow-right"></i></button>
                                     </>
                                     : null}
+                                {currentImage && currentImage.includes("nike") ?
+                                    <img id="product-image" className="product-image" src={currentImage} style={{height:"700px",marginTop:"-20px"}}></img>
+                                    :
+                                    <img id="product-image" className="product-image" src={currentImage}></img>
+                                }
 
-                                <img id="product-image" className="product-image" src={currentImage}></img>
 
                             </div>
                             {product[0].images ?

@@ -144,7 +144,11 @@ export default function ProductsPage(props) {
                         {productsToShow ?
                             productsToShow.map((product, i) => {
                                 return <div key={i} className="product-container">
-                                    <img item={i} className="product-image" src={product[0].image} onClick={loadProductPage}></img>
+                                    {product[0].image.includes("nike")?
+                                    <img item={i} className="product_image_nike" src={product[0].image} onClick={loadProductPage}></img>
+                                    :<img item={i} className="product_image" src={product[0].image} onClick={loadProductPage}></img>
+                                    }
+                                    
                                     <div className="product-info-container">
                                         <div className="product-info-add-container">
                                             <h1 className="product-name">{product[0].name}</h1>

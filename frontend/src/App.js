@@ -6,6 +6,8 @@ import { useDispatch } from 'react-redux'
 import { updateCart, bagCount } from './redux/actions/index'
 import ProductsPage from './components/productsPage/productsPage'
 import SpecificProductPage from './components/SpecificProductPage/specificProductPage'
+import LoginPage from './components/LoginPage/LoginPage'
+import RegisterPage from './components/RegisterPage/RegisterPage'
 function App(props) {
   const dispatch = useDispatch()
 
@@ -19,6 +21,8 @@ function App(props) {
         <Route path="/pages/men/" render={()=><ProductsPage typeOfPage="men"/>}></Route>
         <Route path="/pages/women/" render={()=><ProductsPage typeOfPage="women"/>} ></Route>
         <Route path="/pages/product/:id" exact render={()=><SpecificProductPage/>} ></Route>
+        <Route path="/account/login" exact component={LoginPage}></Route>
+        <Route path="/account/register" exact component={RegisterPage}></Route>
       </Switch>
     </BrowserRouter>
   );
