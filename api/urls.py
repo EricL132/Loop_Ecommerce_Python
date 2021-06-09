@@ -8,6 +8,6 @@ urlpatterns = [
     path('product',GetProduct.as_view()),
     path('feature',GetFeatured.as_view()),
     path('register',Register.as_view()),
-    path('login',Login.as_view())
-    
+    path('login',Login.as_view()),
+    path('account',GetAccountInfo.as_view())
 ]

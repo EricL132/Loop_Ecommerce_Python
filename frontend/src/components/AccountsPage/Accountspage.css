@@ -1,0 +1,23 @@
+.account_mid_container{
+    width: 600px;
+    background-color: green;
+    height: 400px;
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.account_header{
+    font-weight: lighter;
+    font-size: 25px;
+}
+
+.order_history_container{
+   float: right;
+   width: 70%;
+}
+
+.account_order_header{
+    font-weight: 20px;
+    
+}

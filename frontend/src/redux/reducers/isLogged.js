@@ -1,7 +1,7 @@
 const loggedReduer = (state=false,action)=>{
     switch(action.type){
         case 'SIGN_IN':
-            return state = true
+            return !state
         default:
             return state
     }

@@ -29,3 +29,9 @@ export const updateCart=(info)=>{
         payload: info
     }
 }
+
+export const LoggedIn=()=>{
+    return {
+        type:'SIGN_IN'
+    }
+}
