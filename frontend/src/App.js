@@ -9,6 +9,8 @@ import SpecificProductPage from './components/SpecificProductPage/specificProduc
 import LoginPage from './components/LoginPage/LoginPage'
 import RegisterPage from './components/RegisterPage/RegisterPage'
 import AccountPage from './components/AccountsPage/AccountsPage'
+import SearchPage from './components/SearchPage/SearchPage'
+import CheckOutPage from './components/CheckOutPage/CheckOutPage';
 function App(props) {
   const dispatch = useDispatch()
 
@@ -25,6 +27,8 @@ function App(props) {
         <Route path="/account/login" exact component={LoginPage}></Route>
         <Route path="/account/register" exact component={RegisterPage}></Route>
         <Route path="/account/info" exact component={AccountPage}></Route>
+        <Route path="/pages/search" exact component={SearchPage}></Route>
+        <Route path="/checkout" exact component={CheckOutPage}></Route>
       </Switch>
     </BrowserRouter>
   );

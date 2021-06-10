@@ -9,5 +9,8 @@ urlpatterns = [
     path('feature',GetFeatured.as_view()),
     path('register',Register.as_view()),
     path('login',Login.as_view()),
-    path('account',GetAccountInfo.as_view())
+    path('account',GetAccountInfo.as_view()),
+    path('logout',LogOut.as_view()),
+    path('info',GetInfo.as_view()),
+    path('search/',SearchItem.as_view())
 ]

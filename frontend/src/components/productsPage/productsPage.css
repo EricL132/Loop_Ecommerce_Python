@@ -1,5 +1,5 @@
 .products-page-mid{
-    width: 1150px;
+    width: 1300px;
 }
 .mid-container {
     left: 50%;
@@ -69,14 +69,17 @@
 }
 
 .products-container{
-    width: 950px;
+    width: 1100px;
     min-height: calc(100vh - 60px);
-    float: left;
+    float: right;
 
 }
 
 .products-container-p{
-
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
 }
 
 .sort-right-container{
@@ -100,17 +103,17 @@
 
 
 .product-container{
-    width: 270px;
+    width: 300px;
     cursor: pointer;
     position: relative;
     margin: 1.4rem;
-    float: left;
 }
 
 
 .product_image{
     width:300px;
-    min-height: 270px;
+    height: 270px;
+    
 }
 
 .product_image_nike{
@@ -122,8 +125,14 @@
     font-size: 14px;
     font-weight: 400;
     margin: 0;
+    word-wrap: normal;
 }
 
+
+.product-info-add-container{
+    position: relative;
+    padding: 5px 0px;
+}
 
 .product-price{
     font-size: 13px;

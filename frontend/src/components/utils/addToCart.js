@@ -27,18 +27,18 @@ export default function addToCart(e, products, dispatch, id) {
     product = product[0]
 
     if (cart) {
-        for (var i = 0; i < Object.keys(cart).length; i++) {
+        for (var i of Object.keys(cart)) {
+            console.log(i)
             if (cart[i].id === product.id) {
-                console.log('vcxvcx')
                 if (product.stock !== cart[i].quantity) {
                     cart[i].quantity++;
                     localStorage.setItem("cart", JSON.stringify(cart))
                 }
                 break;
             }
-            if (i === Object.keys(cart).length - 1) {
+            if (i === Object.keys(cart)[Object.keys(cart).length - 1]) {
                 product.quantity = 1
-                cart[i + 1] = product
+                cart[parseInt(i) + 1] = product
                 localStorage.setItem("cart", JSON.stringify(cart))
                 break;
             }

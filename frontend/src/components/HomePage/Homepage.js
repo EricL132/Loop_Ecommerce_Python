@@ -62,7 +62,7 @@ export default function HomePage(props) {
     return (
         <div id="home-container">
             {products && currentShowing!==undefined ?
-                <img id="featured-item" src={products[currentShowing].image} onClick={goToItem}></img>
+                <img id="featured-item" draggable="false" src={products[currentShowing].image} onClick={goToItem}></img>
                 : null}
 
 

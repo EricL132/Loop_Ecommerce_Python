@@ -15,8 +15,7 @@ export default function Navbar(props) {
         const current = document.getElementById("background-overlay").style.display
 
         if (current === "block") {
-
-            if (e.target.id === "background-overlay" || e.target.id === "close-background-overlay-button") {
+            if (e.target.id === "background-overlay" || e.target.id === "close-background-overlay-button" || e.key==="Enter") {
                 document.getElementById("search-header").classList.add("slideUpAni")
                 setTimeout(() => {
                     document.getElementById("background-overlay").style.display = "none"
@@ -62,6 +61,22 @@ export default function Navbar(props) {
             }
         })
     }
+
+    function handleSearch(e){
+        if(e.key==="Enter"){
+            handleSearchOverlay(e)
+            const v = e.target.value
+            e.target.value = ""
+            if (!window.location.pathname.includes("search")) {
+                history.push(`/pages/search/?search=${v}`)
+            }else{
+                history.push(`/pages/search/?search=${v}`)
+                window.location.reload()
+
+            }
+            
+        }
+    }
     useEffect(() => {
         checkAccount()
         updateCartInfo(dispatch)
@@ -85,7 +100,7 @@ export default function Navbar(props) {
                 </div>
                 <div id="background-overlay" onMouseDown={handleSearchOverlay}>
                     <div id="search-header">
-                        <input placeholder="Search..."></input>
+                        <input placeholder="Search..." onKeyDown={handleSearch}></input>
                         <button id="close-background-overlay-button" className="nav-buttons nav-buttons-underline" onClick={handleSearchOverlay}>Close</button>
                     </div>
                 </div>

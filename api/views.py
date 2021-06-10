@@ -11,6 +11,8 @@ from django.http import JsonResponse
 from django.core import serializers
 from .models import *
 from .utils import *
+from django.db.models import Q
+
 
 class GetProducts(APIView):
     def get(self,request,format=None):
@@ -102,7 +104,37 @@ class GetAccountInfo(APIView):
             return Response({},status=status.HTTP_200_OK)
         return Response({},status=status.HTTP_403_FORBIDDEN)
         
+class LogOut(APIView):
+    def post(self,request,format=None):
+        token = Token.objects.filter(key=self.request.session["auth"])
+        if token:
+            token.delete()
+            return Response({},status=status.HTTP_200_OK)
+        else:
+            return Response('Not Logged In',status=status.HTTP_404_NOT_FOUND)
+            
+class GetInfo(APIView):
+    def get(self,request,format=None):
+        token = Token.objects.filter(key=self.request.session["auth"])
+        if token:
+            user = User.objects.filter(id=token[0].user_id).values("first_name","last_name")
+            return Response(list(user),status=status.HTTP_200_OK)
+        else:
+            return Response({},status=status.HTTP_401_UNAUTHORIZED)
 
+
+class SearchItem(APIView):
+    def get(self,request,format=None):
+        searchParam = request.GET.get('search',None)
+        products = Product.objects.filter(Q(name__icontains=searchParam)).values()
+        if products:
+            return Response({'products':list(products)},status=status.HTTP_200_OK)
+        return Response({'products':[]},status=status.HTTP_200_OK)
+
+
+class CheckCoupon(APIView):
+    def get(self,request,format=None):
+        return Response({},status=status.HTTP_200_OK)
 def checkAuth(token):
     token = Token.objects.filter(key=token)
     if token:

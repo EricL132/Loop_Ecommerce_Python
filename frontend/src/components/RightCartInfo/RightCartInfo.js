@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react'
 import { updateCart, DecrementBagCount, IncrementBagCount, bagCount } from '../../redux/actions/index'
 import { showCartInfo } from '../../redux/actions/index'
 import updateCartInfo from '../utils/updateCartInfo'
-
+import { Link } from 'react-router-dom'
 export default function RightCartInfo() {
     const cartInfo = useSelector(state => state.cartReducer)
     const showInfo = useSelector(state => state.cartInfoReducer)
@@ -40,7 +40,7 @@ export default function RightCartInfo() {
     function IncrementItem(e) {
         setErrorMessage()
         const itemID = parseInt(e.target.parentNode.getAttribute("item"))
-        for (var i = 0; i < Object.keys(cartInfo).length; i++) {
+        for (var i of Object.keys(cartInfo)) {
             if (cartInfo[i].id === itemID) {
                 const newAmount = cartInfo[i].quantity + 1
                 if (newAmount <= cartInfo[i].stock) {
@@ -65,19 +65,25 @@ export default function RightCartInfo() {
         setErrorMessage()
         const itemID = parseInt(e.target.parentNode.getAttribute("item"))
 
-        for (var i = 0; i < Object.keys(cartInfo).length; i++) {
+        for (var i of Object.keys(cartInfo)) {
             if (cartInfo[i].id === itemID) {
                 const newAmount = cartInfo[i].quantity - 1
-                if (newAmount <= cartInfo[i].stock) {
-                    cartInfo[i].quantity = newAmount
-                    e.target.nextElementSibling.value = newAmount
-                    dispatch(updateCart(cartInfo))
-                    dispatch(DecrementBagCount())
+                if (newAmount === 0) {
+                    delete cartInfo[i]
                     localStorage.setItem("cart", JSON.stringify(cartInfo))
-
+                    updateCartInfo(dispatch)
                 } else {
-                    setErrorMessage("Max quantity reached")
+                    if (newAmount <= cartInfo[i].stock) {
+                        cartInfo[i].quantity = newAmount
+                        e.target.nextElementSibling.value = newAmount
+                        dispatch(updateCart(cartInfo))
+                        dispatch(DecrementBagCount())
+                        localStorage.setItem("cart", JSON.stringify(cartInfo))
+                    } else {
+                        setErrorMessage("Max quantity reached")
+                    }
                 }
+
             }
         }
 
@@ -89,31 +95,38 @@ export default function RightCartInfo() {
         if (e.type === 'blur') {
             setErrorMessage()
             const itemID = parseInt(e.target.parentNode.getAttribute("item"))
-
-            for (var i = 0; i < Object.keys(cartInfo).length; i++) {
+            for (var i of Object.keys(cartInfo)) {
                 if (cartInfo[i].id === itemID) {
                     const newAmount = parseInt(e.target.value)
-
-                    if (newAmount <= cartInfo[i].stock) {
-                        cartInfo[i].quantity = newAmount
+                    if (newAmount === 0) {
+                        delete cartInfo[i]
                         localStorage.setItem("cart", JSON.stringify(cartInfo))
-                        updateCartInfo(dispatch)
-
+                        setTimeout(() => {
+                            updateCartInfo(dispatch)
+                        }, 1000)
+                        return
                     } else {
-                        e.target.value = cartInfo[i].stock
-                        cartInfo[i].quantity = cartInfo[i].stock
-                        localStorage.setItem("cart", JSON.stringify(cartInfo))
-                        updateCartInfo(dispatch)
-                        setErrorMessage("Max quantity reached")
+                        if (newAmount <= cartInfo[i].stock) {
+                            cartInfo[i].quantity = newAmount
+                            localStorage.setItem("cart", JSON.stringify(cartInfo))
+
+                            updateCartInfo(dispatch)
+
+
+                        } else {
+                            e.target.value = cartInfo[i].stock
+                            cartInfo[i].quantity = cartInfo[i].stock
+                            localStorage.setItem("cart", JSON.stringify(cartInfo))
+                            updateCartInfo(dispatch)
+                            setErrorMessage("Max quantity reached")
+                        }
                     }
+
                 }
             }
         }
     }
 
-    function removeItem(){
-        
-    }
     return (
         <>
             {showInfo ?
@@ -129,7 +142,7 @@ export default function RightCartInfo() {
                                 Object.entries(cartInfo).map((item, i) => {
                                     return <div key={i} className="cartInfo-product-container">
                                         <div className="middle-row">
-                                            <img alt="" src={item[1].image}></img>
+                                            <img className="cart_image" alt="" src={item[1].image}></img>
                                             <div className="cartInfo-info-container">
                                                 <span className="product-name">{item[1].name}</span>
                                                 <span style={{ display: "block" }}>{item[1].size}</span>
@@ -137,7 +150,7 @@ export default function RightCartInfo() {
                                                     <button onClick={DecrementItem}>-</button>
                                                     <input className="product-quantity" type="number" defaultValue={item[1].quantity} onKeyDown={changeQuantity} onBlur={changeQuantity}></input>
                                                     <button onClick={IncrementItem}>+</button>
-                                                    <span>${(item[1].quantity * item[1].price).toFixed(2)}</span>
+                                                    <span className="cart_span">${(item[1].quantity * item[1].price).toFixed(2)}</span>
                                                 </div>
                                             </div>
                                         </div>
@@ -153,7 +166,7 @@ export default function RightCartInfo() {
                                 <span id="subtotal-amount">${subTotal.toFixed(2)}</span>
                             </div>
                             <span id="shipping-text">{"Shipping & taxes calculated at checkout"}</span>
-                            <button id="checkout-button">Checkout</button>
+                            <Link to="/checkout"><button id="checkout-button" onClick={closeOverlay}>Checkout</button></Link>
                         </div>
 
                     </div>

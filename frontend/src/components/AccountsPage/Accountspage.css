@@ -1,10 +1,10 @@
 .account_mid_container{
     width: 600px;
-    background-color: green;
     height: 400px;
     position: absolute;
     left: 50%;
     transform: translateX(-50%);
+    margin-top: 5rem;
 }
 
 .account_header{
@@ -17,7 +17,39 @@
    width: 70%;
 }
 
+
 .account_order_header{
-    font-weight: 20px;
-    
+    font-weight: lighter;
+    margin-top: 0;
+    font-size: 18px;
+    margin-bottom: 10px;
+}
+
+.order_table{
+    white-space: nowrap;
+}
+
+.order_table th{
+    text-align: left;
+    font-size: 12px;
+    padding-right: 30px;
+}
+
+.order_table .first_row{
+    margin: 0;
+}
+
+
+#logout{
+    border: none;
+    background-color: transparent;
+    padding: 0;
+    cursor: pointer;
+    font-size: 11px;
+    float: right;
+    margin-top: 20px;
+}
+
+#logout:hover{
+    text-decoration: underline;
 }

@@ -64,4 +64,8 @@ class ShippingInfo(models.Model):
     def __str__(self):
         return self.address
 
+class Coupons(models.Model):
+    code = models.IntegerField(default=0)
+    def __str__(self):
+        return self.code
 

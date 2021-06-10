@@ -11,10 +11,7 @@
 
 
 
-.product-info-add-container{
-    position: relative;
-    padding: 5px 0px;
-}
+
 
 .product-container:hover .product-cart{
     display: block;
@@ -92,6 +89,7 @@
     position: absolute;
     user-select: none;
     cursor: pointer;
+
 }
 
 #home-container #bottom-container-images{

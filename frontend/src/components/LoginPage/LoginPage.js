@@ -2,6 +2,8 @@ import "./LoginPage.css"
 import {Link} from 'react-router-dom'
 import {useState} from 'react'
 import {useHistory} from 'react-router'
+import {useDispatch} from 'react-redux'
+import {LoggedIn} from '../../redux/actions/index'
 export default function LoginPage() {
     const [formInfo,setFormInfo] = useState({
         email:"",
@@ -9,6 +11,7 @@ export default function LoginPage() {
     })
     const [errorMessage,setErrorMessage] = useState()
     const history = useHistory()
+    const dispatch = useDispatch()
     function login(e){
         e.preventDefault()
         setErrorMessage("")
@@ -18,7 +21,10 @@ export default function LoginPage() {
         if(!formInfo["email"].includes(".") || !formInfo["email"].includes("@")) return setErrorMessage("Invalid email")
         if(formInfo["password"].length<6) return setErrorMessage("Invalid Password")
         fetch("/api/login",{method:"POST",headers:{"content-type":"application/json"},body:JSON.stringify(formInfo)}).then((res)=>{
-            if(res.ok) history.push("/account/info")
+            if(res.ok) {
+                dispatch(LoggedIn())
+                history.push("/account/info")
+            }
             return res.text()
         }).then((data)=>{
             setErrorMessage(data)
