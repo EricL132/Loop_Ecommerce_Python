@@ -1,7 +1,7 @@
 const cartReducer = (state="",action)=>{
     switch(action.type){
         case 'UPDATE_CART':
-            return state = action.payload
+            return {...state, cart:action.payload}
         default:
             return state
     }

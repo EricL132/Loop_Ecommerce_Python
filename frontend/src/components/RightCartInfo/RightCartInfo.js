@@ -1,28 +1,32 @@
 import './RightCartInfo.css'
 import { useDispatch, useSelector } from 'react-redux'
-import { useEffect, useState } from 'react'
-import { updateCart, DecrementBagCount, IncrementBagCount, bagCount } from '../../redux/actions/index'
+import { useCallback, useEffect, useState } from 'react'
+import { updateCart, DecrementBagCount, IncrementBagCount } from '../../redux/actions/index'
 import { showCartInfo } from '../../redux/actions/index'
 import updateCartInfo from '../utils/updateCartInfo'
 import { Link } from 'react-router-dom'
 export default function RightCartInfo() {
-    const cartInfo = useSelector(state => state.cartReducer)
+    const cartInfo = useSelector(state => state.cartReducer.cart)
     const showInfo = useSelector(state => state.cartInfoReducer)
 
     const [subTotal, setSubTotal] = useState(0)
     const [errorMessage, setErrorMessage] = useState()
     const dispatch = useDispatch()
     let bagNum = useSelector(state => state.bagCountReducer)
-
+    const updateSubTotal = useCallback(() => {
+        setSubTotal(0)
+        if (cartInfo) {
+            Object.entries(cartInfo).map((item) => {
+                return setSubTotal((subTotal) => subTotal + (item[1].quantity * item[1].price))
+            })
+        }
+    },[cartInfo])   
     useEffect(() => {
         updateSubTotal()
-    }, [cartInfo])
-    function updateSubTotal() {
-        setSubTotal(0)
-        Object.entries(cartInfo).map((item) => {
-            setSubTotal((subTotal) => subTotal + (item[1].quantity * item[1].price))
-        })
-    }
+    }, [bagNum,updateSubTotal])
+
+
+   
     function closeOverlay(e) {
         if (showInfo) {
             if (e.target.id === "cartInfo-overlay" || e.target.id === "cartInfo-close") {
@@ -98,21 +102,11 @@ export default function RightCartInfo() {
             for (var i of Object.keys(cartInfo)) {
                 if (cartInfo[i].id === itemID) {
                     const newAmount = parseInt(e.target.value)
-                    if (newAmount === 0) {
-                        delete cartInfo[i]
-                        localStorage.setItem("cart", JSON.stringify(cartInfo))
-                        setTimeout(() => {
-                            updateCartInfo(dispatch)
-                        }, 1000)
-                        return
-                    } else {
+                    if (newAmount > 0) {
                         if (newAmount <= cartInfo[i].stock) {
                             cartInfo[i].quantity = newAmount
                             localStorage.setItem("cart", JSON.stringify(cartInfo))
-
                             updateCartInfo(dispatch)
-
-
                         } else {
                             e.target.value = cartInfo[i].stock
                             cartInfo[i].quantity = cartInfo[i].stock
@@ -120,13 +114,28 @@ export default function RightCartInfo() {
                             updateCartInfo(dispatch)
                             setErrorMessage("Max quantity reached")
                         }
+                    } else {
+                        e.target.value = cartInfo[i].quantity
                     }
+
+
 
                 }
             }
         }
     }
+    function removeItem(e) {
+        setErrorMessage()
+        const itemID = parseInt(e.target.parentNode.getAttribute("item"))
 
+        for (var i of Object.keys(cartInfo)) {
+            if (cartInfo[i].id === itemID) {
+                delete cartInfo[i]
+                localStorage.setItem("cart", JSON.stringify(cartInfo))
+                updateCartInfo(dispatch)
+            }
+        }
+    }
     return (
         <>
             {showInfo ?
@@ -150,6 +159,7 @@ export default function RightCartInfo() {
                                                     <button onClick={DecrementItem}>-</button>
                                                     <input className="product-quantity" type="number" defaultValue={item[1].quantity} onKeyDown={changeQuantity} onBlur={changeQuantity}></input>
                                                     <button onClick={IncrementItem}>+</button>
+                                                    <button onClick={removeItem}>Remove Item</button>
                                                     <span className="cart_span">${(item[1].quantity * item[1].price).toFixed(2)}</span>
                                                 </div>
                                             </div>

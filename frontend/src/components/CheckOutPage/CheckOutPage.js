@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react"
+import { useCallback, useEffect, useState } from "react"
 import { useSelector } from "react-redux"
 import "./CheckOutPage.css"
 export default function CheckOutPage() {
@@ -6,17 +6,17 @@ export default function CheckOutPage() {
     const loggedIn = useSelector(state => state.loggedReducer)
     const [subTotal, setSubTotal] = useState(0)
 
-    function updateSubTotal() {
+    const updateSubTotal  = useCallback(()=> {
         let total = 0
         Object.entries(cartInfo).map((item) => {
-            total += (item[1].quantity * item[1].price)
+            return total += (item[1].quantity * item[1].price)
         })
         setSubTotal(total)
         
-    }
+    },[cartInfo])
     useEffect(()=>{
         updateSubTotal()
-    },[cartInfo])
+    },[cartInfo,updateSubTotal])
     return (
         <div className="main mid-container checkout_mid">
             <div className="right_side_container">

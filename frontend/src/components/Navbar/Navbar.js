@@ -6,7 +6,6 @@ import { useHistory } from 'react-router'
 import updateCartInfo from '../utils/updateCartInfo'
 import { Link } from 'react-router-dom'
 export default function Navbar(props) {
-    const cartInfo = useSelector(state => state.cartReducer)
     const bagNum = useSelector(state => state.bagCountReducer)
     const userLoggedIn = useSelector(state => state.loggedReducer)
     const dispatch = useDispatch()
@@ -54,13 +53,7 @@ export default function Navbar(props) {
     function goToHome() {
         history.push("/")
     }
-    function checkAccount() {
-        fetch("/api/account").then((res) => {
-            if (res.ok) {
-                dispatch(LoggedIn())
-            }
-        })
-    }
+
 
     function handleSearch(e){
         if(e.key==="Enter"){
@@ -78,9 +71,16 @@ export default function Navbar(props) {
         }
     }
     useEffect(() => {
+        function checkAccount() {
+            fetch("/api/account").then((res) => {
+                if (res.ok) {
+                    dispatch(LoggedIn())
+                }
+            })
+        }
         checkAccount()
         updateCartInfo(dispatch)
-    }, [])
+    }, [dispatch])
     return (
         <>
             <header id="nav-header">

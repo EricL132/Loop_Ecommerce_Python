@@ -1,15 +1,14 @@
 
-import { useEffect, useState } from "react"
+import { useCallback, useEffect, useState } from "react"
 import "./productsPage.css"
 import { useHistory } from 'react-router'
 import RightCartInfo from '../RightCartInfo/RightCartInfo'
-import { useDispatch } from "react-redux"
 import ProductsContainer from './productsContainer'
 export default function ProductsPage(props) {
     const [productsToShow, setProductsToShow] = useState()
     const [originalProducts,setOriginalProducts] = useState()
     const history = useHistory()
-    function getProducts() {
+    const getProducts = useCallback(()=> {
         const currentType = window.location.pathname.split("/")
         fetch(`/api/${props.typeOfPage}?type=${currentType[currentType.length - 1]}`).then((res) => res.json()).then((data) => {
             for (var i = 0; i < data.products.length; i++) {    
@@ -28,9 +27,7 @@ export default function ProductsPage(props) {
                 }else{
                     data.products[i] = [data.products[i]]
                 }
-                data.products = data.products.filter((product, slot) => {
-                    return product.productID !== pID || slot === i
-                })
+                data.products = filterProducts(data,pID,i)
                 
             }
             setProductsToShow(data.products)
@@ -38,10 +35,16 @@ export default function ProductsPage(props) {
             changeImageSize(currentType[currentType.length - 1])
         })
 
-    }
+    },[setProductsToShow,setOriginalProducts,props.typeOfPage])
     useEffect(() => {
         getProducts()
-    }, [])
+    }, [getProducts])
+
+    function filterProducts(data,pID,i){
+        return data.products.filter((product, slot) => {
+            return slot === i || product.productID !== pID
+        })
+    }
     function changeImageSize(currentType) {
         if (currentType === "sunglasses" || currentType === "socks") {
             let ele = document.getElementsByClassName("product_image")

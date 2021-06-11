@@ -1,7 +1,6 @@
 import addToCart from '../utils/addToCart'
 import {useDispatch} from 'react-redux'
 import {useHistory} from 'react-router'
-import { useEffect } from 'react'
 export default function ProductsContainer(props) {
     const dispatch = useDispatch()
     const history = useHistory()
@@ -42,8 +41,8 @@ export default function ProductsContainer(props) {
             props.productsToShow.map((product, i) => {
                 return <div key={i} className="product-container">
                     {product[0].image.includes("nike") ?
-                        <img item={i} className="product_image_nike" src={product[0].image} onClick={loadProductPage}></img>
-                        : <img item={i} className="product_image" src={product[0].image} onClick={loadProductPage}></img>
+                        <img item={i} alt="" className="product_image_nike" src={product[0].image} onClick={loadProductPage}></img>
+                        : <img item={i} alt="" className="product_image" src={product[0].image} onClick={loadProductPage}></img>
                     }
 
                     <div className="product-info-container">

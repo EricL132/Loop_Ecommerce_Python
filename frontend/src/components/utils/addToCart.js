@@ -17,7 +17,7 @@ export default function addToCart(e, products, dispatch, id) {
     } else {
         if (Array.isArray(products[item])) {
             product = products[item].filter((item) => {
-                return item.id == id
+                return item.id === id
             })
         }else{
             product=products
@@ -25,10 +25,8 @@ export default function addToCart(e, products, dispatch, id) {
 
     }
     product = product[0]
-
-    if (cart) {
+    if (cart && Object.keys(cart).length>0) {
         for (var i of Object.keys(cart)) {
-            console.log(i)
             if (cart[i].id === product.id) {
                 if (product.stock !== cart[i].quantity) {
                     cart[i].quantity++;
@@ -44,10 +42,9 @@ export default function addToCart(e, products, dispatch, id) {
             }
         }
 
-
     } else {
         product.quantity = 1
-        localStorage.setItem("cart", JSON.stringify({ [0]: product }))
+        localStorage.setItem("cart", JSON.stringify({ "0": product }))
     }
     updateCartInfo(dispatch)
     dispatch(showCartInfo())

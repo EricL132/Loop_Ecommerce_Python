@@ -77,9 +77,9 @@ export default function SpecificProductPage() {
                                     </>
                                     : null}
                                 {currentImage && currentImage.includes("nike") ?
-                                    <img id="product-image" className="product-image" src={currentImage} style={{height:"700px",marginTop:"-20px"}}></img>
+                                    <img id="product-image" alt="" className="product-image" src={currentImage} style={{height:"700px",marginTop:"-20px"}}></img>
                                     :
-                                    <img id="product-image" className="product-image" src={currentImage}></img>
+                                    <img id="product-image" alt="" className="product-image" src={currentImage}></img>
                                 }
 
 
@@ -87,7 +87,7 @@ export default function SpecificProductPage() {
                             {product[0].images ?
                                 <div className="all-photos-container">
                                     {product[0].images.map((img) => {
-                                        return <img className="smaller-product-image" onClick={changeCurrentImage} src={img}></img>
+                                        return <img alt="" className="smaller-product-image" onClick={changeCurrentImage} src={img}></img>
                                     })}
 
                                 </div>

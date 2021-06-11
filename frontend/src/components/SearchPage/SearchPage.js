@@ -1,12 +1,11 @@
-import { useEffect, useState } from "react"
+import { useCallback, useEffect, useState } from "react"
 import "./SearchPage.css"
 import ProductsContainer from '../productsPage/productsContainer'
 import RightCartInfo from "../RightCartInfo/RightCartInfo"
 
 export default function SearchPage(){
     const [productsToShow, setProductsToShow] = useState()
-    const [originalProducts,setOriginalProducts] = useState()
-    function performSearch(){
+    const performSearch = useCallback(()=>{
         fetch(`/api/search/${window.location.search}`).then((res)=>res.json()).then((data)=>{
             for (var i = 0; i < data.products.length; i++) {    
                 const pID = data.products[i].productID
@@ -24,18 +23,23 @@ export default function SearchPage(){
                 }else{
                     data.products[i] = [data.products[i]]
                 }
-                data.products = data.products.filter((product, slot) => {
-                    return product.productID !== pID || slot === i
-                })
+                data.products = processProducts(data,pID,i)
                 
             }
             setProductsToShow(data.products)
-            setOriginalProducts(data.products)
+        })
+    },[setProductsToShow])
+
+
+    function processProducts(data,pID,i){
+        return data.products.filter((product, slot) => {
+            return product.productID !== pID || slot === i
         })
     }
+
     useEffect(()=>{
         performSearch()
-    },[])
+    },[performSearch])
     return (
         <>
         <div className="main mid-container" style={{maxWidth:"1750px"}}>

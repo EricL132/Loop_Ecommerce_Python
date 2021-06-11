@@ -2,8 +2,6 @@ import './App.css';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import Navbar from './components/Navbar/Navbar'
 import Home from './components/HomePage/Homepage'
-import { useDispatch } from 'react-redux'
-import { updateCart, bagCount } from './redux/actions/index'
 import ProductsPage from './components/productsPage/productsPage'
 import SpecificProductPage from './components/SpecificProductPage/specificProductPage'
 import LoginPage from './components/LoginPage/LoginPage'
@@ -11,8 +9,7 @@ import RegisterPage from './components/RegisterPage/RegisterPage'
 import AccountPage from './components/AccountsPage/AccountsPage'
 import SearchPage from './components/SearchPage/SearchPage'
 import CheckOutPage from './components/CheckOutPage/CheckOutPage';
-function App(props) {
-  const dispatch = useDispatch()
+function App() {
 
 
   
