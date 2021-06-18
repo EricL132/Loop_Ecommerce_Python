@@ -21,15 +21,10 @@ export default function Navbar(props) {
                     document.getElementById("search-header").classList.remove("slideUpAni")
                 }, 400)
 
-
-
             }
         } else {
             document.getElementById("background-overlay").style.display = "block"
         }
-
-
-
     }
 
     function goToMens() {
@@ -81,6 +76,9 @@ export default function Navbar(props) {
         checkAccount()
         updateCartInfo(dispatch)
     }, [dispatch])
+    
+
+
     return (
         <>
             <header id="nav-header">

@@ -20,13 +20,13 @@ export default function RightCartInfo() {
                 return setSubTotal((subTotal) => subTotal + (item[1].quantity * item[1].price))
             })
         }
-    },[cartInfo])   
+    }, [cartInfo])
     useEffect(() => {
         updateSubTotal()
-    }, [bagNum,updateSubTotal])
+    }, [bagNum, updateSubTotal])
 
 
-   
+
     function closeOverlay(e) {
         if (showInfo) {
             if (e.target.id === "cartInfo-overlay" || e.target.id === "cartInfo-close") {
@@ -35,7 +35,7 @@ export default function RightCartInfo() {
                     document.getElementById("left-container").classList.remove("slideRightAni")
                     dispatch(showCartInfo())
                 }, 400)
-
+                removeQuantityZero()
             }
         }
 
@@ -64,7 +64,15 @@ export default function RightCartInfo() {
 
 
     }
-
+    function removeQuantityZero() {
+        for (var i of Object.keys(cartInfo)) {
+            if (cartInfo[i].quantity === 0) {
+                delete cartInfo[i]
+                localStorage.setItem("cart", JSON.stringify(cartInfo))
+                updateCartInfo(dispatch)
+            }
+        }
+    }
     function DecrementItem(e) {
         setErrorMessage()
         const itemID = parseInt(e.target.parentNode.getAttribute("item"))
@@ -149,22 +157,38 @@ export default function RightCartInfo() {
                         <div id="cartInfo-products-container">
                             {cartInfo ?
                                 Object.entries(cartInfo).map((item, i) => {
-                                    return <div key={i} className="cartInfo-product-container">
-                                        <div className="middle-row">
-                                            <img className="cart_image" alt="" src={item[1].image}></img>
-                                            <div className="cartInfo-info-container">
-                                                <span className="product-name">{item[1].name}</span>
-                                                <span style={{ display: "block" }}>{item[1].size}</span>
-                                                <div item={item[1].id} className="product-row">
-                                                    <button onClick={DecrementItem}>-</button>
-                                                    <input className="product-quantity" type="number" defaultValue={item[1].quantity} onKeyDown={changeQuantity} onBlur={changeQuantity}></input>
-                                                    <button onClick={IncrementItem}>+</button>
-                                                    <button onClick={removeItem}>Remove Item</button>
-                                                    <span className="cart_span">${(item[1].quantity * item[1].price).toFixed(2)}</span>
+                                    if (item[1].quantity) {
+                                        return <div key={i} className="cartInfo-product-container">
+                                            <div className="middle-row">
+                                                <img className="cart_image" alt="" src={item[1].image}></img>
+                                                <div className="cartInfo-info-container">
+                                                    <span className="product-name">{item[1].name}</span>
+                                                    <span style={{ display: "block" }}>{item[1].size}</span>
+                                                    <div item={item[1].id} className="product-row">
+                                                        <button onClick={DecrementItem}>-</button>
+                                                        <input className="product-quantity" type="number" defaultValue={item[1].quantity} onKeyDown={changeQuantity} onBlur={changeQuantity}></input>
+                                                        <button onClick={IncrementItem}>+</button>
+                                                        <button onClick={removeItem}>Remove Item</button>
+                                                        <span className="cart_span">${(item[1].quantity * item[1].price).toFixed(2)}</span>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
-                                    </div>
+                                    } else {
+                                        return <div key={i} className="cartInfo-product-container">
+                                            <div className="middle-row">
+                                                <img className="cart_image" alt="" src={item[1].image}></img>
+                                                <div className="cartInfo-info-container">
+                                                    <span className="product-name">{item[1].name}</span>
+                                                    <span style={{ display: "block" }}>{item[1].size}</span>
+                                                    <div item={item[1].id} className="product-row">
+                                                        <span className="out_of_stock_message">Item is out of stock and was removed from your cart</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    }
+
 
                                 })
 

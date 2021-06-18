@@ -45,6 +45,7 @@ export default function ProductsPage(props) {
             return slot === i || product.productID !== pID
         })
     }
+    
     function changeImageSize(currentType) {
         if (currentType === "sunglasses" || currentType === "socks") {
             let ele = document.getElementsByClassName("product_image")

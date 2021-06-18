@@ -134,7 +134,31 @@ class SearchItem(APIView):
 
 class CheckCoupon(APIView):
     def get(self,request,format=None):
+        code = Coupons.objects.filter(code=request.GET.get('code',None)).values("discount")
+        if len(code)>0:
+            return Response(list(code)[0],status=status.HTTP_200_OK)
+        else:
+            return Response('Invalid Discount Code',status=status.HTTP_404_NOT_FOUND)
+
+class CheckOut(APIView):
+    def post(self,request,format=None):
         return Response({},status=status.HTTP_200_OK)
+
+class CheckStock(APIView):
+    def post(self,request,format=None):
+        allInStock = True
+        for i in request.data:
+            product = Product.objects.filter(id=request.data[i].get("id")).values()
+            if request.data[i].get("quantity")==0 or request.data[i].get("quantity") >product[0].get("stock"):
+                request.data[i]["quantity"] = 0
+                allInStock = False
+        if allInStock==False:
+            return Response({"status":allInStock,"cart":request.data},status=status.HTTP_200_OK)
+        else:
+           return Response({"status":allInStock},status=status.HTTP_200_OK)
+
+
+
 def checkAuth(token):
     token = Token.objects.filter(key=token)
     if token:

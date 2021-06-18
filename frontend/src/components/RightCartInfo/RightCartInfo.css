@@ -193,3 +193,8 @@
     text-align: center;
     color: rgb(204, 102, 255);
 }
+
+.out_of_stock_message{
+    color: rgb(204, 102, 255);
+    font-size: 11px;
+}

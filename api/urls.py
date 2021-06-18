@@ -12,5 +12,8 @@ urlpatterns = [
     path('account',GetAccountInfo.as_view()),
     path('logout',LogOut.as_view()),
     path('info',GetInfo.as_view()),
-    path('search/',SearchItem.as_view())
+    path('search/',SearchItem.as_view()),
+    path('coupon/',CheckCoupon.as_view()),
+    path('checkout',CheckOut.as_view()),
+    path('stock',CheckStock.as_view())
 ]
