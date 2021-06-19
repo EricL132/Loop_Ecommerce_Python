@@ -21,13 +21,13 @@ class GetProducts(APIView):
 
 class GetMensProducts(APIView):
     def get(self,request,format=None):
-        products = Product.objects.filter(itemCategory='mens',itemType=request.GET.get('type'))
-        return Response({'products':list(products.values())},status=status.HTTP_200_OK)
+        products = Product.objects.filter(itemCategory='mens',itemType=request.GET.get('type'),stock__gt=0).values()
+        return Response({'products':list(products)},status=status.HTTP_200_OK)
 
 class GetWomensProducts(APIView):
     def get(self,request,format=None):
-        products = Product.objects.filter(itemCategory='womens',itemType=request.GET.get('type'))
-        return Response({'products':list(products.values())},status=status.HTTP_200_OK)
+        products = Product.objects.filter(itemCategory='womens',itemType=request.GET.get('type'),stock__gt=0).values()        
+        return Response({'products':list(products)},status=status.HTTP_200_OK)
 
 
 class GetProduct(APIView):
@@ -142,6 +142,7 @@ class CheckCoupon(APIView):
 
 class CheckOut(APIView):
     def post(self,request,format=None):
+        print(request.data)
         return Response({},status=status.HTTP_200_OK)
 
 class CheckStock(APIView):

@@ -2,7 +2,7 @@ import { useCallback, useEffect, useState, React, useRef } from "react"
 import { useSelector, useDispatch } from "react-redux"
 import ReactDOM from 'react-dom'
 import "./CheckOutPage.css"
-import {Link} from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import { useHistory } from "react-router"
 import { showCartInfo } from "../../redux/actions"
 import updateCartInfo from "../utils/updateCartInfo"
@@ -75,7 +75,7 @@ export default function CheckOutPage() {
         setCustomerInfo(prev => ({ ...prev, [e.target.id]: e.target.value }))
     }
 
-    function handleEditCart(){
+    function handleEditCart() {
         history.push("/")
     }
     useEffect(() => {
@@ -91,8 +91,8 @@ export default function CheckOutPage() {
 
             const Button = window.paypal.Buttons({
                 createOrder: function (data, actions) {
-
-                    if (discountTotal) {
+                    const stockCheck = checkCartStock()
+                    if (discountTotal && stockCheck) {
                         return actions.order.create({
                             purchase_units: [
                                 {
@@ -103,15 +103,18 @@ export default function CheckOutPage() {
                             ],
                         });
                     } else {
-                        return actions.order.create({
-                            purchase_units: [
-                                {
-                                    amount: {
-                                        value: total,
+                        if (stockCheck) {
+                            return actions.order.create({
+                                purchase_units: [
+                                    {
+                                        amount: {
+                                            value: total,
+                                        },
                                     },
-                                },
-                            ],
-                        });
+                                ],
+                            });
+                        }
+
                     }
 
 
@@ -120,8 +123,8 @@ export default function CheckOutPage() {
 
                 onApprove: function (data, actions) {
                     return actions.order.capture().then((details) => {
-                        setCustomerInfo(prev => ({ ...prev, "details": details }))
-                        setCustomerInfo(prev => ({ ...prev, "cart": cartInfo }))
+                        setCustomerInfo(prev => ({ ...prev, ["details"]: details }))
+                        setCustomerInfo(prev => ({ ...prev, ["cart"]: cartInfo }))
                         handleCheckout()
                     });
                 }
@@ -130,27 +133,28 @@ export default function CheckOutPage() {
             return () => Button.close()
         }
     }, [discountTotal, total, InPayment])
-    function handleCheckout(){
-        fetch("/api/checkout",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(customerInfo)}).then((res)=>{
-            
+    function handleCheckout() {
+        fetch("/api/checkout", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(customerInfo) }).then((res) => {
+
         })
     }
 
-    function checkCartStock(){
-        fetch("api/stock",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(cartInfo)}).then((res)=> res.json()).then(data=>{
-            if(!data.status){
-                localStorage.setItem("cart",JSON.stringify(data.cart))
+    function checkCartStock() {
+        fetch("api/stock", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(cartInfo) }).then((res) => res.json()).then(data => {
+            if (!data.status) {
+                localStorage.setItem("cart", JSON.stringify(data.cart))
                 updateCartInfo(dispatch)
                 history.push("/")
+                return false
             }
         })
-    }   
-    useEffect(()=>{
-        const invCheck = setInterval(()=>{
-            checkCartStock()
-        },5000)
-        return ()=>clearInterval(invCheck)
-    },[])
+    }
+    /*     useEffect(()=>{
+            const invCheck = setInterval(()=>{
+                checkCartStock()
+            },5000)
+            return ()=>clearInterval(invCheck)
+        },[]) */
     return (
         <>
 
@@ -232,7 +236,7 @@ export default function CheckOutPage() {
                 </div>
 
                 <div className="order_summary_container">
-                    <h1 className="shipping_header summary_header">Order Summary <button onClick={handleEditCart}className="account_button">Edit Cart</button></h1>
+                    <h1 className="shipping_header summary_header">Order Summary <button onClick={handleEditCart} className="account_button">Edit Cart</button></h1>
                     {cartInfo ?
                         <>
                             {Object.entries(cartInfo).map((item, i) => {

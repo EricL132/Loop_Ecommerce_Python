@@ -200,7 +200,7 @@ export default function RightCartInfo() {
                                 <span id="subtotal-amount">${subTotal.toFixed(2)}</span>
                             </div>
                             <span id="shipping-text">{"Shipping & taxes calculated at checkout"}</span>
-                            <Link to="/checkout"><button id="checkout-button" onClick={closeOverlay}>Checkout</button></Link>
+                            <Link to="/checkout"><button id="checkout-button">Checkout</button></Link>
                         </div>
 
                     </div>
