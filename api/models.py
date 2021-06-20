@@ -12,12 +12,7 @@ def randomProductID():
 
 
 
-class Customer(models.Model):
-    user = models.OneToOneField(User,on_delete=models.CASCADE,blank=True,null=True)
-    name = models.CharField(max_length=200)
-    email = models.CharField(max_length=200)
-    def __str__(self):
-        return self.name
+
 class Product(models.Model):
     name=models.CharField(max_length=200)
     image=models.CharField(max_length=200)
@@ -37,6 +32,31 @@ class Featured(models.Model):
     image= models.CharField(max_length=200,null=True)
     def __str__(self):
         return self.product.name
+
+
+
+
+
+class Coupons(models.Model):
+    code = models.CharField(max_length=50,default="")
+    discount = models.IntegerField(default=0)
+    def __str__(self):
+        return self.code
+
+
+class TempOrder(models.Model):
+    user = models.ForeignKey(User,on_delete=models.CASCADE,blank=True,null=True)
+    order_id = models.CharField(max_length=200)
+    info = models.TextField()
+    total = models.FloatField()
+    date_added = models.DateTimeField(auto_now_add=True)
+
+class Customer(models.Model):
+    user = models.OneToOneField(User,on_delete=models.CASCADE,blank=True,null=True)
+    name = models.CharField(max_length=200)
+    email = models.CharField(max_length=200)
+    def __str__(self):
+        return self.name
 
 class Order(models.Model):
     customer = models.ForeignKey(Customer,on_delete=models.SET_NULL,blank=True,null=True)
@@ -63,10 +83,3 @@ class ShippingInfo(models.Model):
     date_added = models.DateTimeField(auto_now_add=True)
     def __str__(self):
         return self.address
-
-class Coupons(models.Model):
-    code = models.CharField(max_length=50,default="")
-    discount = models.IntegerField(default=0)
-    def __str__(self):
-        return self.code
-

@@ -27,6 +27,7 @@ export default function CheckOutPage() {
     const history = useHistory()
     const [paymentError, setPaymentError] = useState()
     const [InPayment, setInPayment] = useState()
+    const [checkout, setCheckout] = useState()
     const updateSubTotal = useCallback(() => {
         let total = 0
         Object.entries(cartInfo).map((item) => {
@@ -91,7 +92,8 @@ export default function CheckOutPage() {
 
             const Button = window.paypal.Buttons({
                 createOrder: function (data, actions) {
-                    const stockCheck = checkCartStock()
+                    /* const stockCheck = checkCartStock()
+                    console.log(stockCheck)
                     if (discountTotal && stockCheck) {
                         return actions.order.create({
                             purchase_units: [
@@ -115,46 +117,81 @@ export default function CheckOutPage() {
                             });
                         }
 
+                    } */
+                    if(couponApplied){
+                        customerInfo["coupon"] = coupon
                     }
-
+                    customerInfo["cart"] = cartInfo
+                    return fetch('/api/createorder', {
+                        method: 'post', headers: { "content-type": "application/json" }, body: JSON.stringify(customerInfo)
+                    }).then(function (res) {
+                        return res.json();
+                    }).then(function (orderData) {
+                        console.log(orderData)
+                        if (orderData.status===false) {
+                            localStorage.setItem("cart", JSON.stringify(orderData.cart))
+                            updateCartInfo(dispatch)
+                            history.push("/")
+                            return false
+                        }
+                        return orderData.id;
+                    });
 
 
                 },
 
                 onApprove: function (data, actions) {
-                    return actions.order.capture().then((details) => {
+                    /* return actions.order.capture().then((details) => {
                         setCustomerInfo(prev => ({ ...prev, ["details"]: details }))
                         setCustomerInfo(prev => ({ ...prev, ["cart"]: cartInfo }))
-                        handleCheckout()
+                        setCheckout(true)
+                    }) */
+                    return fetch('/api/checkout/' + data.orderID + '/capture/', {
+                        method: 'post'
+                    }).then(function (res) {
+                        return res.json();
+                    }).then(function (orderData) {
+                        var errorDetail = Array.isArray(orderData.details) && orderData.details[0];
+
+                        if (errorDetail && errorDetail.issue === 'INSTRUMENT_DECLINED') {
+                            return actions.restart();
+                        }
+
+                        if (errorDetail) {
+                            var msg = 'Sorry, your transaction could not be processed.';
+                            if (errorDetail.description) msg += '\n\n' + errorDetail.description;
+                            if (orderData.debug_id) msg += ' (' + orderData.debug_id + ')';
+                            return alert(msg);
+                        }
+
+                        alert('Transaction completed by ' + orderData.payer.name.given_name);
                     });
                 }
             })
             Button.render(paypal.current)
             return () => Button.close()
         }
-    }, [discountTotal, total, InPayment])
+    }, [discountTotal, total, InPayment,couponApplied])
     function handleCheckout() {
         fetch("/api/checkout", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(customerInfo) }).then((res) => {
 
         })
     }
 
-    function checkCartStock() {
-        fetch("api/stock", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(cartInfo) }).then((res) => res.json()).then(data => {
-            if (!data.status) {
+    async function checkCartStock() {
+        await fetch("api/stock", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(cartInfo) }).then((res) => res.json()).then(data => {
+            if (data.status === false) {
                 localStorage.setItem("cart", JSON.stringify(data.cart))
                 updateCartInfo(dispatch)
                 history.push("/")
                 return false
             }
         })
+        return true
     }
-    /*     useEffect(()=>{
-            const invCheck = setInterval(()=>{
-                checkCartStock()
-            },5000)
-            return ()=>clearInterval(invCheck)
-        },[]) */
+    useEffect(() => {
+        handleCheckout()
+    }, [checkout])
     return (
         <>
 
@@ -259,7 +296,7 @@ export default function CheckOutPage() {
                                 <h3>Items: {Object.keys(cartInfo).length}</h3>
                                 <h3>Subtotal: ${subTotal}</h3>
                                 <h3 >Total:<span id="total_amount"> ${total}</span> {discountTotal ?
-                                    <span>${discountTotal}</span>
+                                    <span>${discountTotal.toFixed(2)}</span>
                                     : null} </h3>
                                 <div className="coupon_container">
                                     {!couponApplied ?
