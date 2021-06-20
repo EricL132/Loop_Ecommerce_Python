@@ -9,6 +9,7 @@ import RegisterPage from './components/RegisterPage/RegisterPage'
 import AccountPage from './components/AccountsPage/AccountsPage'
 import SearchPage from './components/SearchPage/SearchPage'
 import CheckOutPage from './components/CheckOutPage/CheckOutPage';
+import OrderSummary from './components/OrderSummary/OrderSummary';
 function App() {
 
 
@@ -26,6 +27,8 @@ function App() {
         <Route path="/account/info" exact component={AccountPage}></Route>
         <Route path="/pages/search" exact component={SearchPage}></Route>
         <Route path="/checkout" exact component={CheckOutPage}></Route>
+        <Route path="/order/:id" exact component={OrderSummary}></Route>
+
       </Switch>
     </BrowserRouter>
   );

@@ -62,8 +62,10 @@ class Order(models.Model):
     customer = models.ForeignKey(Customer,on_delete=models.SET_NULL,blank=True,null=True)
     date_ordered = models.DateTimeField(auto_now_add=True)
     transaction_id = models.CharField(max_length=200)
+    total = models.FloatField()
+    status= models.CharField(max_length=100)
     def __str__(self):
-        return self.id
+        return self.transaction_id
 
 class OrderItem(models.Model):
     product = models.ForeignKey(Product,on_delete=models.SET_NULL,blank=True,null=True)
@@ -71,7 +73,7 @@ class OrderItem(models.Model):
     quantity = models.IntegerField(default=0)
     date_added = models.DateTimeField(auto_now_add=True)
     def __str__(self):
-        return self.id
+        return str(self.order.id)
 
 class ShippingInfo(models.Model):
     customer = models.ForeignKey(Customer,on_delete=models.SET_NULL,blank=True,null=True)
@@ -80,6 +82,7 @@ class ShippingInfo(models.Model):
     state = models.CharField(max_length=200)
     city = models.CharField(max_length=200)
     zipcode = models.CharField(max_length=200)
+    email = models.CharField(max_length=200,blank=True)
     date_added = models.DateTimeField(auto_now_add=True)
     def __str__(self):
         return self.address

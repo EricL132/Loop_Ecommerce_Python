@@ -1,16 +1,17 @@
 import { useEffect, useState } from "react"
 import "./AccountsPage.css"
 import { useHistory } from 'react-router'
-import {useDispatch}  from 'react-redux'
-import {LoggedIn} from '../../redux/actions/index'
+import { useDispatch } from 'react-redux'
+import { LoggedIn } from '../../redux/actions/index'
 import RightCartInfo from "../RightCartInfo/RightCartInfo"
+import { Link } from "react-router-dom"
 export default function AccountPage() {
     const history = useHistory()
     const [userInfo, setUserInfo] = useState()
     const dispatch = useDispatch()
     function getInfo() {
         fetch("/api/info").then((res) => res.json()).then((data) => {
-            setUserInfo(data[0])
+            setUserInfo(data)
         })
     }
     function logOut() {
@@ -24,25 +25,45 @@ export default function AccountPage() {
     }, [])
     return (
         <>
-        <div className="main account_mid_container">
-            <h1 className="account_header">My Account<button id="logout" onClick={logOut}>Log Out</button></h1>
-            {userInfo ?
-                <span>{userInfo.first_name} {userInfo.last_name}</span>
-                : null}
-            <div className="order_history_container">
-                <h5 className="account_order_header">Order History</h5>
-                <table className="order_table">
-                    <tr className="first_row">
-                        <th>Order#</th>
-                        <th>Date</th>
-                        <th>Payment Status</th>
-                        <th>Fulfillment Status</th>
-                        <th>Total</th>
-                    </tr>
-                </table>
+            <div className="main account_mid_container">
+                <h1 className="account_header">My Account<button id="logout" onClick={logOut}>Log Out</button></h1>
+                {userInfo ?
+                    <>
+                        <span>{userInfo.first_name} {userInfo.last_name}</span>
+
+                        <div className="order_history_container">
+                            <h5 className="account_order_header">Order History</h5>
+                            <table className="order_table">
+                                <tr className="first_row">
+                                    <th>Order#</th>
+                                    <th>Date</th>
+                                    <th>Payment Status</th>
+                                    <th>Fulfillment Status</th>
+                                    <th>Total</th>
+                                </tr>
+                                {userInfo.hasOwnProperty("order") ?
+                                    <>
+                                        {
+                                            userInfo.order.map((order) => {
+                                                return <tr>
+                                                    <Link to={`/order/${order.transaction_id}`}><td className="order_history_td">{order.transaction_id}</td></Link>
+                                                    <td className="order_history_td">{order.date_ordered.split("T")[0]}</td>
+                                                    <td className="order_history_td">{order.status}</td>
+                                                    <td className="order_history_td">Delivered</td>
+                                                    <td className="order_history_td">${order.total}</td>
+                                                </tr>
+                                            })
+                                        }
+                                    </>
+                                    : null}
+
+
+                            </table>
+                        </div>
+                    </>
+                    : null}
             </div>
-        </div>
-        <RightCartInfo></RightCartInfo>
+            <RightCartInfo></RightCartInfo>
         </>
     )
 }

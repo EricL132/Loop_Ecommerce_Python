@@ -118,8 +118,13 @@ class GetInfo(APIView):
     def get(self,request,format=None):
         token = Token.objects.filter(key=self.request.session["auth"])
         if token:
-            user = User.objects.filter(id=token[0].user_id).values("first_name","last_name")
-            return Response(list(user),status=status.HTTP_200_OK)
+            user = User.objects.filter(id=token[0].user_id)[0]
+            customer = Customer.objects.filter(user=user)
+            if customer:
+                order = Order.objects.filter(customer=customer[0]).values()
+                if order:
+                    return Response({"first_name":user.first_name,"last_name":user.last_name,"order":order},status=status.HTTP_200_OK)
+            return Response({"first_name":user.first_name,"last_name":user.last_name},status=status.HTTP_200_OK)
         else:
             return Response({},status=status.HTTP_401_UNAUTHORIZED)
 
@@ -183,16 +188,51 @@ class CreateOrder(APIView):
 
 class CaptureOrder(APIView):
     def post(self,request,order,format=None):
-        # response = capture_order(order)
-        # if response.result.status=="COMPLETED":
-        # order_info = TempOrder.objects.filter(order_id=response.result.id).values()
-        order_info = TempOrder.objects.filter(order_id=order).values()[0]
-        if order_info:
-            print(order_info)
-            return Response({},status=status.HTTP_200_OK)
-        else:
-            return Response({},status=status.HTTP_403_FORBIDDEN)
+        response = capture_order(order)
+        if response.result.status=="COMPLETED":
+            order_info = TempOrder.objects.filter(order_id=order).values()[0]
+            if order_info:
+                user = None
+                user_info = None
+                customer = None
+                order_model=None
+                info = json.loads(order_info.get("info"))
+                if order_info.get("user_id"):
+                    user = User.objects.filter(id=order_info.get("user_id"))[0]
+                    user_info = User.objects.filter(id=order_info.get("user_id")).values("id","first_name","last_name","email")[0]
+                    customer = Customer.objects.filter(user=user)
+                    if len(customer)==0:
+                        customer = Customer.objects.create(user=user,name=str(user_info.get("first_name"))+" "+str(user_info.get("last_name")),email=user_info.get("email"))
+                    else:
+                        customer = customer[0]
+                else:
+                    customer = Customer.objects.create(name=info.get("first_name")+" "+info.get("last_name"),email=info.get("email"))
+                order_model = Order.objects.filter(transaction_id=order_info.get("order_id"))
+                if len(order_model)==0:
+                    order_model = Order.objects.create(customer=customer,transaction_id=order_info.get("order_id"))
+                else:
+                    order_model = order_model[0]
+                for i in info.get("cart"):
+                    product = Product.objects.filter(id=info.get("cart")[i].get("id"))[0]
+                    OrderItem.objects.create(product=product,order=order_model,quantity=info.get("cart")[i].get("quantity"))
+                ShippingInfo.objects.create(customer=customer,order=order_model,address=info.get("address"),state=info.get("state"),city=info.get("city"),zipcode=info.get("zip"),email=info.get("email"))
+                return Response({"status":"COMPLETE","order_id":order},status=status.HTTP_200_OK)
+            else:
+                return Response({"status":"FAIL","error":"Order not found"},status=status.HTTP_403_FORBIDDEN)
 
+class GetOrderInfo(APIView):
+    def get(self,request,order):
+        order_info = Order.objects.filter(transaction_id=order)[0]
+        if order_info:
+            customer = Customer.objects.filter(id=order_info.customer_id)[0]
+            shipping_info = ShippingInfo.objects.filter(customer=customer).values()[0]
+            products = OrderItem.objects.filter(order=order_info).values("product_id","quantity")
+            for i in products:
+                product = Product.objects.filter(id=i.get("product_id")).values("image","name","price","size","productID")[0]
+                i["product_id"] = product
+            return Response({"shipping_info":shipping_info,"order_info":products,"total":order_info.total},status=status.HTTP_200_OK)
+        else:
+            return Response({},status=status.HTTP_404_NOT_FOUND)
 def checkAuth(token):
     token = Token.objects.filter(key=token)
     if token:

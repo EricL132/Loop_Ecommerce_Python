@@ -31,7 +31,7 @@
 
 .order_table th{
     text-align: left;
-    font-size: 12px;
+    font-size: 13px;
     padding-right: 30px;
 }
 
@@ -39,7 +39,9 @@
     margin: 0;
 }
 
-
+.order_history_td{
+    font-size: 12px;
+}
 #logout{
     border: none;
     background-color: transparent;

@@ -17,5 +17,6 @@ urlpatterns = [
     path('checkout',CheckOut.as_view()),
     path('stock',CheckStock.as_view()),
     path('createorder',CreateOrder.as_view()),
-    path('checkout/<slug:order>/capture/',CaptureOrder.as_view())
+    path('checkout/<slug:order>/capture/',CaptureOrder.as_view()),
+    path('order/<slug:order>',GetOrderInfo.as_view())
 ]

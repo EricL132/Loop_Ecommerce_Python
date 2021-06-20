@@ -65,13 +65,16 @@ export default function RightCartInfo() {
 
     }
     function removeQuantityZero() {
-        for (var i of Object.keys(cartInfo)) {
-            if (cartInfo[i].quantity === 0) {
-                delete cartInfo[i]
-                localStorage.setItem("cart", JSON.stringify(cartInfo))
-                updateCartInfo(dispatch)
+        if (cartInfo) {
+            for (var i of Object.keys(cartInfo)) {
+                if (cartInfo[i].quantity === 0) {
+                    delete cartInfo[i]
+                    localStorage.setItem("cart", JSON.stringify(cartInfo))
+                    updateCartInfo(dispatch)
+                }
             }
         }
+
     }
     function DecrementItem(e) {
         setErrorMessage()
@@ -194,14 +197,17 @@ export default function RightCartInfo() {
 
                                 : null}
                         </div>
-                        <div id="cartInfo-bottom-box">
-                            <div id="subtotal">
-                                <span>Subtotal</span>
-                                <span id="subtotal-amount">${subTotal.toFixed(2)}</span>
+                        {bagNum ?
+                            <div id="cartInfo-bottom-box">
+                                <div id="subtotal">
+                                    <span>Subtotal</span>
+                                    <span id="subtotal-amount">${subTotal.toFixed(2)}</span>
+                                </div>
+                                <span id="shipping-text">{"Shipping & taxes calculated at checkout"}</span>
+                                <Link to="/checkout"><button id="checkout-button">Checkout</button></Link>
                             </div>
-                            <span id="shipping-text">{"Shipping & taxes calculated at checkout"}</span>
-                            <Link to="/checkout"><button id="checkout-button">Checkout</button></Link>
-                        </div>
+                            : null}
+
 
                     </div>
 

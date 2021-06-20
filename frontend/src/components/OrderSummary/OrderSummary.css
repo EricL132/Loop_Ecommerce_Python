@@ -1,0 +1,74 @@
+.order_mid{
+    width: 650px;
+    font-family: sans-serif;
+}
+
+.order_mid .heading{
+    text-align: center;
+}
+
+.order_mid .order_number_heading{
+    text-align: center;
+    opacity: .7;
+}
+
+.order_mid .info_container{
+
+}
+
+.order_mid .info_label{
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.order_mid .info_span{
+    margin-left: 30px;
+}
+
+.order_mid .left_container{
+    float: left;
+}
+
+.order_mid .semi_info_container{
+    margin: 15px;
+}
+
+.shipping_info{
+    float: right;
+    display: block;
+}
+
+.address_span{
+    display: block;
+}
+
+
+
+.info_table{
+    width: 100%;
+    white-space: nowrap;
+}
+
+.products_table{
+    margin-top: 4rem;
+    display: inline-block;
+    width: 100%;
+}
+
+.info_row{
+    
+    position: relative;
+}
+
+.table_info_head{
+    text-align: left;
+}
+
+.info_image{
+    width: 70px;
+    height: 70px;
+}
+
+.item_header{
+    padding-left: 15px;
+}

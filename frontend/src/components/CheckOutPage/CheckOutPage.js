@@ -18,6 +18,8 @@ export default function CheckOutPage() {
     const [discountTotal, setDiscountTotal] = useState()
     const [total, setTotal] = useState()
     const [customerInfo, setCustomerInfo] = useState({
+        first_name:"",
+        last_name:"",
         email: "",
         address: "",
         zip: "",
@@ -35,6 +37,7 @@ export default function CheckOutPage() {
         })
         setSubTotal(total)
         setTotal(total + (total * .08))
+       
     }, [cartInfo])
 
     function applyCoupon() {
@@ -83,6 +86,8 @@ export default function CheckOutPage() {
         if (cartInfo) {
             updateSubTotal()
 
+        }else{
+            history.push("/")
         }
     }, [cartInfo, updateSubTotal])
 
@@ -163,8 +168,9 @@ export default function CheckOutPage() {
                             if (orderData.debug_id) msg += ' (' + orderData.debug_id + ')';
                             return alert(msg);
                         }
-
-                        alert('Transaction completed by ' + orderData.payer.name.given_name);
+                        localStorage.removeItem("cart")
+                        updateCartInfo(dispatch)
+                        history.push(`/order/${orderData.order_id}`)
                     });
                 }
             })
@@ -202,6 +208,9 @@ export default function CheckOutPage() {
                         <form onChange={changeCustomerInfo}>
                             <input id="email" autoComplete="new-password" className="checkout_inputs" placeholder="Email" style={{ marginTop: "0px" }}></input>
                             <h1 className="shipping_header">Shipping Infomation</h1>
+                            <input id="first_name" autoComplete="new-password" className="smaller_checkout_inputs checkout_inputs " placeholder="First Name"></input>
+                            <input id="last_name" autoComplete="new-password" className="smaller_checkout_inputs checkout_inputs " placeholder="Last Name"></input>
+
                             <input id="address" autoComplete="new-password" className="checkout_inputs" placeholder="Address" style={{ marginTop: "0px" }}></input>
                             <input id="zip" autoComplete="new-password" className=" smaller_checkout_inputs checkout_inputs " placeholder="Zip"></input>
                             <input id="city" autoComplete="new-password" className="smaller_checkout_inputs checkout_inputs" placeholder="City"></input>
