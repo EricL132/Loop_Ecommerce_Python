@@ -9,14 +9,15 @@ urlpatterns = [
     path('feature',GetFeatured.as_view()),
     path('register',Register.as_view()),
     path('login',Login.as_view()),
+    path('forgot',Forgot.as_view()),
+    path('reset/<slug:token>',Reset.as_view()),
     path('account',GetAccountInfo.as_view()),
     path('logout',LogOut.as_view()),
     path('info',GetInfo.as_view()),
     path('search/',SearchItem.as_view()),
     path('coupon/',CheckCoupon.as_view()),
-    path('checkout',CheckOut.as_view()),
     path('stock',CheckStock.as_view()),
     path('createorder',CreateOrder.as_view()),
     path('checkout/<slug:order>/capture/',CaptureOrder.as_view()),
-    path('order/<slug:order>',GetOrderInfo.as_view())
+    path('order/<slug:order>',GetOrderInfo.as_view()),
 ]

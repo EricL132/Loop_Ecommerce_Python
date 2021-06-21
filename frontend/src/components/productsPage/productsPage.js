@@ -60,7 +60,7 @@ export default function ProductsPage(props) {
         }
     }
     function changeProductsType(e) {
-
+        setProductsToShow()
         history.push(`/pages/${props.typeOfPage}/${e.target.getAttribute("name")}`)
 
         getProducts()

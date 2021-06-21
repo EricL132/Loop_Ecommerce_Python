@@ -10,7 +10,13 @@ def randomProductID():
             break
     return productID
 
-
+def randomResetToken():
+    while True:
+        token= get_random_string(20)
+        tokenExists = ResetToken.objects.filter(token=token)
+        if len(tokenExists)==0:
+            break
+    return token
 
 
 class Product(models.Model):
@@ -86,3 +92,10 @@ class ShippingInfo(models.Model):
     date_added = models.DateTimeField(auto_now_add=True)
     def __str__(self):
         return self.address
+
+class ResetToken(models.Model):
+    user = models.OneToOneField(User,on_delete=models.CASCADE)
+    token = models.CharField(max_length=200,default=randomResetToken)
+    date_added = models.DateTimeField(auto_now_add=True)
+    def __str__(self):
+        return self.token

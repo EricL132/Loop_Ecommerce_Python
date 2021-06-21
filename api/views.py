@@ -1,4 +1,4 @@
-from os import stat
+
 import requests
 from django.shortcuts import render
 from rest_framework import status
@@ -15,6 +15,11 @@ from .utils import *
 from django.db.models import Q
 from .paypal import create_order,capture_order
 import json
+
+import smtplib
+import os
+from dotenv import load_dotenv
+load_dotenv()
 class GetProducts(APIView):
     def get(self,request,format=None):
         products = Product.objects
@@ -72,10 +77,11 @@ class Register(APIView):
             return Response('Invalid Email',status=status.HTTP_403_FORBIDDEN)
         if len(request.data['password'])<6:
             return Response('Password must be at least 6 characters',status=status.HTTP_403_FORBIDDEN)
-        if not self.request.session.exists(self.request.session.session_key):
-            self.request.session.create()
         if len(User.objects.filter(username=request.data['email']))>0:
             return Response('Email already registered',status=status.HTTP_403_FORBIDDEN)
+        if not self.request.session.exists(self.request.session.session_key):
+            self.request.session.create()
+            
         email = request.data['email'].lower()
         user = User.objects.create_user(username=email,email=email,password=request.data['password'],first_name=request.data['fname'],last_name=request.data['lname'])
         token = Token.objects.create(user=user)
@@ -97,7 +103,44 @@ class Login(APIView):
             return Response({},status=status.HTTP_200_OK)
         return Response('Invalid Email/Password',status=status.HTTP_403_FORBIDDEN)
 
-
+class Forgot(APIView):
+    def post(self,request,format=None):
+        if request.data["email"]==None:
+            return Response('Invalid Information',status=status.HTTP_403_FORBIDDEN)
+        email = request.data["email"].lower()
+        user = User.objects.filter(email=email)
+        if len(user)==0:
+            return Response('Email not registered',status=status.HTTP_403_FORBIDDEN)
+        user = user[0]
+        token = ResetToken.objects.filter(user=user)
+        if len(token)>0:
+            token = token[0].token
+        else:
+            token = ResetToken.objects.create(user=user)
+            token=token.token
+        with smtplib.SMTP_SSL('smtp.gmail.com',465) as smtp:
+            smtp.login(os.getenv("EMAIL_ADDRESS"),os.getenv("EMAIL_PASSWORD"))
+            subject = "Forgot Password"
+            body= "Reset Link: {}{}".format(os.getenv("HOSTLINK"),token)
+            msg = f'Subject:{subject}\n\n{body}'
+            smtp.sendmail(os.getenv("EMAIL_ADDRESS"),user.email,msg)
+        return Response('Email Sent',status=status.HTTP_200_OK)
+            
+class Reset(APIView):
+    def post(self,request,token,format=None):
+        if len(request.data['password'])<6:
+            return Response('Password must be at least 6 characters',status=status.HTTP_403_FORBIDDEN)
+        if request.data['password']!= request.data['cpassword']:
+            return Response('Password and Confirm password must be the same',status=status.HTTP_403_FORBIDDEN)
+        token = ResetToken.objects.filter(token=token)
+        if len(token)==0:
+            return Response('Invalid Token',status=status.HTTP_403_FORBIDDEN)
+        token = token[0]
+        user = token.user
+        user.set_password(request.data['password'])
+        user.save()
+        token.delete()
+        return Response('Password Changed',status=status.HTTP_200_OK)      
 
 class GetAccountInfo(APIView):
     def get(self,request,format=None):
@@ -146,14 +189,7 @@ class CheckCoupon(APIView):
         else:
             return Response('Invalid Discount Code',status=status.HTTP_404_NOT_FOUND)
 
-class CheckOut(APIView):
-    def post(self,request,format=None):
-        # print(request.data)
-        # print(request.data.get("details"))
-        d = {'email': 'fsa', 'address': 'fsa', 'zip': 'fsa', 'city': 'fsa', 'state': 'AL', 'details': {'id': '0X558966PY339233C', 'intent': 'CAPTURE', 'status': 'COMPLETED', 'purchase_units': [{'reference_id': 'default', 'amount': {'currency_code': 'USD', 'value': '140.40'}, 'payee': {'email_address': 'sb-ppk47n6524827@business.example.com', 'merchant_id': 'QNDAJB2P8QC4Q'}, 'shipping': {'name': {'full_name': 'John Doe'}, 'address': {'address_line_1': '1 Main St', 'admin_area_2': 'San Jose', 'admin_area_1': 'CA', 'postal_code': '95131', 'country_code': 'US'}}, 'payments': {'captures': [{'id': '7DG38681NL224013R', 'status': 'COMPLETED', 'amount': {'currency_code': 'USD', 'value': '140.40'}, 'final_capture': True, 'seller_protection': {'status': 'ELIGIBLE', 'dispute_categories': ['ITEM_NOT_RECEIVED', 'UNAUTHORIZED_TRANSACTION']}, 'create_time': '2021-06-19T21:19:50Z', 'update_time': '2021-06-19T21:19:50Z'}]}}], 'payer': {'name': {'given_name': 'John', 'surname': 'Doe'}, 'email_address': 'sb-yrqup6522719@business.example.com', 'payer_id': '498DVHNMZH89W', 'address': {'country_code': 'US'}}, 'create_time': '2021-06-19T21:19:37Z', 'update_time': '2021-06-19T21:19:50Z', 'links': [{'href': 'https://api.sandbox.paypal.com/v2/checkout/orders/0X558966PY339233C', 
-        'rel': 'self', 'method': 'GET'}]}, 'cart': {'0': {'id': 47, 'name': 'Nike Wildhorse 7', 'image': 'https://static.nike.com/a/images/t_PDP_864_v1/f_auto,b_rgb:f5f5f5/eaf8461f-ffc5-478b-b171-d7b70f70f068/air-zoom-pegasus-38-womens-running-shoe-2bvJvW.png', 'images': ['https://static.nike.com/a/images/t_PDP_864_v1/f_auto,b_rgb:f5f5f5/eaf8461f-ffc5-478b-b171-d7b70f70f068/air-zoom-pegasus-38-womens-running-shoe-2bvJvW.png', 'https://static.nike.com/a/images/t_PDP_864_v1/f_auto,b_rgb:f5f5f5,q_80/724c24ff-7e4b-479b-ba5e-2bc0f570257f/air-zoom-pegasus-38-womens-running-shoe-2bvJvW.png', 'https://static.nike.com/a/images/t_PDP_864_v1/f_auto,b_rgb:f5f5f5,q_80/6d268ac7-c1f9-413b-9109-2f2c529e7980/air-zoom-pegasus-38-womens-running-shoe-2bvJvW.png', 'https://static.nike.com/a/images/t_PDP_864_v1/f_auto,b_rgb:f5f5f5,q_80/9b099cc2-fdec-4f08-ad92-f83d8d348c91/air-zoom-pegasus-38-womens-running-shoe-2bvJvW.png', 'https://static.nike.com/a/images/t_PDP_864_v1/f_auto,b_rgb:f5f5f5,q_80/a527c01d-0708-42d7-9a6c-3aa21a734b73/air-zoom-pegasus-38-womens-running-shoe-2bvJvW.png'], 'price': 130, 'stock': 1, 'itemCategory': 'womens', 'itemType': 'sneakers', 'size': '9.0', 'productID': 'mKXusFwE', 'colors': 'White / Red', 'quantity': 1}}}
 
-        return Response({},status=status.HTTP_200_OK)
 
 class CheckStock(APIView):
     def post(self,request,format=None):

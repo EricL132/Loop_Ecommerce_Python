@@ -40,7 +40,7 @@ export default function LoginPage() {
                 <h1 id="login_h1">Login <Link to="/account/register"><button id="register">Register</button></Link></h1>
                 <input id="email" className="login_input" placeholder="Email"></input>
                 <input id="password" type="password" className="login_input" placeholder="Password"></input>
-                <button id="forgotpass">Forgot Password?</button>
+                <Link to="/account/forgot"><button id="forgotpass">Forgot Password?</button></Link>
                 <button id="signin" onClick={login}>SIGN IN</button>
                 <span className="login_error">{errorMessage}</span>
             </form>
