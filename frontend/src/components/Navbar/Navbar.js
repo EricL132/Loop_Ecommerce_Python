@@ -45,6 +45,15 @@ export default function Navbar(props) {
         }
 
     }
+    function goToKids() {
+        if (!window.location.pathname.includes("pages")) {
+            history.push("/pages/kids/sneakers")
+        } else {
+            history.push("/pages/kids/sneakers")
+            window.location.reload()
+        }
+
+    }
     function goToHome() {
         history.push("/")
     }
@@ -86,7 +95,7 @@ export default function Navbar(props) {
                 <div id="nav-pages-container">
                     <button className="nav-buttons nav-buttons-underline" style={{ fontWeight: "bold" }} onClick={goToMens}>Men</button>
                     <button className="nav-buttons nav-buttons-underline" style={{ fontWeight: "bold" }} onClick={goToWomens}>Women</button>
-                    <button className="nav-buttons nav-buttons-underline" style={{ fontWeight: "bold" }}>Kids</button>
+                    <button className="nav-buttons nav-buttons-underline" style={{ fontWeight: "bold" }}  onClick={goToKids}>Kids</button>
                 </div>
                 <div id="nav-left-container">
                     <button className="nav-buttons nav-buttons-underline" onClick={handleSearchOverlay}>Search</button>

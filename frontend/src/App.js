@@ -12,6 +12,7 @@ import CheckOutPage from './components/CheckOutPage/CheckOutPage';
 import OrderSummary from './components/OrderSummary/OrderSummary';
 import ForgotPassword from './components/FogotPassword/ForgotPassword';
 import ResetPage from './components/ResetPage/ResetPage';
+import BottomMessage from './components/BottomMessage/BottomMessage';
 function App() {
 
 
@@ -23,6 +24,8 @@ function App() {
         <Route path="/" exact component={Home}></Route>
         <Route path="/pages/men/" render={()=><ProductsPage typeOfPage="men"/>}></Route>
         <Route path="/pages/women/" render={()=><ProductsPage typeOfPage="women"/>} ></Route>
+        <Route path="/pages/kids/" render={()=><ProductsPage typeOfPage="kids"/>} ></Route>
+
         <Route path="/pages/product/:id" exact render={()=><SpecificProductPage/>} ></Route>
         <Route path="/account/login" exact component={LoginPage}></Route>
         <Route path="/account/register" exact component={RegisterPage}></Route>
@@ -34,6 +37,7 @@ function App() {
         <Route path="/account/reset/:token" exact component={ResetPage}></Route>
 
       </Switch>
+      <BottomMessage></BottomMessage>
     </BrowserRouter>
   );
 }

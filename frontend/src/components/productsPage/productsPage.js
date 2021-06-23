@@ -6,12 +6,12 @@ import RightCartInfo from '../RightCartInfo/RightCartInfo'
 import ProductsContainer from './productsContainer'
 export default function ProductsPage(props) {
     const [productsToShow, setProductsToShow] = useState()
-    const [originalProducts,setOriginalProducts] = useState()
+    const [originalProducts, setOriginalProducts] = useState()
     const history = useHistory()
-    const getProducts = useCallback(()=> {
+    const getProducts = useCallback(() => {
         const currentType = window.location.pathname.split("/")
         fetch(`/api/${props.typeOfPage}?type=${currentType[currentType.length - 1]}`).then((res) => res.json()).then((data) => {
-            for (var i = 0; i < data.products.length; i++) {    
+            for (var i = 0; i < data.products.length; i++) {
                 const pID = data.products[i].productID
                 for (var j = 0; j < data.products.length; j++) {
                     if (i !== j && pID === data.products[j].productID) {
@@ -22,30 +22,30 @@ export default function ProductsPage(props) {
                         }
                     }
                 }
-                if(Array.isArray(data.products[i])){
-                    data.products[i].sort((a,b)=>a.size-b.size)
-                }else{
+                if (Array.isArray(data.products[i])) {
+                    data.products[i].sort((a, b) => a.size - b.size)
+                } else {
                     data.products[i] = [data.products[i]]
                 }
-                data.products = filterProducts(data,pID,i)
-                
+                data.products = filterProducts(data, pID, i)
+
             }
             setProductsToShow(data.products)
             setOriginalProducts(data.products)
             changeImageSize(currentType[currentType.length - 1])
         })
 
-    },[setProductsToShow,setOriginalProducts,props.typeOfPage])
+    }, [setProductsToShow, setOriginalProducts, props.typeOfPage])
     useEffect(() => {
         getProducts()
     }, [getProducts])
 
-    function filterProducts(data,pID,i){
+    function filterProducts(data, pID, i) {
         return data.products.filter((product, slot) => {
             return slot === i || product.productID !== pID
         })
     }
-    
+
     function changeImageSize(currentType) {
         if (currentType === "sunglasses" || currentType === "socks") {
             let ele = document.getElementsByClassName("product_image")
@@ -69,9 +69,9 @@ export default function ProductsPage(props) {
 
 
 
-    function selectSortChange(e){
-        const v=  e.target.value
-        switch(v){
+    function selectSortChange(e) {
+        const v = e.target.value
+        switch (v) {
             case "0":
                 sortFeatured()
                 break;
@@ -86,20 +86,20 @@ export default function ProductsPage(props) {
         }
     }
 
-    function sortFeatured(){
+    function sortFeatured() {
         setProductsToShow(originalProducts)
     }
 
-    function sortLowToHigh(){
-        const a =[...productsToShow].sort((a,b)=>{
+    function sortLowToHigh() {
+        const a = [...productsToShow].sort((a, b) => {
             return a[0].price - b[0].price
         })
         setProductsToShow(a)
     }
 
-    function sortHighToLow(){
-        const a =[...productsToShow].sort((a,b)=>{
-            return b[0].price - a[0].price 
+    function sortHighToLow() {
+        const a = [...productsToShow].sort((a, b) => {
+            return b[0].price - a[0].price
         })
         setProductsToShow(a)
     }
@@ -110,7 +110,8 @@ export default function ProductsPage(props) {
                 <div className="list-container">
                     {props.typeOfPage === "men" ?
                         <h1 className="section-header">Men</h1>
-                        : props.typeOfPage === "women" ? <h1 className="section-header">Women</h1> : null}
+                        : props.typeOfPage === "women" ? <h1 className="section-header">Women</h1> 
+                        : props.typeOfPage === "kids" ? <h1 className="section-header">Kids</h1>:null}
 
                     <ul className="full-List">
                         <li className="semi-List-header">Footwear</li>
@@ -121,20 +122,25 @@ export default function ProductsPage(props) {
                             <li className="list-section" name="socks" onClick={changeProductsType}>Socks</li>
                         </ul>
                     </ul>
-                    <ul className="full-List">
-                        <li className="semi-List-header">Apparel</li>
-                        <ul className="semi-List">
-                            <li className="list-section" name="tops" onClick={changeProductsType}>Tops</li>
-                            <li className="list-section" name="bottoms" onClick={changeProductsType}>Bottoms</li>
-                            <li className="list-section" name="sweaters" onClick={changeProductsType}>Sweaters</li>
-                        </ul>
-                    </ul>
-                    <ul className="full-List">
-                        <li className="semi-List-header">Accesories</li>
-                        <ul className="semi-List">
-                            <li className="list-section" name="sunglasses" onClick={changeProductsType}>Sunglasses</li>
-                        </ul>
-                    </ul>
+                    {props.typeOfPage !== "kids" ?
+                        <>
+                            <ul className="full-List">
+                                <li className="semi-List-header">Apparel</li>
+                                <ul className="semi-List">
+                                    <li className="list-section" name="tops" onClick={changeProductsType}>Tops</li>
+                                    <li className="list-section" name="bottoms" onClick={changeProductsType}>Bottoms</li>
+                                    <li className="list-section" name="sweaters" onClick={changeProductsType}>Sweaters</li>
+                                </ul>
+                            </ul>
+                            <ul className="full-List">
+                                <li className="semi-List-header">Accesories</li>
+                                <ul className="semi-List">
+                                    <li className="list-section" name="sunglasses" onClick={changeProductsType}>Sunglasses</li>
+                                </ul>
+                            </ul>
+                        </>
+                        : null}
+
                 </div>
                 <div className="products-container">
                     <div className="sort-by-container">
@@ -149,7 +155,7 @@ export default function ProductsPage(props) {
 
 
                     </div>
-                    
+
 
 
                     <ProductsContainer productsToShow={productsToShow}></ProductsContainer>

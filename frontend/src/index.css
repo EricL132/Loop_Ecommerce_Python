@@ -15,3 +15,13 @@ html{
 .main {
   margin-top: 60px;
 }
+.bottom_message{
+  position: static;
+  bottom: 0;
+  width: 100%;
+}
+
+.bottom_message span{
+  text-align: center;
+  display: block;
+}

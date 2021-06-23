@@ -13,7 +13,6 @@ export default function SpecificProductPage() {
         let productID = window.location.pathname.split("/")
         fetch(`/api/product?productid=${productID[productID.length - 1]}`).then((res) => res.json()).then((data) => {
             if (data) {
-                console.log(data.sort((a, b) => a.size - b.size))
                 setProduct(data)
                 setCurrentImage(data[0].image)
             }
@@ -76,10 +75,16 @@ export default function SpecificProductPage() {
                                         <button className="photo-button right-button" onClick={nextPhoto}><i className="fas fa-arrow-right"></i></button>
                                     </>
                                     : null}
-                                {currentImage && currentImage.includes("nike") ?
-                                    <img id="product-image" alt="" className="product-image" src={currentImage} style={{height:"700px",marginTop:"-20px"}}></img>
+                                {currentImage && currentImage.includes("nike") && (product[0].itemType !== "socks" && product[0].itemType !== "sunglasses" || currentImage.includes("nike"))  ?
+                                    <img id="product-image" alt="" className="product-image" src={currentImage} style={{ height: "700px", marginTop: "-20px" }}></img>
                                     :
-                                    <img id="product-image" alt="" className="product-image" src={currentImage}></img>
+                                    <>
+                                        {product[0].itemType === "socks" || product[0].itemType === "sunglasses" ?
+                                            <img id="product-image" alt="" className="product-image" src={currentImage} style={{ height: "300px", marginTop: "-20px" }}></img>
+
+                                            : <img id="product-image" alt="" className="product-image" src={currentImage}></img>
+                                        }
+                                    </>
                                 }
 
 
@@ -104,12 +109,18 @@ export default function SpecificProductPage() {
                                 : null}
                             <h2 className="product-price">${product[0].price}</h2>
                             <span className="select-size-span">Select size</span>
+                            
                             <div className="sizes-available-container">
                                 {product.map((p, i) => {
                                     if (isNaN(parseFloat(p.size))) {
                                         return <div className="size-container">
                                             <button className="size-span" item={i} onClick={selectSize}>{p.size}</button>
                                         </div>
+                                    }
+                                    if(p.size==="0.0"){
+                                        return <div className="size-container">
+                                        <button className="size-span" item={i} onClick={selectSize}>Only one size</button>
+                                    </div>
                                     }
                                     return <div className="size-container">
                                         <button className="size-span" item={i} onClick={selectSize}>M {parseFloat(p.size)}/W {parseFloat(p.size) + 1}</button>
