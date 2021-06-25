@@ -35,3 +35,10 @@ export const LoggedIn=()=>{
         type:'SIGN_IN'
     }
 }
+
+export const screenWidth=(info)=>{
+    return {
+        type: 'CHANGE_WIDTH',
+        payload:info
+    }
+}

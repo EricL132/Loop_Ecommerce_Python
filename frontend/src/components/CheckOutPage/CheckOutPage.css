@@ -3,8 +3,6 @@
     margin-top: 6rem;
 }
 
-
-
 .right_side_container {
     float: left;
     width: 47%;
@@ -103,43 +101,41 @@
     margin-left: .5rem;
 }
 
-.checkout_product_container .product-row{
+.checkout_product_container .product-row {
     font-size: 15px;
 }
 
-.summary_bottom_container{
+.summary_bottom_container {
     margin-left: 1rem;
 }
 
-.state_select{
+.state_select {
     outline: none;
     font-size: 15px;
     cursor: pointer;
-    padding:2px;
+    padding: 2px;
 }
 
-
-
-.buttons_container{
+.buttons_container {
     top: 55%;
     position: absolute;
-    transform: translate(-50%,-50%);
+    transform: translate(-50%, -50%);
     width: 80%;
     left: 50%;
 }
 
-.coupon_container{
+.coupon_container {
     margin-bottom: 20px;
     margin-top: -5px;
 }
 
-.coupon_container input{
+.coupon_container input {
     font-size: 16px;
     outline: none;
     padding: 2px 5px;
 }
 
-.coupon_container button{
+.coupon_container button {
     border-radius: 5px;
     margin-left: 10px;
     font-size: 15px;
@@ -148,12 +144,12 @@
     cursor: pointer;
 }
 
-.coupon_container button:hover{
+.coupon_container button:hover {
     background-color: black;
     color: white;
 }
 
-.coupon_container .coupon_error{
+.coupon_container .coupon_error {
     color: red;
     display: block;
     margin-top: 5px;
@@ -169,28 +165,54 @@
     border-radius: 5px;
 }
 
-.payment_options_button{
+.payment_options_button {
     position: absolute;
     left: 50%;
     top: 50%;
-    transform: translate(-50%,-50%);
+    transform: translate(-50%, -50%);
     cursor: pointer;
     font-size: 17px;
     padding: 5px 10px;
     border-radius: 5px;
     border: none;
-
 }
 
-.payment_options_button:hover{
+.payment_options_button:hover {
     background-color: black;
     color: white;
 }
 
-.payment_error{
+.payment_error {
     color: red;
     bottom: 10px;
     position: absolute;
     width: 100%;
     text-align: center;
+}
+
+@media(max-width:600px) {
+    .order_summary_container {
+        width: 100%;
+        float: none;
+    }
+    .checkout_mid {
+        max-width: 100%;
+        display: flex;
+        flex-direction: column-reverse;
+        
+    }
+    .right_side_container {
+        width: 100%;
+    }
+    .state_select{
+        margin: 15px;
+       
+    }
+    .checkout_info_container{
+        width: 66%;
+    }
+    .checkout_product_container .product-row {
+        width: 60%;
+    }
+  
 }

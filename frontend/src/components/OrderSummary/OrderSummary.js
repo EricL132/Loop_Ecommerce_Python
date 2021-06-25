@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react"
 import "./OrderSummary.css"
 import { Link } from "react-router-dom"
+import RightCartInfo from "../RightCartInfo/RightCartInfo"
 export default function OrderSummary(props) {
     const [orderInfo, setOrderInfo] = useState()
     const [orderid, setorderid] = useState()
@@ -24,6 +25,7 @@ export default function OrderSummary(props) {
         <>
             {
                 orderInfo ?
+                <>
                     <div className="main mid-container order_mid">
 
 
@@ -58,29 +60,33 @@ export default function OrderSummary(props) {
 
                             <div className="products_table">
                                 <table className="info_table">
-                                    <tr className="info_rows">
-                                        <th className="table_info_head item_header">Items</th>
-                                        <th className="table_info_head">Description</th>
-                                        <th className="table_info_head">Qty</th>
-                                        <th className="table_info_head">Size</th>
-                                        <th className="table_info_head">Price</th>
-                                    </tr>
-                                    {orderInfo.order_info.map((product) => {
-                                        return <tr>
-                                            <td>
-                                                <Link to={`/pages/product/${product.product_id.productID}`}><img className="info_image" src={product.product_id.image}></img></Link>
-                                            </td>
-                                            <td>{product.product_id.name}</td>
-                                            <td>{product.quantity}</td>
-                                            <td>{product.product_id.size}</td>
-                                            <td>${product.product_id.price}</td>
+                                    <tbody>
+                                        <tr className="info_rows">
+                                            <th className="table_info_head item_header">Items</th>
+                                            <th className="table_info_head desc_table">Description</th>
+                                            <th className="table_info_head">Qty</th>
+                                            <th className="table_info_head">Size</th>
+                                            <th className="table_info_head">Price</th>
                                         </tr>
-                                    })}
-
+                                        {orderInfo.order_info.map((product,i) => {
+                                            return <tr key={i}>
+                                                <td>
+                                                    <Link to={`/pages/product/${product.product_id.productID}`}><img className="info_image" src={product.product_id.image}></img></Link>
+                                                </td>
+                                                <td className="desc_rowd">{product.product_id.name}</td>
+                                                <td>{product.quantity}</td>
+                                                <td>{product.product_id.size}</td>
+                                                <td>${product.product_id.price}</td>
+                                            </tr>
+                                        })}
+                                    </tbody>
                                 </table>
                             </div>
                         </div>
                     </div >
+
+                    <RightCartInfo></RightCartInfo>
+                    </>
                     : null
             }
         </>

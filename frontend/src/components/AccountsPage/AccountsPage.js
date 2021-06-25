@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react"
 import "./AccountsPage.css"
 import { useHistory } from 'react-router'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { LoggedIn } from '../../redux/actions/index'
 import RightCartInfo from "../RightCartInfo/RightCartInfo"
 import { Link } from "react-router-dom"
@@ -9,6 +9,7 @@ export default function AccountPage() {
     const history = useHistory()
     const [userInfo, setUserInfo] = useState()
     const dispatch = useDispatch()
+    const width = useSelector(state => state.screenWidth)
     function getInfo() {
         fetch("/api/info").then((res) => res.json()).then((data) => {
             setUserInfo(data)
@@ -36,10 +37,14 @@ export default function AccountPage() {
                             <table className="order_table">
                                 <tr className="first_row">
                                     <th>Order#</th>
-                                    <th>Date</th>
-                                    <th>Payment Status</th>
-                                    <th>Fulfillment Status</th>
-                                    <th>Total</th>
+                                    {width > 600 ?
+                                        <>
+                                            <th>Date</th>
+                                            <th>Payment Status</th>
+                                            <th>Fulfillment Status</th>
+                                            <th>Total</th>
+                                        </>
+                                        : null}
                                 </tr>
                                 {userInfo.hasOwnProperty("order") ?
                                     <>
@@ -47,10 +52,15 @@ export default function AccountPage() {
                                             userInfo.order.map((order) => {
                                                 return <tr>
                                                     <Link to={`/order/${order.transaction_id}`}><td className="order_history_td">{order.transaction_id}</td></Link>
-                                                    <td className="order_history_td">{order.date_ordered.split("T")[0]}</td>
-                                                    <td className="order_history_td">{order.status}</td>
-                                                    <td className="order_history_td">Delivered</td>
-                                                    <td className="order_history_td">${order.total}</td>
+                                                    {width > 600 ?
+                                                        <>
+                                                            <td className="order_history_td">{order.date_ordered.split("T")[0]}</td>
+                                                            <td className="order_history_td">{order.status}</td>
+                                                            <td className="order_history_td">Delivered</td>
+                                                            <td className="order_history_td">${order.total}</td>
+                                                        </>
+                                                        : null}
+
                                                 </tr>
                                             })
                                         }

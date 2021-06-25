@@ -27,7 +27,7 @@ def create_order(amount):
                 {
                     "amount": {
                         "currency_code": "USD",
-                        "value": 1
+                        "value": amount
                     }
                 }
             ]

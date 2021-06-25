@@ -4,10 +4,12 @@ import "./productsPage.css"
 import { useHistory } from 'react-router'
 import RightCartInfo from '../RightCartInfo/RightCartInfo'
 import ProductsContainer from './productsContainer'
+import { useSelector } from "react-redux"
 export default function ProductsPage(props) {
     const [productsToShow, setProductsToShow] = useState()
     const [originalProducts, setOriginalProducts] = useState()
     const history = useHistory()
+    const width = useSelector(state=>state.screenWidth)
     const getProducts = useCallback(() => {
         const currentType = window.location.pathname.split("/")
         fetch(`/api/${props.typeOfPage}?type=${currentType[currentType.length - 1]}`).then((res) => res.json()).then((data) => {

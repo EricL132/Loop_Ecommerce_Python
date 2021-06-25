@@ -12,7 +12,6 @@ export default function addToCart(e, products, dispatch, id) {
         item = e.getAttribute("item")
     }
     let product;
-    console.log(products)
     if (products[item].length === 1) {
         product = products[item]
     } else {

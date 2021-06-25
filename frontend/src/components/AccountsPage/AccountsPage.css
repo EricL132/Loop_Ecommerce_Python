@@ -55,3 +55,18 @@
 #logout:hover{
     text-decoration: underline;
 }
+
+
+@media(max-width:600px){
+    .account_header{
+        width: 95%;
+    }
+    .account_mid_container{
+        width: 100%;
+        display: block;
+    }
+    .order_table{
+        width: 100%;
+        overflow: auto;
+    }
+}

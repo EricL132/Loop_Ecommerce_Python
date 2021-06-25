@@ -1,5 +1,5 @@
 import './App.css';
-import { BrowserRouter, Route, Switch } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import Navbar from './components/Navbar/Navbar'
 import Home from './components/HomePage/Homepage'
 import ProductsPage from './components/productsPage/productsPage'
@@ -18,10 +18,9 @@ function App() {
 
   
   return (
-    <BrowserRouter>
+    <Router>
       <Navbar/>
       <Switch>
-        <Route path="/" exact component={Home}></Route>
         <Route path="/pages/men/" render={()=><ProductsPage typeOfPage="men"/>}></Route>
         <Route path="/pages/women/" render={()=><ProductsPage typeOfPage="women"/>} ></Route>
         <Route path="/pages/kids/" render={()=><ProductsPage typeOfPage="kids"/>} ></Route>
@@ -35,10 +34,11 @@ function App() {
         <Route path="/checkout" exact component={CheckOutPage}></Route>
         <Route path="/order/:id" exact component={OrderSummary}></Route>
         <Route path="/account/reset/:token" exact component={ResetPage}></Route>
+        <Route path="/" exact component={Home}></Route>
 
       </Switch>
       <BottomMessage></BottomMessage>
-    </BrowserRouter>
+    </Router>
   );
 }
 

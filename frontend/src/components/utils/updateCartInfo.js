@@ -8,7 +8,6 @@ export default function updateCartInfo(dispatch) {
       bag += cart[i].quantity
     }
     dispatch(bagCount(bag))
-
     dispatch(updateCart(cart))
   } else {
     dispatch(bagCount(0))

@@ -34,6 +34,10 @@ class GetWomensProducts(APIView):
     def get(self,request,format=None):
         products = Product.objects.filter(itemCategory='womens',itemType=request.GET.get('type'),stock__gt=0).values()        
         return Response({'products':list(products)},status=status.HTTP_200_OK)
+class GetKidsProducts(APIView):
+    def get(self,request,format=None):
+        products = Product.objects.filter(itemCategory='kids',itemType=request.GET.get('type'),stock__gt=0).values()        
+        return Response({'products':list(products)},status=status.HTTP_200_OK)
 
 
 class GetProduct(APIView):
@@ -96,6 +100,9 @@ class Login(APIView):
         if user:
             if not self.request.session.exists(self.request.session.session_key):
                 self.request.session.create()
+            token = Token.objects.filter(user=user)
+            if token:
+                token.delete()
             token = Token.objects.create(user=user)
             token.id = user.id
             token.save()
@@ -144,10 +151,14 @@ class Reset(APIView):
 
 class GetAccountInfo(APIView):
     def get(self,request,format=None):
+        if not self.request.session.exists(self.request.session.session_key):
+            self.request.session.create()
+        if 'auth' not in request.session:
+            return Response({},status=status.HTTP_403_FORBIDDEN)
         if checkAuth(self.request.session["auth"]):
-            return Response({},status=status.HTTP_200_OK)
+            return Response({},status=status.HTTP_200_OK)        
         return Response({},status=status.HTTP_403_FORBIDDEN)
-        
+
 class LogOut(APIView):
     def post(self,request,format=None):
         token = Token.objects.filter(key=self.request.session["auth"])
@@ -211,7 +222,6 @@ class CreateOrder(APIView):
             total = calculateTotal(request.data["cart"],False)
         order = create_order(total)
         if self.request.session["auth"]:
-            print(self.request.session["auth"])
             token = Token.objects.filter(key = self.request.session["auth"]).values()[0]
             if token:
                 user = User.objects.filter(id=token.get("user_id"))[0]
@@ -245,13 +255,15 @@ class CaptureOrder(APIView):
                     customer = Customer.objects.create(name=info.get("first_name")+" "+info.get("last_name"),email=info.get("email"))
                 order_model = Order.objects.filter(transaction_id=order_info.get("order_id"))
                 if len(order_model)==0:
-                    order_model = Order.objects.create(customer=customer,transaction_id=order_info.get("order_id"))
+                    order_model = Order.objects.create(customer=customer,transaction_id=order_info.get("order_id"),total=order_info.get("total"),status="Complete")
                 else:
                     order_model = order_model[0]
                 for i in info.get("cart"):
                     product = Product.objects.filter(id=info.get("cart")[i].get("id"))[0]
+                    product.stock = product.stock-info.get("cart")[i].get("quantity")
+                    product.save()
                     OrderItem.objects.create(product=product,order=order_model,quantity=info.get("cart")[i].get("quantity"))
-                ShippingInfo.objects.create(customer=customer,order=order_model,address=info.get("address"),state=info.get("state"),city=info.get("city"),zipcode=info.get("zip"),email=info.get("email"))
+                shipping = ShippingInfo.objects.create(customer=customer,order=order_model,address=info.get("address"),state=info.get("state"),city=info.get("city"),zipcode=info.get("zip"),email=info.get("email"))
                 return Response({"status":"COMPLETE","order_id":order},status=status.HTTP_200_OK)
             else:
                 return Response({"status":"FAIL","error":"Order not found"},status=status.HTTP_403_FORBIDDEN)
@@ -260,8 +272,7 @@ class GetOrderInfo(APIView):
     def get(self,request,order):
         order_info = Order.objects.filter(transaction_id=order)[0]
         if order_info:
-            customer = Customer.objects.filter(id=order_info.customer_id)[0]
-            shipping_info = ShippingInfo.objects.filter(customer=customer).values()[0]
+            shipping_info = ShippingInfo.objects.filter(order=order_info).values()[0]
             products = OrderItem.objects.filter(order=order_info).values("product_id","quantity")
             for i in products:
                 product = Product.objects.filter(id=i.get("product_id")).values("image","name","price","size","productID")[0]

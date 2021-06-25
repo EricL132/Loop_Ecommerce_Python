@@ -45,6 +45,7 @@
     background-color: rgba(0, 0, 0, .7);
     justify-content: center;
     border-radius: 10px;
+    max-width: 100%;
 }
 
 .coupon-span {
@@ -89,7 +90,7 @@
     position: absolute;
     user-select: none;
     cursor: pointer;
-
+    max-width: 100%;
 }
 
 #home-container #bottom-container-images{
@@ -117,4 +118,12 @@
 .selected_different_feature_button{
     background-color: black;
     border-radius: 1px solid white;
+}
+
+
+@media(max-width:600px){
+    .home-button {
+       width: 90px;
+    }
+   
 }

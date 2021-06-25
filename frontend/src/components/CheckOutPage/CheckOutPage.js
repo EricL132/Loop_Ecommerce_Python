@@ -29,7 +29,8 @@ export default function CheckOutPage() {
     const history = useHistory()
     const [paymentError, setPaymentError] = useState()
     const [InPayment, setInPayment] = useState()
-    const [checkout, setCheckout] = useState()
+    const [checkedOut,setCheckedOut] = useState()
+    const [pageLoaded,setPageLoaded] = useState(false)
     const updateSubTotal = useCallback(() => {
         let total = 0
         Object.entries(cartInfo).map((item) => {
@@ -85,10 +86,14 @@ export default function CheckOutPage() {
     useEffect(() => {
         if (cartInfo) {
             updateSubTotal()
-
         }else{
-            history.push("/")
+            
+            if(!checkedOut && pageLoaded){
+                history.push("/")
+            }
+            
         }
+        setPageLoaded(true)
     }, [cartInfo, updateSubTotal])
 
     useEffect(() => {
@@ -132,7 +137,6 @@ export default function CheckOutPage() {
                     }).then(function (res) {
                         return res.json();
                     }).then(function (orderData) {
-                        console.log(orderData)
                         if (orderData.status===false) {
                             localStorage.setItem("cart", JSON.stringify(orderData.cart))
                             updateCartInfo(dispatch)
@@ -168,8 +172,10 @@ export default function CheckOutPage() {
                             if (orderData.debug_id) msg += ' (' + orderData.debug_id + ')';
                             return alert(msg);
                         }
+                        setCheckedOut(true)
                         localStorage.removeItem("cart")
                         updateCartInfo(dispatch)
+
                         history.push(`/order/${orderData.order_id}`)
                     });
                 }
@@ -178,11 +184,7 @@ export default function CheckOutPage() {
             return () => Button.close()
         }
     }, [discountTotal, total, InPayment,couponApplied])
-    function handleCheckout() {
-        fetch("/api/checkout", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(customerInfo) }).then((res) => {
 
-        })
-    }
 
     async function checkCartStock() {
         await fetch("api/stock", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(cartInfo) }).then((res) => res.json()).then(data => {
@@ -195,9 +197,7 @@ export default function CheckOutPage() {
         })
         return true
     }
-    useEffect(() => {
-        handleCheckout()
-    }, [checkout])
+
     return (
         <>
 
@@ -214,7 +214,7 @@ export default function CheckOutPage() {
                             <input id="address" autoComplete="new-password" className="checkout_inputs" placeholder="Address" style={{ marginTop: "0px" }}></input>
                             <input id="zip" autoComplete="new-password" className=" smaller_checkout_inputs checkout_inputs " placeholder="Zip"></input>
                             <input id="city" autoComplete="new-password" className="smaller_checkout_inputs checkout_inputs" placeholder="City"></input>
-                            <select id="state" className="state_select">
+                            <select id="state" className="state_select" >
                                 <option value="AL">Alabama</option>
                                 <option value="AK">Alaska</option>
                                 <option value="AZ">Arizona</option>

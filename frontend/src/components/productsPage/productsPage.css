@@ -73,6 +73,7 @@
     min-height: calc(100vh - 60px);
     float: right;
 
+
 }
 
 .products-container-p{
@@ -183,4 +184,35 @@
     flex-direction: column;
     position: relative;
     width: 300px;
+}
+
+
+@media(max-width:600px){
+    .products-container{
+        width: 90%;
+        float: none;
+        left: 50%;
+        transform: translateX(-50%);
+        position: relative;
+        min-height: 0;
+        margin-top: 220px;
+    }
+    .products-container-p{
+        justify-content: center;
+    }
+    .products-page-mid{
+        width: 100%;
+    }
+    .product-container{
+       
+        margin:0;
+    }
+    .list-container{
+        width: 98%;
+       
+    }
+    .full-List{
+        width: 30%;
+        float: left;
+    }
 }
