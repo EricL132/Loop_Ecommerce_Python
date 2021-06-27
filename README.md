@@ -1,5 +1,6 @@
 # Ecommerse Platform
-#### Live demo on https://listenalong.herokuapp.com/
+#### Live demo on https://shop132.herokuapp.com/
+Site might take 30 seconds to load on first load due to free plan on hosting platform
 ## Home Page
 ## ![](https://i.gyazo.com/fc61dba2add0f47ef5637975a754e5aa.png)
 ## Products Page
