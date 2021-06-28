@@ -10,7 +10,7 @@ Site might take 30 seconds to load on first load due to free plan on hosting pla
 ## Account Page
 ## ![](https://i.gyazo.com/62d832ffef05325558ac60cfb2fa4fe4.png)
 ## Bag Info
-#### Can be accessed in any page
+#### Can be accessed on any page
 ## ![](https://i.gyazo.com/80d55b897ea47a93cd500157546a2cd4.png)
 ## Checkout page
 ## ![](https://i.gyazo.com/adcdbc61b21074907689b0ad9714f9f6.png)
