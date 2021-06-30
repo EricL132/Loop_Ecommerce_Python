@@ -31,7 +31,7 @@ function App() {
         <Route path="/account/forgot" exact component={ForgotPassword}></Route>
         <Route path="/account/info" exact component={AccountPage}></Route>
         <Route path="/pages/search" exact component={SearchPage}></Route>
-        <Route path="/checkout" exact component={CheckOutPage}></Route>
+        <Route path="/pages/checkout" exact component={CheckOutPage}></Route>
         <Route path="/order/:id" exact component={OrderSummary}></Route>
         <Route path="/account/reset/:token" exact component={ResetPage}></Route>
         <Route path="/" exact component={Home}></Route>
