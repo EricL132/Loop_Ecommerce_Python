@@ -175,7 +175,7 @@ export default function CheckOutPage() {
                         setCheckedOut(true)
                         localStorage.removeItem("cart")
                         updateCartInfo(dispatch)
-
+                        closeCart()
                         history.push(`/order/${orderData.order_id}`)
                     });
                 }
@@ -198,13 +198,16 @@ export default function CheckOutPage() {
         return true
     }
 
+    function closeCart(){
+        dispatch(showCartInfo())
+    }
     return (
         <>
 
             <div className="main mid-container checkout_mid">
                 <div className="right_side_container">
                     <div className="customer_info_container">
-                        <h1 className="shipping_header">Contact Infomation {!loggedIn ? <button className="account_button">Have an Account?</button> : null}</h1>
+                        <h1 className="shipping_header">Contact Infomation {!loggedIn ? <Link to="/account/login" onClick={closeCart}><button className="account_button" >Have an Account?</button></Link> : null}</h1>
                         <form onChange={changeCustomerInfo}>
                             <input id="email" autoComplete="new-password" className="checkout_inputs" placeholder="Email" style={{ marginTop: "0px" }}></input>
                             <h1 className="shipping_header">Shipping Infomation</h1>

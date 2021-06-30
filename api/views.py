@@ -217,17 +217,17 @@ class CreateOrder(APIView):
         if stock.get("status")==False:
             return Response(stock,status=status.HTTP_200_OK)
         if "coupon" in request.data:
-            total = calculateTotal(request.data["cart"],request.data["coupon"])
+            total = round(calculateTotal(request.data["cart"],request.data["coupon"]),2)
         else:
-            total = calculateTotal(request.data["cart"],False)
+            total = round(calculateTotal(request.data["cart"],False),2)
         order = create_order(total)
-        if self.request.session["auth"]:
-            token = Token.objects.filter(key = self.request.session["auth"]).values()[0]
+        if self.request.session and 'auth' in self.request.session:
+            token = Token.objects.filter(key = self.request.session["auth"]).values()
             if token:
-                user = User.objects.filter(id=token.get("user_id"))[0]
+                user = User.objects.filter(id=token[0].get("user_id"))[0]
                 TempOrder.objects.create(user=user,order_id=order.id,info=json.dumps(request.data),total=total)
             else:
-                return Response({},status=status.HTTP_404_NOT_FOUND)
+                TempOrder.objects.create(order_id=order.id,info=json.dumps(request.data),total=total)
         else:
             TempOrder.objects.create(order_id=order.id,info=json.dumps(request.data),total=total)
         return Response({"id":order.id},status=status.HTTP_200_OK)
@@ -301,7 +301,7 @@ def calculateTotal(cart,coupon):
     discount = False
     total = 0
     if coupon:
-        code = Coupons.objects.filter(code=coupon).values("discount")
+        code = Coupons.objects.filter(code=coupon.strip()).values("discount")
         if len(code)>0:
             discount = code[0].get("discount")
    

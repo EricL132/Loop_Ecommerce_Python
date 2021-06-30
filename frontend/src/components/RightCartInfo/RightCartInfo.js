@@ -207,7 +207,7 @@ export default function RightCartInfo() {
                                 <Link to="/pages/checkout"><button id="checkout-button">Checkout</button></Link>
                             </div>
                             : null}
-                        
+    
 
                     </div>
 
