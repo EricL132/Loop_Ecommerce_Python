@@ -1,5 +1,4 @@
 
-import requests
 from django.shortcuts import render
 from rest_framework import status
 from rest_framework.views import APIView
@@ -7,11 +6,7 @@ from rest_framework.response import Response
 from rest_framework.authtoken.models import Token
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate
-
-from django.http import JsonResponse
-from django.core import serializers
 from .models import *
-from .utils import *
 from django.db.models import Q
 from .paypal import create_order,capture_order
 import json
@@ -19,6 +14,8 @@ import json
 import smtplib
 import os
 from dotenv import load_dotenv
+
+from . import semail 
 load_dotenv()
 class GetProducts(APIView):
     def get(self,request,format=None):
@@ -125,12 +122,13 @@ class Forgot(APIView):
         else:
             token = ResetToken.objects.create(user=user)
             token=token.token
-        with smtplib.SMTP_SSL('smtp.gmail.com',465) as smtp:
-            smtp.login(os.getenv("EMAIL_ADDRESS"),os.getenv("EMAIL_PASSWORD"))
-            subject = "Forgot Password"
-            body= "Reset Link: {}{}".format(os.getenv("HOSTLINK"),token)
-            msg = f'Subject:{subject}\n\n{body}'
-            smtp.sendmail(os.getenv("EMAIL_ADDRESS"),user.email,msg)
+        # with smtplib.SMTP_SSL('smtp.gmail.com',465) as smtp:
+        #     smtp.login(os.getenv("EMAIL_ADDRESS"),os.getenv("EMAIL_PASSWORD"))
+        #     subject = "Forgot Password"
+        #     body= "Reset Link: {}{}".format(os.getenv("HOSTLINK"),token)
+        #     msg = f'Subject:{subject}\n\n{body}'
+        #     smtp.sendmail(os.getenv("EMAIL_ADDRESS"),user.email,msg)
+        semail.main("Forgot password","Reset Link: {}{}".format(os.getenv("WEBLINK"),token),"moomeowmoo1@gmail.com",user.email)
         return Response('Email Sent',status=status.HTTP_200_OK)
             
 class Reset(APIView):
