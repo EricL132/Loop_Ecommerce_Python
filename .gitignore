@@ -8,7 +8,8 @@ media
 
 # Backup files # 
 *.bak 
-
+credentials.json
+token.pickle
 # If you are using PyCharm # 
 .idea/**/workspace.xml 
 .idea/**/tasks.xml 
