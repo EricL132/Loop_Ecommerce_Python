@@ -1,5 +1,5 @@
 # Ecommerse Platform
-#### Live demo on https://shop132.herokuapp.com/
+#### Live demo on https://shop.erics.software/
 Site may take 30 seconds to render on first request due to free plan on hosting platform  
 ## Home Page
 ## ![](https://i.gyazo.com/fc61dba2add0f47ef5637975a754e5aa.png)
