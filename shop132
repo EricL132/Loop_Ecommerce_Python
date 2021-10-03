@@ -1,0 +1,2290 @@
+--
+-- PostgreSQL database dump
+--
+
+-- Dumped from database version 13.3
+-- Dumped by pg_dump version 13.3
+
+SET statement_timeout = 0;
+SET lock_timeout = 0;
+SET idle_in_transaction_session_timeout = 0;
+SET client_encoding = 'UTF8';
+SET standard_conforming_strings = on;
+SELECT pg_catalog.set_config('search_path', '', false);
+SET check_function_bodies = false;
+SET xmloption = content;
+SET client_min_messages = warning;
+SET row_security = off;
+
+SET default_tablespace = '';
+
+SET default_table_access_method = heap;
+
+--
+-- Name: api_coupons; Type: TABLE; Schema: public; Owner: Eric
+--
+
+CREATE TABLE public.api_coupons (
+    id bigint NOT NULL,
+    code character varying(50) NOT NULL,
+    discount integer NOT NULL
+);
+
+
+ALTER TABLE public.api_coupons OWNER TO "Eric";
+
+--
+-- Name: api_coupons_id_seq; Type: SEQUENCE; Schema: public; Owner: Eric
+--
+
+CREATE SEQUENCE public.api_coupons_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.api_coupons_id_seq OWNER TO "Eric";
+
+--
+-- Name: api_coupons_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: Eric
+--
+
+ALTER SEQUENCE public.api_coupons_id_seq OWNED BY public.api_coupons.id;
+
+
+--
+-- Name: api_customer; Type: TABLE; Schema: public; Owner: Eric
+--
+
+CREATE TABLE public.api_customer (
+    id bigint NOT NULL,
+    name character varying(200) NOT NULL,
+    email character varying(200) NOT NULL,
+    user_id integer
+);
+
+
+ALTER TABLE public.api_customer OWNER TO "Eric";
+
+--
+-- Name: api_customer_id_seq; Type: SEQUENCE; Schema: public; Owner: Eric
+--
+
+CREATE SEQUENCE public.api_customer_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.api_customer_id_seq OWNER TO "Eric";
+
+--
+-- Name: api_customer_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: Eric
+--
+
+ALTER SEQUENCE public.api_customer_id_seq OWNED BY public.api_customer.id;
+
+
+--
+-- Name: api_featured; Type: TABLE; Schema: public; Owner: Eric
+--
+
+CREATE TABLE public.api_featured (
+    id bigint NOT NULL,
+    product_id bigint NOT NULL,
+    image character varying(200)
+);
+
+
+ALTER TABLE public.api_featured OWNER TO "Eric";
+
+--
+-- Name: api_featured_id_seq; Type: SEQUENCE; Schema: public; Owner: Eric
+--
+
+CREATE SEQUENCE public.api_featured_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.api_featured_id_seq OWNER TO "Eric";
+
+--
+-- Name: api_featured_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: Eric
+--
+
+ALTER SEQUENCE public.api_featured_id_seq OWNED BY public.api_featured.id;
+
+
+--
+-- Name: api_order; Type: TABLE; Schema: public; Owner: Eric
+--
+
+CREATE TABLE public.api_order (
+    id bigint NOT NULL,
+    date_ordered timestamp with time zone NOT NULL,
+    transaction_id character varying(200) NOT NULL,
+    customer_id bigint,
+    total double precision NOT NULL,
+    status character varying(100) NOT NULL
+);
+
+
+ALTER TABLE public.api_order OWNER TO "Eric";
+
+--
+-- Name: api_order_id_seq; Type: SEQUENCE; Schema: public; Owner: Eric
+--
+
+CREATE SEQUENCE public.api_order_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.api_order_id_seq OWNER TO "Eric";
+
+--
+-- Name: api_order_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: Eric
+--
+
+ALTER SEQUENCE public.api_order_id_seq OWNED BY public.api_order.id;
+
+
+--
+-- Name: api_orderitem; Type: TABLE; Schema: public; Owner: Eric
+--
+
+CREATE TABLE public.api_orderitem (
+    id bigint NOT NULL,
+    quantity integer NOT NULL,
+    date_added timestamp with time zone NOT NULL,
+    order_id bigint,
+    product_id bigint
+);
+
+
+ALTER TABLE public.api_orderitem OWNER TO "Eric";
+
+--
+-- Name: api_orderitem_id_seq; Type: SEQUENCE; Schema: public; Owner: Eric
+--
+
+CREATE SEQUENCE public.api_orderitem_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.api_orderitem_id_seq OWNER TO "Eric";
+
+--
+-- Name: api_orderitem_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: Eric
+--
+
+ALTER SEQUENCE public.api_orderitem_id_seq OWNED BY public.api_orderitem.id;
+
+
+--
+-- Name: api_product; Type: TABLE; Schema: public; Owner: Eric
+--
+
+CREATE TABLE public.api_product (
+    id bigint NOT NULL,
+    name character varying(200) NOT NULL,
+    image character varying(200) NOT NULL,
+    price double precision NOT NULL,
+    stock integer NOT NULL,
+    "itemCategory" character varying(100) NOT NULL,
+    "itemType" character varying(100) NOT NULL,
+    size character varying(50),
+    "productID" character varying(21),
+    colors character varying(50),
+    images character varying(200)[]
+);
+
+
+ALTER TABLE public.api_product OWNER TO "Eric";
+
+--
+-- Name: api_product_id_seq; Type: SEQUENCE; Schema: public; Owner: Eric
+--
+
+CREATE SEQUENCE public.api_product_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.api_product_id_seq OWNER TO "Eric";
+
+--
+-- Name: api_product_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: Eric
+--
+
+ALTER SEQUENCE public.api_product_id_seq OWNED BY public.api_product.id;
+
+
+--
+-- Name: api_resettoken; Type: TABLE; Schema: public; Owner: Eric
+--
+
+CREATE TABLE public.api_resettoken (
+    id bigint NOT NULL,
+    token character varying(200) NOT NULL,
+    date_added timestamp with time zone NOT NULL,
+    user_id integer NOT NULL
+);
+
+
+ALTER TABLE public.api_resettoken OWNER TO "Eric";
+
+--
+-- Name: api_resettoken_id_seq; Type: SEQUENCE; Schema: public; Owner: Eric
+--
+
+CREATE SEQUENCE public.api_resettoken_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.api_resettoken_id_seq OWNER TO "Eric";
+
+--
+-- Name: api_resettoken_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: Eric
+--
+
+ALTER SEQUENCE public.api_resettoken_id_seq OWNED BY public.api_resettoken.id;
+
+
+--
+-- Name: api_shippinginfo; Type: TABLE; Schema: public; Owner: Eric
+--
+
+CREATE TABLE public.api_shippinginfo (
+    id bigint NOT NULL,
+    address character varying(200) NOT NULL,
+    state character varying(200) NOT NULL,
+    city character varying(200) NOT NULL,
+    zipcode character varying(200) NOT NULL,
+    date_added timestamp with time zone NOT NULL,
+    customer_id bigint,
+    order_id bigint,
+    email character varying(200) NOT NULL
+);
+
+
+ALTER TABLE public.api_shippinginfo OWNER TO "Eric";
+
+--
+-- Name: api_shippinginfo_id_seq; Type: SEQUENCE; Schema: public; Owner: Eric
+--
+
+CREATE SEQUENCE public.api_shippinginfo_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.api_shippinginfo_id_seq OWNER TO "Eric";
+
+--
+-- Name: api_shippinginfo_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: Eric
+--
+
+ALTER SEQUENCE public.api_shippinginfo_id_seq OWNED BY public.api_shippinginfo.id;
+
+
+--
+-- Name: api_temporder; Type: TABLE; Schema: public; Owner: Eric
+--
+
+CREATE TABLE public.api_temporder (
+    id bigint NOT NULL,
+    order_id character varying(200) NOT NULL,
+    info text NOT NULL,
+    total double precision NOT NULL,
+    date_added timestamp with time zone NOT NULL,
+    user_id integer
+);
+
+
+ALTER TABLE public.api_temporder OWNER TO "Eric";
+
+--
+-- Name: api_temporder_id_seq; Type: SEQUENCE; Schema: public; Owner: Eric
+--
+
+CREATE SEQUENCE public.api_temporder_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.api_temporder_id_seq OWNER TO "Eric";
+
+--
+-- Name: api_temporder_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: Eric
+--
+
+ALTER SEQUENCE public.api_temporder_id_seq OWNED BY public.api_temporder.id;
+
+
+--
+-- Name: auth_group; Type: TABLE; Schema: public; Owner: Eric
+--
+
+CREATE TABLE public.auth_group (
+    id integer NOT NULL,
+    name character varying(150) NOT NULL
+);
+
+
+ALTER TABLE public.auth_group OWNER TO "Eric";
+
+--
+-- Name: auth_group_id_seq; Type: SEQUENCE; Schema: public; Owner: Eric
+--
+
+CREATE SEQUENCE public.auth_group_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.auth_group_id_seq OWNER TO "Eric";
+
+--
+-- Name: auth_group_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: Eric
+--
+
+ALTER SEQUENCE public.auth_group_id_seq OWNED BY public.auth_group.id;
+
+
+--
+-- Name: auth_group_permissions; Type: TABLE; Schema: public; Owner: Eric
+--
+
+CREATE TABLE public.auth_group_permissions (
+    id bigint NOT NULL,
+    group_id integer NOT NULL,
+    permission_id integer NOT NULL
+);
+
+
+ALTER TABLE public.auth_group_permissions OWNER TO "Eric";
+
+--
+-- Name: auth_group_permissions_id_seq; Type: SEQUENCE; Schema: public; Owner: Eric
+--
+
+CREATE SEQUENCE public.auth_group_permissions_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.auth_group_permissions_id_seq OWNER TO "Eric";
+
+--
+-- Name: auth_group_permissions_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: Eric
+--
+
+ALTER SEQUENCE public.auth_group_permissions_id_seq OWNED BY public.auth_group_permissions.id;
+
+
+--
+-- Name: auth_permission; Type: TABLE; Schema: public; Owner: Eric
+--
+
+CREATE TABLE public.auth_permission (
+    id integer NOT NULL,
+    name character varying(255) NOT NULL,
+    content_type_id integer NOT NULL,
+    codename character varying(100) NOT NULL
+);
+
+
+ALTER TABLE public.auth_permission OWNER TO "Eric";
+
+--
+-- Name: auth_permission_id_seq; Type: SEQUENCE; Schema: public; Owner: Eric
+--
+
+CREATE SEQUENCE public.auth_permission_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.auth_permission_id_seq OWNER TO "Eric";
+
+--
+-- Name: auth_permission_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: Eric
+--
+
+ALTER SEQUENCE public.auth_permission_id_seq OWNED BY public.auth_permission.id;
+
+
+--
+-- Name: auth_user; Type: TABLE; Schema: public; Owner: Eric
+--
+
+CREATE TABLE public.auth_user (
+    id integer NOT NULL,
+    password character varying(128) NOT NULL,
+    last_login timestamp with time zone,
+    is_superuser boolean NOT NULL,
+    username character varying(150) NOT NULL,
+    first_name character varying(150) NOT NULL,
+    last_name character varying(150) NOT NULL,
+    email character varying(254) NOT NULL,
+    is_staff boolean NOT NULL,
+    is_active boolean NOT NULL,
+    date_joined timestamp with time zone NOT NULL
+);
+
+
+ALTER TABLE public.auth_user OWNER TO "Eric";
+
+--
+-- Name: auth_user_groups; Type: TABLE; Schema: public; Owner: Eric
+--
+
+CREATE TABLE public.auth_user_groups (
+    id bigint NOT NULL,
+    user_id integer NOT NULL,
+    group_id integer NOT NULL
+);
+
+
+ALTER TABLE public.auth_user_groups OWNER TO "Eric";
+
+--
+-- Name: auth_user_groups_id_seq; Type: SEQUENCE; Schema: public; Owner: Eric
+--
+
+CREATE SEQUENCE public.auth_user_groups_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.auth_user_groups_id_seq OWNER TO "Eric";
+
+--
+-- Name: auth_user_groups_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: Eric
+--
+
+ALTER SEQUENCE public.auth_user_groups_id_seq OWNED BY public.auth_user_groups.id;
+
+
+--
+-- Name: auth_user_id_seq; Type: SEQUENCE; Schema: public; Owner: Eric
+--
+
+CREATE SEQUENCE public.auth_user_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.auth_user_id_seq OWNER TO "Eric";
+
+--
+-- Name: auth_user_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: Eric
+--
+
+ALTER SEQUENCE public.auth_user_id_seq OWNED BY public.auth_user.id;
+
+
+--
+-- Name: auth_user_user_permissions; Type: TABLE; Schema: public; Owner: Eric
+--
+
+CREATE TABLE public.auth_user_user_permissions (
+    id bigint NOT NULL,
+    user_id integer NOT NULL,
+    permission_id integer NOT NULL
+);
+
+
+ALTER TABLE public.auth_user_user_permissions OWNER TO "Eric";
+
+--
+-- Name: auth_user_user_permissions_id_seq; Type: SEQUENCE; Schema: public; Owner: Eric
+--
+
+CREATE SEQUENCE public.auth_user_user_permissions_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.auth_user_user_permissions_id_seq OWNER TO "Eric";
+
+--
+-- Name: auth_user_user_permissions_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: Eric
+--
+
+ALTER SEQUENCE public.auth_user_user_permissions_id_seq OWNED BY public.auth_user_user_permissions.id;
+
+
+--
+-- Name: authtoken_token; Type: TABLE; Schema: public; Owner: Eric
+--
+
+CREATE TABLE public.authtoken_token (
+    key character varying(40) NOT NULL,
+    created timestamp with time zone NOT NULL,
+    user_id integer NOT NULL
+);
+
+
+ALTER TABLE public.authtoken_token OWNER TO "Eric";
+
+--
+-- Name: django_admin_log; Type: TABLE; Schema: public; Owner: Eric
+--
+
+CREATE TABLE public.django_admin_log (
+    id integer NOT NULL,
+    action_time timestamp with time zone NOT NULL,
+    object_id text,
+    object_repr character varying(200) NOT NULL,
+    action_flag smallint NOT NULL,
+    change_message text NOT NULL,
+    content_type_id integer,
+    user_id integer NOT NULL,
+    CONSTRAINT django_admin_log_action_flag_check CHECK ((action_flag >= 0))
+);
+
+
+ALTER TABLE public.django_admin_log OWNER TO "Eric";
+
+--
+-- Name: django_admin_log_id_seq; Type: SEQUENCE; Schema: public; Owner: Eric
+--
+
+CREATE SEQUENCE public.django_admin_log_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.django_admin_log_id_seq OWNER TO "Eric";
+
+--
+-- Name: django_admin_log_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: Eric
+--
+
+ALTER SEQUENCE public.django_admin_log_id_seq OWNED BY public.django_admin_log.id;
+
+
+--
+-- Name: django_content_type; Type: TABLE; Schema: public; Owner: Eric
+--
+
+CREATE TABLE public.django_content_type (
+    id integer NOT NULL,
+    app_label character varying(100) NOT NULL,
+    model character varying(100) NOT NULL
+);
+
+
+ALTER TABLE public.django_content_type OWNER TO "Eric";
+
+--
+-- Name: django_content_type_id_seq; Type: SEQUENCE; Schema: public; Owner: Eric
+--
+
+CREATE SEQUENCE public.django_content_type_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.django_content_type_id_seq OWNER TO "Eric";
+
+--
+-- Name: django_content_type_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: Eric
+--
+
+ALTER SEQUENCE public.django_content_type_id_seq OWNED BY public.django_content_type.id;
+
+
+--
+-- Name: django_migrations; Type: TABLE; Schema: public; Owner: Eric
+--
+
+CREATE TABLE public.django_migrations (
+    id bigint NOT NULL,
+    app character varying(255) NOT NULL,
+    name character varying(255) NOT NULL,
+    applied timestamp with time zone NOT NULL
+);
+
+
+ALTER TABLE public.django_migrations OWNER TO "Eric";
+
+--
+-- Name: django_migrations_id_seq; Type: SEQUENCE; Schema: public; Owner: Eric
+--
+
+CREATE SEQUENCE public.django_migrations_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.django_migrations_id_seq OWNER TO "Eric";
+
+--
+-- Name: django_migrations_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: Eric
+--
+
+ALTER SEQUENCE public.django_migrations_id_seq OWNED BY public.django_migrations.id;
+
+
+--
+-- Name: django_session; Type: TABLE; Schema: public; Owner: Eric
+--
+
+CREATE TABLE public.django_session (
+    session_key character varying(40) NOT NULL,
+    session_data text NOT NULL,
+    expire_date timestamp with time zone NOT NULL
+);
+
+
+ALTER TABLE public.django_session OWNER TO "Eric";
+
+--
+-- Name: api_coupons id; Type: DEFAULT; Schema: public; Owner: Eric
+--
+
+ALTER TABLE ONLY public.api_coupons ALTER COLUMN id SET DEFAULT nextval('public.api_coupons_id_seq'::regclass);
+
+
+--
+-- Name: api_customer id; Type: DEFAULT; Schema: public; Owner: Eric
+--
+
+ALTER TABLE ONLY public.api_customer ALTER COLUMN id SET DEFAULT nextval('public.api_customer_id_seq'::regclass);
+
+
+--
+-- Name: api_featured id; Type: DEFAULT; Schema: public; Owner: Eric
+--
+
+ALTER TABLE ONLY public.api_featured ALTER COLUMN id SET DEFAULT nextval('public.api_featured_id_seq'::regclass);
+
+
+--
+-- Name: api_order id; Type: DEFAULT; Schema: public; Owner: Eric
+--
+
+ALTER TABLE ONLY public.api_order ALTER COLUMN id SET DEFAULT nextval('public.api_order_id_seq'::regclass);
+
+
+--
+-- Name: api_orderitem id; Type: DEFAULT; Schema: public; Owner: Eric
+--
+
+ALTER TABLE ONLY public.api_orderitem ALTER COLUMN id SET DEFAULT nextval('public.api_orderitem_id_seq'::regclass);
+
+
+--
+-- Name: api_product id; Type: DEFAULT; Schema: public; Owner: Eric
+--
+
+ALTER TABLE ONLY public.api_product ALTER COLUMN id SET DEFAULT nextval('public.api_product_id_seq'::regclass);
+
+
+--
+-- Name: api_resettoken id; Type: DEFAULT; Schema: public; Owner: Eric
+--
+
+ALTER TABLE ONLY public.api_resettoken ALTER COLUMN id SET DEFAULT nextval('public.api_resettoken_id_seq'::regclass);
+
+
+--
+-- Name: api_shippinginfo id; Type: DEFAULT; Schema: public; Owner: Eric
+--
+
+ALTER TABLE ONLY public.api_shippinginfo ALTER COLUMN id SET DEFAULT nextval('public.api_shippinginfo_id_seq'::regclass);
+
+
+--
+-- Name: api_temporder id; Type: DEFAULT; Schema: public; Owner: Eric
+--
+
+ALTER TABLE ONLY public.api_temporder ALTER COLUMN id SET DEFAULT nextval('public.api_temporder_id_seq'::regclass);
+
+
+--
+-- Name: auth_group id; Type: DEFAULT; Schema: public; Owner: Eric
+--
+
+ALTER TABLE ONLY public.auth_group ALTER COLUMN id SET DEFAULT nextval('public.auth_group_id_seq'::regclass);
+
+
+--
+-- Name: auth_group_permissions id; Type: DEFAULT; Schema: public; Owner: Eric
+--
+
+ALTER TABLE ONLY public.auth_group_permissions ALTER COLUMN id SET DEFAULT nextval('public.auth_group_permissions_id_seq'::regclass);
+
+
+--
+-- Name: auth_permission id; Type: DEFAULT; Schema: public; Owner: Eric
+--
+
+ALTER TABLE ONLY public.auth_permission ALTER COLUMN id SET DEFAULT nextval('public.auth_permission_id_seq'::regclass);
+
+
+--
+-- Name: auth_user id; Type: DEFAULT; Schema: public; Owner: Eric
+--
+
+ALTER TABLE ONLY public.auth_user ALTER COLUMN id SET DEFAULT nextval('public.auth_user_id_seq'::regclass);
+
+
+--
+-- Name: auth_user_groups id; Type: DEFAULT; Schema: public; Owner: Eric
+--
+
+ALTER TABLE ONLY public.auth_user_groups ALTER COLUMN id SET DEFAULT nextval('public.auth_user_groups_id_seq'::regclass);
+
+
+--
+-- Name: auth_user_user_permissions id; Type: DEFAULT; Schema: public; Owner: Eric
+--
+
+ALTER TABLE ONLY public.auth_user_user_permissions ALTER COLUMN id SET DEFAULT nextval('public.auth_user_user_permissions_id_seq'::regclass);
+
+
+--
+-- Name: django_admin_log id; Type: DEFAULT; Schema: public; Owner: Eric
+--
+
+ALTER TABLE ONLY public.django_admin_log ALTER COLUMN id SET DEFAULT nextval('public.django_admin_log_id_seq'::regclass);
+
+
+--
+-- Name: django_content_type id; Type: DEFAULT; Schema: public; Owner: Eric
+--
+
+ALTER TABLE ONLY public.django_content_type ALTER COLUMN id SET DEFAULT nextval('public.django_content_type_id_seq'::regclass);
+
+
+--
+-- Name: django_migrations id; Type: DEFAULT; Schema: public; Owner: Eric
+--
+
+ALTER TABLE ONLY public.django_migrations ALTER COLUMN id SET DEFAULT nextval('public.django_migrations_id_seq'::regclass);
+
+
+--
+-- Data for Name: api_coupons; Type: TABLE DATA; Schema: public; Owner: Eric
+--
+
+COPY public.api_coupons (id, code, discount) FROM stdin;
+1	JGFNB3	20
+\.
+
+
+--
+-- Data for Name: api_customer; Type: TABLE DATA; Schema: public; Owner: Eric
+--
+
+COPY public.api_customer (id, name, email, user_id) FROM stdin;
+7	Eric Liao	ericliao132@gmail.com	4
+9	Eric Liao	Ericliao132@gmail.com	\N
+10	Eric Liao	Ericliao132@gmail.com	\N
+11	Eric Liao	Ericliao132@gmail.com	\N
+12	Eric Liao	Ericliao132@gmail.com	\N
+13	Eric Liao	Ericliao132@gmail.com	\N
+14	Eric Liao	Ericliao132@gmail.com	\N
+15	Eric Liao	Ericliao132@gmail.com	\N
+16	fds fds	fasdsad@gmail.com	\N
+17	fds bgf	fdsfds@gmail.com	\N
+18	fdsfds fsd	fdsfsd	\N
+19	fds fds	bgfbgf@gmail.com	\N
+20	John Lee	fdsmfdms@gmail.com	7
+21	fgds fds	dsadsasa@gmail.com	\N
+\.
+
+
+--
+-- Data for Name: api_featured; Type: TABLE DATA; Schema: public; Owner: Eric
+--
+
+COPY public.api_featured (id, product_id, image) FROM stdin;
+1	46	https://assets.adidas.com/images/h_840,f_auto,q_auto:sensitive,fl_lossy/aaa6a67130e3400bab12ad3900425aeb_9366/Love_Unites_Allover_Print_Tee_(Gender_Neutral)_Multicolor_H43968_21_model.jpg
+2	34	https://assets.adidas.com/images/h_840,f_auto,q_auto:sensitive,fl_lossy/965b750cc5ca46409a45ac31010b4ada_9366/LOUNGEWEAR_Adicolor_Essentials_Trefoil_Tee_Black_GN3416_21_model.jpg
+3	37	https://assets.adidas.com/images/h_840,f_auto,q_auto:sensitive,fl_lossy/1743e1ab810d4ddb8b41ac9200e87ddb_9366/Essentials_3-Stripes_Hoodie_Grey_GK9080_21_model.jpg
+4	38	https://assets.adidas.com/images/h_840,f_auto,q_auto:sensitive,fl_lossy/52704b6852ed47528d57ac360124520c_9366/adidas_Sportswear_3-Stripes_Hooded_Track_Top_Black_GM6450_21_model.jpg
+\.
+
+
+--
+-- Data for Name: api_order; Type: TABLE DATA; Schema: public; Owner: Eric
+--
+
+COPY public.api_order (id, date_ordered, transaction_id, customer_id, total, status) FROM stdin;
+1	2021-06-20 03:25:39.824773-04	2WW45286MF484953W	\N	0	Complete
+2	2021-06-20 04:11:34.749912-04	5RR91076FY367861C	12	0	Complete
+3	2021-06-20 04:25:31.724573-04	0WX6945634650051V	7	285.12	Complete
+5	2021-06-23 13:17:59.020305-04	7F361375TJ1361748	7	70.2	
+6	2021-06-27 18:54:32.192415-04	25E87528H18522449	7	907.2	Complete
+7	2021-06-30 04:24:48.210238-04	77T27572R6226472M	16	129.6	Complete
+8	2021-06-30 04:26:15.936331-04	1W478362JB599851V	17	194.4	Complete
+9	2021-06-30 04:28:54.75022-04	2HS1174282020150G	18	118.8	Complete
+10	2021-06-30 04:36:03.40094-04	6LD32481K3109170N	19	194.4	Complete
+11	2021-06-30 04:37:01.995407-04	9JV71607AF019454H	20	155.52	Complete
+12	2021-10-02 18:09:24.453201-04	85V949665S765544U	21	64.8	Complete
+\.
+
+
+--
+-- Data for Name: api_orderitem; Type: TABLE DATA; Schema: public; Owner: Eric
+--
+
+COPY public.api_orderitem (id, quantity, date_added, order_id, product_id) FROM stdin;
+8	1	2021-06-20 04:20:55.292481-04	2	47
+9	2	2021-06-20 04:20:55.307486-04	2	9
+10	3	2021-06-20 04:20:55.308485-04	2	10
+11	1	2021-06-20 04:20:55.310487-04	2	11
+12	1	2021-06-20 04:25:31.727573-04	3	47
+13	1	2021-06-20 04:25:31.729574-04	3	11
+14	1	2021-06-23 13:17:59.043222-04	5	39
+15	4	2021-06-27 18:54:32.205959-04	6	14
+16	1	2021-06-27 18:54:32.215393-04	6	10
+17	2	2021-06-30 04:24:48.276217-04	7	70
+18	1	2021-06-30 04:26:15.998136-04	8	44
+19	1	2021-06-30 04:28:54.810018-04	9	16
+20	1	2021-06-30 04:36:03.412569-04	10	45
+21	1	2021-06-30 04:37:02.005319-04	11	14
+22	1	2021-10-02 18:09:24.459202-04	12	70
+\.
+
+
+--
+-- Data for Name: api_product; Type: TABLE DATA; Schema: public; Owner: Eric
+--
+
+COPY public.api_product (id, name, image, price, stock, "itemCategory", "itemType", size, "productID", colors, images) FROM stdin;
+1	Garmin vivomove Watch	https://images-na.ssl-images-amazon.com/images/I/51qBnMMlitL._AC_SX522_.jpg	100	2	Other	Other	0.0	8aUTvQYp	\N	\N
+2	Blink Mini – Compact indoor plug-in	https://images-na.ssl-images-amazon.com/images/I/41GZI7HASrL._SX425_.jpg	29.98	100	Other	Other	0.0	z9dSIHe2	\N	\N
+3	Wyze Cam v3 1080p HD Indoor/Outdoor Video Camera	https://images-na.ssl-images-amazon.com/images/I/61DJRLNgyWL._AC_SX679_.jpg	27.99	78	Other	Other	0.0	rvvL2XGI	\N	\N
+4	MUDEELA Planter Pot with Stand	https://images-na.ssl-images-amazon.com/images/I/51Ewpp-0JgL._AC_SY355_.jpg	19.99	33	Other	Other	0.0	rgkPGCax	\N	\N
+5	Costa Farms Live Hoya Heart	https://images-na.ssl-images-amazon.com/images/I/61nap6DEDaL._AC_SY450_.jpg	18.37	11	Other	Other	0.0	a30cfi9h	\N	\N
+6	B-Best Guardians of The Galaxy Baby Groot Pens Holder Desk	https://images-na.ssl-images-amazon.com/images/I/61VFdu3JmeL._AC_SX425_.jpg	10.96	53	Other	Other	0.0	Q3ciarm3	\N	\N
+7	Bluebird Hanging Planter Pot - Ceramic - 7" Diameter	https://images-na.ssl-images-amazon.com/images/I/51oCG1RvsbL._AC_SX522_.jpg	33.95	133	Other	Other	0.0	RKIVuYWp	\N	\N
+8	Spalding NBA Street Outdoor Basketball	https://images-na.ssl-images-amazon.com/images/I/91PlxEj64%2BL._AC_SX425_.jpg	14.99	15	Other	Other	0.0	YBlvph08	\N	\N
+21	Men's Benassi Just Do It Slide Sandals	https://slimages.macys.com/is/image/MCY/products/8/optimized/3418748_fpx.tif?op_sharpen=1&wid=1230&hei=1500&fit=fit,1&$filterxlrg$	25	6	mens	sandels	9.0	wEL8ugsU	\N	\N
+22	Men's Redder Pool Slide Sandals	https://slimages.macys.com/is/image/MCY/products/6/optimized/16397456_fpx.tif?op_sharpen=1&wid=1230&hei=1500&fit=fit,1&$filterxlrg$	24.99	7	mens	sandels	8.0	sK1uIvpU	\N	\N
+23	Polo Ralph Lauren	https://slimages.macys.com/is/image/MCY/products/3/optimized/16756553_fpx.tif?op_sharpen=1&wid=1230&hei=1500&fit=fit,1&$filterxlrg$	50	4	mens	sandels	10.0	4yif2RAa	\N	\N
+24	Men's Bolt Slip-On Thong Flip-Flop Sandals	https://slimages.macys.com/is/image/MCY/products/5/optimized/18482245_fpx.tif?op_sharpen=1&wid=1230&hei=1500&fit=fit,1&$filterxlrg$	11	11	mens	sandels	9.0	lFVFlb28	\N	\N
+41	BADGE OF SPORT TEE	https://assets.adidas.com/images/h_840,f_auto,q_auto:sensitive,fl_lossy/b87f7be790bb4b06a093aa07007bb908_9366/Badge_of_Sport_Tee_White_ED9606_01_laydown.jpg	25	55	mens	tops	Small	zAAh68MT	\N	\N
+40	BADGE OF SPORT TEE	https://assets.adidas.com/images/h_840,f_auto,q_auto:sensitive,fl_lossy/b87f7be790bb4b06a093aa07007bb908_9366/Badge_of_Sport_Tee_White_ED9606_01_laydown.jpg	25	11	mens	tops	Medium	zAAh68MT	\N	\N
+33	BADGE OF SPORT TEE	https://assets.adidas.com/images/h_840,f_auto,q_auto:sensitive,fl_lossy/b87f7be790bb4b06a093aa07007bb908_9366/Badge_of_Sport_Tee_White_ED9606_01_laydown.jpg	25	123	mens	tops	Large	zAAh68MT	\N	\N
+25	Men's Riker Pool Slide Sandals	https://slimages.macys.com/is/image/MCY/products/8/optimized/17336218_fpx.tif?op_sharpen=1&wid=1230&hei=1500&fit=fit,1&$filterxlrg$	24.99	14	mens	sandels	10.0	qYwpFEkm	\N	\N
+26	Original Leather Boots Men Autumn Shoes Male Leather Casual Boots Men Comfy Anti-Slip Lace-up Boots	https://img.joomcdn.net/c36517d21c889721a8022aed86c4f04eef15c7f5_original.jpeg	65	11	mens	boots	10.0	jtaaDMuU	\N	\N
+27	President	https://cdn.shopify.com/s/files/1/0419/1525/products/1024x1024-Men-President-BlackMatte-LB1_36b80244-495d-4c0f-b166-3e5646099774_672x672.jpg?v=1569061396	199.99	15	mens	boots	11.5	PkyeOgtB	\N	\N
+28	DECARSDZ Men Boots Autumn Comfy Durable outsole Lace-up Fashion Shoes Men 2021 Leather Casual Boots Men Brand design Men's Boots	https://ae01.alicdn.com/kf/H279458f6f35b4525ae992451f169d01bc/DECARSDZ-Men-Boots-Autumn-Comfy-Durable-outsole-Lace-up-Fashion-Shoes-Men-2021-Leather-Casual-Boots.jpg_q50.jpg	150.65	45	mens	boots	10.0	Sv0tfLVW	\N	\N
+29	MEN'S RUST BROWN CHELSEA BOOTS BY BERNARD DE WULF	https://cdn.shopify.com/s/files/1/1594/9235/products/DWChelseaBootsMen_Rust2_bootsmen_leatherchelseabootsmen_leatherboots_bootsmen_brownchelseaboots_dewulfmenshoes_dewulfmenboots_800x.jpg?v=1602180231	100	22	mens	boots	12.0	T7VPIhIr	\N	\N
+20	COURT RALLYE SLIP X STAR WARS SHOES	https://assets.adidas.com/images/h_840,f_auto,q_auto:sensitive,fl_lossy/c2b42bdf6bdc4bf7874bad19017e7c13_9366/Court_Rallye_Slip_x_Star_Wars_Shoes_Black_FY5312_01_standard.jpg	60	64	mens	sneakers	7.5	e1UFVNjx	\N	{https://assets.adidas.com/images/h_840,f_auto,q_auto:sensitive,fl_lossy,c_fill,g_auto/c2b42bdf6bdc4bf7874bad19017e7c13_9366/Court_Rallye_Slip_x_Star_Wars_Shoes_Black_FY5312_01_standard.jpg,https://assets.adidas.com/images/h_840,f_auto,q_auto:sensitive,fl_lossy,c_fill,g_auto/80aaf09c02924918bcf1ad19017dbace_9366/Court_Rallye_Slip_x_Star_Wars_Shoes_Black_FY5312_011_hover_standard.jpg,https://assets.adidas.com/images/h_840,f_auto,q_auto:sensitive,fl_lossy,c_fill,g_auto/e4ff0366604049feb5e4ad190183402c_9366/Court_Rallye_Slip_x_Star_Wars_Shoes_Black_FY5312_012_hover_standard.jpg,https://assets.adidas.com/images/h_840,f_auto,q_auto:sensitive,fl_lossy,c_fill,g_auto/a8935c7d91804e07a7baad19017e5ee6_9366/Court_Rallye_Slip_x_Star_Wars_Shoes_Black_FY5312_02_standard.jpg,https://assets.adidas.com/images/h_840,f_auto,q_auto:sensitive,fl_lossy,c_fill,g_auto/4a8e8d93f6d14114a295ad19017e3b72_9366/Court_Rallye_Slip_x_Star_Wars_Shoes_Black_FY5312_03_standard.jpg}
+30	Dickies Men's Multi-pack Dri-tech Moisture Control Crew Socks	https://images-na.ssl-images-amazon.com/images/I/91Dmp7X6RzL._AC_UX679_.jpg	12.99	155	mens	socks	6-10	XvQhw41g	\N	\N
+31	PUMA mens 6 Pack Quarter Crew Socks	https://images-na.ssl-images-amazon.com/images/I/91Pw4Jtbz0L._AC_UX679_.jpg	12.55	222	mens	socks	10-13	gm8qXqbj	\N	\N
+32	Fruit of the Loom Men's Dual Defense No Show Socks 12 Pair	https://images-na.ssl-images-amazon.com/images/I/71jFn3LK0-L._AC_UX679_.jpg	11.5	321	mens	socks	8-13	PPmUugUb	\N	\N
+34	LOUNGEWEAR ADICOLOR ESSENTIALS TREFOIL TEE	https://assets.adidas.com/images/h_840,f_auto,q_auto:sensitive,fl_lossy/965b750cc5ca46409a45ac31010b4ada_9366/LOUNGEWEAR_Adicolor_Essentials_Trefoil_Tee_Black_GN3416_21_model.jpg	25	321	mens	tops	Medium	p8QROeE2	\N	\N
+35	ADICOLOR CLASSICS 3-STRIPES PANTS	https://assets.adidas.com/images/h_840,f_auto,q_auto:sensitive,fl_lossy/50f9c7a77dc04781925aac3800f96e83_9366/Adicolor_Classics_3-Stripes_Pants_Black_GN3458_21_model.jpg	60	31	mens	bottoms	Small	go6rPRpX	\N	\N
+36	TREFOIL HOODIE	https://assets.adidas.com/images/h_840,f_auto,q_auto:sensitive,fl_lossy/f9ead56071764da0a853a873013c6149_9366/Trefoil_Hoodie_Black_DT7964_01_laydown.jpg	65	111	mens	sweaters	Medium	iPPVeJWx	\N	\N
+37	ESSENTIALS 3-STRIPES HOODIE	https://assets.adidas.com/images/h_840,f_auto,q_auto:sensitive,fl_lossy/1743e1ab810d4ddb8b41ac9200e87ddb_9366/Essentials_3-Stripes_Hoodie_Grey_GK9080_21_model.jpg	60	12	mens	sweaters	Small	apc2VapV	\N	\N
+38	ADIDAS SPORTSWEAR 3-STRIPES HOODED TRACK TOP	https://assets.adidas.com/images/h_840,f_auto,q_auto:sensitive,fl_lossy/52704b6852ed47528d57ac360124520c_9366/adidas_Sportswear_3-Stripes_Hooded_Track_Top_Black_GM6450_21_model.jpg	65	23	mens	sweaters	Large	Tsm8iP8d	\N	\N
+74	Men's Benassi Just Do It Slide Sandals	https://slimages.macys.com/is/image/MCY/products/8/optimized/3418748_fpx.tif?op_sharpen=1&wid=1230&hei=1500&fit=fit,1&$filterxlrg$	25	11	mens	sandels	8.0	wEL8ugsU	\N	{}
+39	HIGH KEY Aviator Sunglasses	https://cdn.shopify.com/s/files/1/0898/5824/products/HighKey_Black-Fade_1025x.jpg?v=1602612822	65	21	mens	sunglasses	0.0	EQSOKxkQ	\N	\N
+12	ULTRABOOST DNA 1.0 SHOES	https://assets.adidas.com/images/h_840,f_auto,q_auto:sensitive,fl_lossy/cdfdf1409e054322b9e0ac6d011da5e2_9366/Ultraboost_DNA_1.0_Shoes_Green_H05264_01_standard.jpg	180	6	mens	sneakers	8.0	h4HMDzyc	Bahia Mint / Eqt Green / Cloud White	{https://assets.adidas.com/images/h_840,f_auto,q_auto:sensitive,fl_lossy/cdfdf1409e054322b9e0ac6d011da5e2_9366/Ultraboost_DNA_1.0_Shoes_Green_H05264_01_standard.jpg,https://assets.adidas.com/images/h_840,f_auto,q_auto:sensitive,fl_lossy/02705e8729c7435e9bb9ac6d01265a01_9366/Ultraboost_DNA_1.0_Shoes_Green_H05264_02_standard.jpg,https://assets.adidas.com/images/h_840,f_auto,q_auto:sensitive,fl_lossy/ac3cfbfce4a84b598864ac6d011963ac_9366/Ultraboost_DNA_1.0_Shoes_Green_H05264_03_standard.jpg,https://assets.adidas.com/images/h_840,f_auto,q_auto:sensitive,fl_lossy/a14abd8e93004e4b9706ac6d0115d8f0_9366/Ultraboost_DNA_1.0_Shoes_Green_H05264_04_standard.jpg,https://assets.adidas.com/images/h_840,f_auto,q_auto:sensitive,fl_lossy/44bcb47866b04e739aa4ac6d0119f6ef_9366/Ultraboost_DNA_1.0_Shoes_Green_H05264_05_standard.jpg}
+59	Nike Bella Kai	https://static.nike.com/a/images/t_PDP_864_v1/f_auto,b_rgb:f5f5f5/gibvpylsdksozaxlmrtp/bella-kai-womens-thong-ZzpVrK.png	30	3	womens	sandels	7	FkdLYp8y	Black / White / Metallic Silver	{https://static.nike.com/a/images/t_PDP_864_v1/f_auto,b_rgb:f5f5f5/gibvpylsdksozaxlmrtp/bella-kai-womens-thong-ZzpVrK.png,https://static.nike.com/a/images/t_PDP_864_v1/f_auto,b_rgb:f5f5f5,q_80/nanwzgtu7sclcv46akkx/bella-kai-womens-thong-ZzpVrK.png,https://static.nike.com/a/images/t_PDP_864_v1/f_auto,b_rgb:f5f5f5,q_80/x2wzt5efd6wc7b88amh1/bella-kai-womens-thong-ZzpVrK.png}
+46	LOVE UNITES TANK TOP (GENDER NEUTRAL)	https://assets.adidas.com/images/h_840,f_auto,q_auto:sensitive,fl_lossy/77e18bceabef427c945fad3900441546_9366/Love_Unites_Tank_Top_(Gender_Neutral)_Black_H43967_21_model.jpg	28	233	mens	tops	small	r4JiXVIw	Black / Multicolor	{https://assets.adidas.com/images/h_840,f_auto,q_auto:sensitive,fl_lossy/77e18bceabef427c945fad3900441546_9366/Love_Unites_Tank_Top_(Gender_Neutral)_Black_H43967_21_model.jpg,https://assets.adidas.com/images/h_840,f_auto,q_auto:sensitive,fl_lossy/9fc1842c2a9748dd8ce0ad390040ceee_9366/Love_Unites_Tank_Top_(Gender_Neutral)_Black_H43967_23_hover_model.jpg,https://assets.adidas.com/images/h_840,f_auto,q_auto:sensitive,fl_lossy/339cb0ec80da46dc9a2dac6d012e7b18_9366/Love_Unites_Tank_Top_(Gender_Neutral)_Black_H43967_25_model.jpg,https://assets.adidas.com/images/h_840,f_auto,q_auto:sensitive,fl_lossy/dd2330ec1960468f956dac6d012aba89_9366/Love_Unites_Tank_Top_(Gender_Neutral)_Black_H43967_01_laydown.jpg,https://assets.adidas.com/images/h_840,f_auto,q_auto:sensitive,fl_lossy/1e038a0ec3e1473abb7eac6d01278061_9366/Love_Unites_Tank_Top_(Gender_Neutral)_Black_H43967_41_detail.jpg}
+48	Nike Wildhorse 7	https://static.nike.com/a/images/t_PDP_864_v1/f_auto,b_rgb:f5f5f5/94636b1d-371d-4447-b29b-5a42331e8b36/wildhorse-7-womens-trail-running-shoe-Nrmvwh.png	130	6	womens	sneakers	10.0	ricNUoOo	White / Red	{https://static.nike.com/a/images/t_PDP_864_v1/f_auto,b_rgb:f5f5f5/94636b1d-371d-4447-b29b-5a42331e8b36/wildhorse-7-womens-trail-running-shoe-Nrmvwh.png,https://static.nike.com/a/images/t_PDP_864_v1/f_auto,b_rgb:f5f5f5,q_80/138044e2-89a4-47f5-a4ea-ee684ecc47a6/wildhorse-7-womens-trail-running-shoe-Nrmvwh.png,https://static.nike.com/a/images/t_PDP_864_v1/f_auto,b_rgb:f5f5f5,q_80/684a28bf-4d2a-44fd-9f33-5153205266a6/wildhorse-7-womens-trail-running-shoe-Nrmvwh.png,https://static.nike.com/a/images/t_PDP_864_v1/f_auto,b_rgb:f5f5f5,q_80/2730de85-f0a8-49d0-a6f1-4f50952d452c/wildhorse-7-womens-trail-running-shoe-Nrmvwh.png,https://static.nike.com/a/images/t_PDP_864_v1/f_auto,b_rgb:f5f5f5,q_80/8e4efea7-cf90-4f49-8025-303c07938ed8/wildhorse-7-womens-trail-running-shoe-Nrmvwh.png}
+45	ULTRABOOST DNA 1.0 SHOES	https://assets.adidas.com/images/h_840,f_auto,q_auto:sensitive,fl_lossy/cdfdf1409e054322b9e0ac6d011da5e2_9366/Ultraboost_DNA_1.0_Shoes_Green_H05264_01_standard.jpg	180	32	mens	sneakers	6.0	h4HMDzyc	Bahia Mint / Eqt Green / Cloud White	{https://assets.adidas.com/images/h_840,f_auto,q_auto:sensitive,fl_lossy/cdfdf1409e054322b9e0ac6d011da5e2_9366/Ultraboost_DNA_1.0_Shoes_Green_H05264_01_standard.jpg,https://assets.adidas.com/images/h_840,f_auto,q_auto:sensitive,fl_lossy/02705e8729c7435e9bb9ac6d01265a01_9366/Ultraboost_DNA_1.0_Shoes_Green_H05264_02_standard.jpg,https://assets.adidas.com/images/h_840,f_auto,q_auto:sensitive,fl_lossy/ac3cfbfce4a84b598864ac6d011963ac_9366/Ultraboost_DNA_1.0_Shoes_Green_H05264_03_standard.jpg,https://assets.adidas.com/images/h_840,f_auto,q_auto:sensitive,fl_lossy/a14abd8e93004e4b9706ac6d0115d8f0_9366/Ultraboost_DNA_1.0_Shoes_Green_H05264_04_standard.jpg,https://assets.adidas.com/images/h_840,f_auto,q_auto:sensitive,fl_lossy/44bcb47866b04e739aa4ac6d0119f6ef_9366/Ultraboost_DNA_1.0_Shoes_Green_H05264_05_standard.jpg}
+49	Nike React Escape Run	https://static.nike.com/a/images/t_PDP_864_v1/f_auto,b_rgb:f5f5f5/bb42ffe7-35b9-4008-b77b-5301bc7d15ce/react-escape-run-womens-running-shoe-LP3Msz.png	100	2	womens	sneakers	7.0	yw6JFrTI	Grey / White	{https://static.nike.com/a/images/t_PDP_864_v1/f_auto,b_rgb:f5f5f5/bb42ffe7-35b9-4008-b77b-5301bc7d15ce/react-escape-run-womens-running-shoe-LP3Msz.png,https://static.nike.com/a/images/t_PDP_864_v1/f_auto,b_rgb:f5f5f5,q_80/5971e706-0e2d-4b97-bb1c-b327553786c0/react-escape-run-womens-running-shoe-LP3Msz.png,https://static.nike.com/a/images/t_PDP_864_v1/f_auto,b_rgb:f5f5f5,q_80/76d42fdc-88b2-4f67-b2b3-c2aa22979d02/react-escape-run-womens-running-shoe-LP3Msz.png,https://static.nike.com/a/images/t_PDP_864_v1/f_auto,b_rgb:f5f5f5,q_80/fcc4710d-620a-43f0-a7f7-ac456aff3b23/react-escape-run-womens-running-shoe-LP3Msz.png,https://static.nike.com/a/images/t_PDP_864_v1/f_auto,b_rgb:f5f5f5,q_80/2c0d06bf-1816-4df3-adea-8c3159c69826/react-escape-run-womens-running-shoe-LP3Msz.png}
+75	Men's Benassi Just Do It Slide Sandals	https://slimages.macys.com/is/image/MCY/products/8/optimized/3418748_fpx.tif?op_sharpen=1&wid=1230&hei=1500&fit=fit,1&$filterxlrg$	25	23	mens	sandels	7.0	wEL8ugsU	\N	{}
+50	Nike ZoomX Invincible Run Flyknit	https://static.nike.com/a/images/t_PDP_864_v1/f_auto,b_rgb:f5f5f5/32156b26-3b2c-4147-a3a5-a2ed9f4280fe/zoomx-invincible-run-flyknit-womens-running-shoe-gwQgRJ.png	180	12	womens	sneakers	10.0	UGWewAca	Purple / Tint	{https://static.nike.com/a/images/t_PDP_864_v1/f_auto,b_rgb:f5f5f5/32156b26-3b2c-4147-a3a5-a2ed9f4280fe/zoomx-invincible-run-flyknit-womens-running-shoe-gwQgRJ.png,https://static.nike.com/a/images/t_PDP_864_v1/f_auto,b_rgb:f5f5f5,q_80/67c72b96-27f8-4444-b9af-d5712117735f/zoomx-invincible-run-flyknit-womens-running-shoe-gwQgRJ.pnghttps://static.nike.com/a/images/t_PDP_864_v1/f_auto,b_rgb:f5f5f5,q_80/8fdb3b52-ea72-4226-9b1e-e7a7f5b67069/zoomx-invincible-run-flyknit-womens-running-shoe-gwQgRJ.png,https://static.nike.com/a/images/t_PDP_864_v1/f_auto,b_rgb:f5f5f5,q_80/fbd9d64f-6e0c-4632-8c60-7b992e84637f/zoomx-invincible-run-flyknit-womens-running-shoe-gwQgRJ.png,https://static.nike.com/a/images/t_PDP_864_v1/f_auto,b_rgb:f5f5f5,q_80/adf8ae93-fc86-4f90-97c1-0fa4bdcd37e2/zoomx-invincible-run-flyknit-womens-running-shoe-gwQgRJ.png}
+51	Nike Air Zoom Tempo NEXT%	https://static.nike.com/a/images/t_PDP_864_v1/f_auto,b_rgb:f5f5f5/032f4f9d-85c4-4b17-aaa6-9dbaff1f7c02/air-zoom-tempo-next-womens-running-shoe-ZWMnV0.png	200	7	womens	sneakers	6.0	NK0MBjCp	Red / Light Blue	{https://static.nike.com/a/images/t_PDP_864_v1/f_auto,b_rgb:f5f5f5/032f4f9d-85c4-4b17-aaa6-9dbaff1f7c02/air-zoom-tempo-next-womens-running-shoe-ZWMnV0.png,https://static.nike.com/a/images/t_PDP_864_v1/f_auto,b_rgb:f5f5f5,q_80/27aed438-2ed7-4516-8db2-95fce7473db6/air-zoom-tempo-next-womens-running-shoe-ZWMnV0.png,https://static.nike.com/a/images/t_PDP_864_v1/f_auto,b_rgb:f5f5f5,q_80/0ca95ab8-83e3-4558-a8bd-a29efb38d425/air-zoom-tempo-next-womens-running-shoe-ZWMnV0.png,https://static.nike.com/a/images/t_PDP_864_v1/f_auto,b_rgb:f5f5f5,q_80/af876e5e-715d-4df8-87be-7816c2a398b5/air-zoom-tempo-next-womens-running-shoe-ZWMnV0.png,https://static.nike.com/a/images/t_PDP_864_v1/f_auto,b_rgb:f5f5f5,q_80/38a99b78-54bf-418e-9986-675708702105/air-zoom-tempo-next-womens-running-shoe-ZWMnV0.png}
+47	Nike Wildhorse 7	https://static.nike.com/a/images/t_PDP_864_v1/f_auto,b_rgb:f5f5f5/eaf8461f-ffc5-478b-b171-d7b70f70f068/air-zoom-pegasus-38-womens-running-shoe-2bvJvW.png	130	1	womens	sneakers	9.0	mKXusFwE	White / Red	{https://static.nike.com/a/images/t_PDP_864_v1/f_auto,b_rgb:f5f5f5/eaf8461f-ffc5-478b-b171-d7b70f70f068/air-zoom-pegasus-38-womens-running-shoe-2bvJvW.png,https://static.nike.com/a/images/t_PDP_864_v1/f_auto,b_rgb:f5f5f5,q_80/724c24ff-7e4b-479b-ba5e-2bc0f570257f/air-zoom-pegasus-38-womens-running-shoe-2bvJvW.png,https://static.nike.com/a/images/t_PDP_864_v1/f_auto,b_rgb:f5f5f5,q_80/6d268ac7-c1f9-413b-9109-2f2c529e7980/air-zoom-pegasus-38-womens-running-shoe-2bvJvW.png,https://static.nike.com/a/images/t_PDP_864_v1/f_auto,b_rgb:f5f5f5,q_80/9b099cc2-fdec-4f08-ad92-f83d8d348c91/air-zoom-pegasus-38-womens-running-shoe-2bvJvW.png,https://static.nike.com/a/images/t_PDP_864_v1/f_auto,b_rgb:f5f5f5,q_80/a527c01d-0708-42d7-9a6c-3aa21a734b73/air-zoom-pegasus-38-womens-running-shoe-2bvJvW.png}
+66	Nike Air Force 1 LE	https://static.nike.com/a/images/t_PDP_864_v1/f_auto,b_rgb:f5f5f5/ebad848a-13b1-46d5-a85e-49b4b6a4953c/air-force-1-le-big-kids-shoe-3JNSvS.png	80	5	kids	sneakers	8.5	yU88AFG0	White	{https://static.nike.com/a/images/t_PDP_864_v1/f_auto,b_rgb:f5f5f5/ebad848a-13b1-46d5-a85e-49b4b6a4953c/air-force-1-le-big-kids-shoe-3JNSvS.png,https://static.nike.com/a/images/t_PDP_864_v1/f_auto,b_rgb:f5f5f5,q_80/d4087d46-d932-425c-bf06-386c470c7042/air-force-1-le-big-kids-shoe-3JNSvS.png,https://static.nike.com/a/images/t_PDP_864_v1/f_auto,b_rgb:f5f5f5,q_80/4ee7f9e9-9f1f-4395-95f4-ceca25120f39/air-force-1-le-big-kids-shoe-3JNSvS.png,https://static.nike.com/a/images/t_PDP_864_v1/f_auto,b_rgb:f5f5f5,q_80/37a8100f-518e-42a6-b09b-bd3c259a59b1/air-force-1-le-big-kids-shoe-3JNSvS.png,https://static.nike.com/a/images/t_PDP_864_v1/f_auto,b_rgb:f5f5f5,q_80/469a549f-81fb-4f84-bfd5-e8d01827e2cb/air-force-1-le-big-kids-shoe-3JNSvS.png}
+67	Little/Big Kids' Slide	https://static.nike.com/a/images/t_PDP_864_v1/f_auto,b_rgb:f5f5f5/cc1dcb16-c508-453f-98ce-084dc9b213e2/kawa-little-big-kids-slide-VXZxnZ.png	26	5	kids	sandels	11	nMV8454A	Blue	{https://static.nike.com/a/images/t_PDP_864_v1/f_auto,b_rgb:f5f5f5/cc1dcb16-c508-453f-98ce-084dc9b213e2/kawa-little-big-kids-slide-VXZxnZ.png,https://static.nike.com/a/images/t_PDP_864_v1/f_auto,b_rgb:f5f5f5,q_80/c40d86a9-5188-4c1d-807d-79b6e665ff1a/kawa-little-big-kids-slide-VXZxnZ.png,https://static.nike.com/a/images/t_PDP_864_v1/f_auto,b_rgb:f5f5f5,q_80/875c6edd-8eb2-43ca-a210-72fada7baae7/kawa-little-big-kids-slide-VXZxnZ.png,https://static.nike.com/a/images/t_PDP_864_v1/f_auto,b_rgb:f5f5f5,q_80/30b22185-3e95-4762-86e0-373794895b20/kawa-little-big-kids-slide-VXZxnZ.png,https://static.nike.com/a/images/t_PDP_864_v1/f_auto,b_rgb:f5f5f5,q_80/1919dac8-605d-4195-985f-f906de7eb375/kawa-little-big-kids-slide-VXZxnZ.png}
+54	Nike ZoomX Vaporfly Next% 2	https://static.nike.com/a/images/t_PDP_864_v1/f_auto,b_rgb:f5f5f5/73691802-471a-4c00-ac0b-6fc54fedf298/zoomx-vaporfly-next-2-womens-racing-shoe-2CMkCf.png	250	123	womens	sneakers	9.0	i3EanlH9	White / Metallic Silver / Black	{https://static.nike.com/a/images/t_PDP_864_v1/f_auto,b_rgb:f5f5f5/73691802-471a-4c00-ac0b-6fc54fedf298/zoomx-vaporfly-next-2-womens-racing-shoe-2CMkCf.png,https://static.nike.com/a/images/t_PDP_864_v1/f_auto,b_rgb:f5f5f5,q_80/b524dc84-773b-41b3-97e2-a8656c7d50eb/zoomx-vaporfly-next-2-womens-racing-shoe-2CMkCf.png,https://static.nike.com/a/images/t_PDP_864_v1/f_auto,b_rgb:f5f5f5,q_80/2677e98f-1ab6-4de3-9536-9a4c76b9cedb/zoomx-vaporfly-next-2-womens-racing-shoe-2CMkCf.png,https://static.nike.com/a/images/t_PDP_864_v1/f_auto,b_rgb:f5f5f5,q_80/b0a4285f-1dba-4fd5-8d0e-a9dcba1a42a5/zoomx-vaporfly-next-2-womens-racing-shoe-2CMkCf.png,https://static.nike.com/a/images/t_PDP_864_v1/f_auto,b_rgb:f5f5f5,q_80/afa24f08-1e03-4fd0-9e17-e11b6f9c2df9/zoomx-vaporfly-next-2-womens-racing-shoe-2CMkCf.png}
+53	Nike React Infinity Run Flyknit 2	https://static.nike.com/a/images/t_PDP_864_v1/f_auto,b_rgb:f5f5f5/31059367-f1d2-403f-a5be-cc9e3f8f4639/react-infinity-run-flyknit-2-womens-running-shoe-rfh6Z8.png	160	32	womens	sneakers	10.0	HrNzuE4x	Platinum Tint / Hyper Pink / Black / Bright Mango	{https://static.nike.com/a/images/t_PDP_864_v1/f_auto,b_rgb:f5f5f5/31059367-f1d2-403f-a5be-cc9e3f8f4639/react-infinity-run-flyknit-2-womens-running-shoe-rfh6Z8.png,https://static.nike.com/a/images/t_PDP_864_v1/f_auto,b_rgb:f5f5f5,q_80/6a09bd07-0dca-4a04-8729-afef5675eed8/react-infinity-run-flyknit-2-womens-running-shoe-rfh6Z8.png,https://static.nike.com/a/images/t_PDP_864_v1/f_auto,b_rgb:f5f5f5,q_80/7c5f550f-3003-4d34-bce8-f5cd71a44ee7/react-infinity-run-flyknit-2-womens-running-shoe-rfh6Z8.png,https://static.nike.com/a/images/t_PDP_864_v1/f_auto,b_rgb:f5f5f5,q_80/33c6784d-eb27-4dd1-a372-bf797e3858eb/react-infinity-run-flyknit-2-womens-running-shoe-rfh6Z8.png,https://static.nike.com/a/images/t_PDP_864_v1/f_auto,b_rgb:f5f5f5,q_80/297c926c-ddfe-45d7-99f5-fa3faec1776e/react-infinity-run-flyknit-2-womens-running-shoe-rfh6Z8.png}
+57	Nike Victori One	https://static.nike.com/a/images/t_PDP_864_v1/f_auto,b_rgb:f5f5f5/48e6eb50-1d54-43f4-8ef3-471a2d94b5c6/victori-one-womens-slide-QshJR2.png	30	12	Other	Other	5	TR5tHq5m	Black / White	{https://static.nike.com/a/images/t_PDP_864_v1/f_auto,b_rgb:f5f5f5/48e6eb50-1d54-43f4-8ef3-471a2d94b5c6/victori-one-womens-slide-QshJR2.png,https://static.nike.com/a/images/t_PDP_864_v1/f_auto,b_rgb:f5f5f5,q_80/960a7e72-a605-4398-9185-9809730e4b7b/victori-one-womens-slide-QshJR2.png,https://static.nike.com/a/images/t_PDP_864_v1/f_auto,b_rgb:f5f5f5,q_80/e9098d5a-56c3-4756-8742-bc3f8139108d/victori-one-womens-slide-QshJR2.png,https://static.nike.com/a/images/t_PDP_864_v1/f_auto,b_rgb:f5f5f5,q_80/5b425f8b-de1b-40b8-9242-aed9103bc0af/victori-one-womens-slide-QshJR2.png}
+56	Nike On Deck	https://static.nike.com/a/images/t_PDP_864_v1/f_auto,b_rgb:f5f5f5/d82b9f9f-0d85-472b-9bd0-8d5a2dfccdca/on-deck-womens-flip-flop-cB99q2.png	25	55	womens	sandels	8	5VGV5QLD	Black / White	{https://static.nike.com/a/images/t_PDP_864_v1/f_auto,b_rgb:f5f5f5/d82b9f9f-0d85-472b-9bd0-8d5a2dfccdca/on-deck-womens-flip-flop-cB99q2.png,https://static.nike.com/a/images/t_PDP_864_v1/f_auto,b_rgb:f5f5f5,q_80/26124105-a2b0-4027-bf40-d70329d561d7/on-deck-womens-flip-flop-cB99q2.png,https://static.nike.com/a/images/t_PDP_864_v1/f_auto,b_rgb:f5f5f5,q_80/d98cd594-a9cd-4b12-b777-3ea1ca303ac4/on-deck-womens-flip-flop-cB99q2.png,https://static.nike.com/a/images/t_PDP_864_v1/f_auto,b_rgb:f5f5f5,q_80/ae9080cd-d2a6-4811-b6d1-72e42342362d/on-deck-womens-flip-flop-cB99q2.png}
+55	Nike Owaysis	https://static.nike.com/a/images/t_PDP_864_v1/f_auto,b_rgb:f5f5f5/0d0c4369-273d-4919-98d7-f55303726af0/owaysis-womens-sandal-6DNSmH.png	55	33	womens	sandels	7	8TLOnboI	White / Pure Platinum	{https://static.nike.com/a/images/t_PDP_864_v1/f_auto,b_rgb:f5f5f5/0d0c4369-273d-4919-98d7-f55303726af0/owaysis-womens-sandal-6DNSmH.png,https://static.nike.com/a/images/t_PDP_864_v1/f_auto,b_rgb:f5f5f5,q_80/de6922e3-5c0d-4c4a-a908-a69d1dbc0a61/owaysis-womens-sandal-6DNSmH.png,https://static.nike.com/a/images/t_PDP_864_v1/f_auto,b_rgb:f5f5f5,q_80/de5d98ba-6d4e-426e-85b5-d945c24ebf1a/owaysis-womens-sandal-6DNSmH.png,https://static.nike.com/a/images/t_PDP_864_v1/f_auto,b_rgb:f5f5f5,q_80/1cc88797-4f11-4eb8-a285-8416171de294/owaysis-womens-sandal-6DNSmH.png,https://static.nike.com/a/images/t_PDP_864_v1/f_auto,b_rgb:f5f5f5,q_80/2ac2013d-6504-4dfc-86ad-978f6afee736/owaysis-womens-sandal-6DNSmH.png}
+58	Nike Asuna	https://static.nike.com/a/images/t_PDP_864_v1/f_auto,b_rgb:f5f5f5/i1-3c817702-f2bc-4a17-9e3a-80673a765739/asuna-womens-slide-BKVfTf.png	45	5	womens	sandels	7	blQulk3u	Photon Dust / White	{https://static.nike.com/a/images/t_PDP_864_v1/f_auto,b_rgb:f5f5f5/i1-3c817702-f2bc-4a17-9e3a-80673a765739/asuna-womens-slide-BKVfTf.png,https://static.nike.com/a/images/t_PDP_864_v1/f_auto,b_rgb:f5f5f5,q_80/i1-c99b217f-e2b9-455b-b2e5-db0a90f7397c/asuna-womens-slide-BKVfTf.png,https://static.nike.com/a/images/t_PDP_864_v1/f_auto,b_rgb:f5f5f5,q_80/i1-64b45ed6-797a-478b-adef-916929b7e69b/asuna-womens-slide-BKVfTf.png,https://static.nike.com/a/images/t_PDP_864_v1/f_auto,b_rgb:f5f5f5,q_80/i1-413e6760-81e4-4da1-bc66-e46815c39f8d/asuna-womens-slide-BKVfTf.png}
+99	ESSENTIALS 3-STRIPES HOODIE	https://assets.adidas.com/images/h_840,f_auto,q_auto:sensitive,fl_lossy/1743e1ab810d4ddb8b41ac9200e87ddb_9366/Essentials_3-Stripes_Hoodie_Grey_GK9080_21_model.jpg	60	5	mens	sweaters	Medium	apc2VapV	\N	{}
+52	Nike Air Zoom Pegasus 38 Limited Edition	https://static.nike.com/a/images/t_PDP_864_v1/f_auto,b_rgb:f5f5f5/54788069-04d7-49c0-89df-04ff9bfe5890/air-zoom-pegasus-38-limited-edition-womens-running-shoe-vmTQVG.png	120	0	womens	sneakers	8.0	s8ppmdTd	Black / Grey / Multicolor	{https://static.nike.com/a/images/t_PDP_864_v1/f_auto,b_rgb:f5f5f5/54788069-04d7-49c0-89df-04ff9bfe5890/air-zoom-pegasus-38-limited-edition-womens-running-shoe-vmTQVG.png,https://static.nike.com/a/images/t_PDP_864_v1/f_auto,b_rgb:f5f5f5,q_80/1d804dad-d4df-4eed-af37-d2a5152387b1/air-zoom-pegasus-38-limited-edition-womens-running-shoe-vmTQVG.png,https://static.nike.com/a/images/t_PDP_864_v1/f_auto,b_rgb:f5f5f5,q_80/0a659aab-5bb4-471e-adb3-beaf9be6e737/air-zoom-pegasus-38-limited-edition-womens-running-shoe-vmTQVG.png,https://static.nike.com/a/images/t_PDP_864_v1/f_auto,b_rgb:f5f5f5,q_80/0a659aab-5bb4-471e-adb3-beaf9be6e737/air-zoom-pegasus-38-limited-edition-womens-running-shoe-vmTQVG.png,https://static.nike.com/a/images/t_PDP_864_v1/f_auto,b_rgb:f5f5f5,q_80/a75a142f-55ac-4628-aba6-1df07ec6a8e7/air-zoom-pegasus-38-limited-edition-womens-running-shoe-vmTQVG.png,https://static.nike.com/a/images/t_PDP_864_v1/f_auto,b_rgb:f5f5f5,q_80/88906e24-3893-42ea-b367-d5c2cd8e7bf2/air-zoom-pegasus-38-limited-edition-womens-running-shoe-vmTQVG.png}
+9	ULTRABOOST DNA 1.0 SHOES	https://assets.adidas.com/images/w_600,f_auto,q_auto/1bc0bb5605f444dba249ac6d01273c46_9366/Ultraboost_DNA_1.0_Shoes_White_H05265_01_standard.jpg	180	10	mens	sneakers	10.0	d1wUKB8k	\N	{https://assets.adidas.com/images/h_840,f_auto,q_auto:sensitive,fl_lossy,c_fill,g_auto/1bc0bb5605f444dba249ac6d01273c46_9366/Ultraboost_DNA_1.0_Shoes_White_H05265_01_standard.jpg,https://assets.adidas.com/images/h_840,f_auto,q_auto:sensitive,fl_lossy,c_fill,g_auto/6d1a1cc570684f3d8492ac6d01271f84_9366/Ultraboost_DNA_1.0_Shoes_White_H05265_02_standard_hover.jpg,https://assets.adidas.com/images/h_840,f_auto,q_auto:sensitive,fl_lossy,c_fill,g_auto/10ae0c7e3946419d8a80ac6d0129867a_9366/Ultraboost_DNA_1.0_Shoes_White_H05265_03_standard.jpg,https://assets.adidas.com/images/h_840,f_auto,q_auto:sensitive,fl_lossy,c_fill,g_auto/d0a2dd63c673423b867aac6d011cfb7e_9366/Ultraboost_DNA_1.0_Shoes_White_H05265_04_standard.jpg,https://assets.adidas.com/images/h_840,f_auto,q_auto:sensitive,fl_lossy,c_fill,g_auto/2446d4acb90d4b46998cac6d0122f58d_9366/Ultraboost_DNA_1.0_Shoes_White_H05265_05_standard.jpg}
+18	NMD_R1 SHOES	https://assets.adidas.com/images/h_840,f_auto,q_auto:sensitive,fl_lossy/9f9901054abf41798c39acaf010d2906_9366/NMD_R1_Shoes_White_GV7549_01_standard.jpg	140	6	mens	sneakers	8.5	2Gobbz24	\N	{https://assets.adidas.com/images/h_840,f_auto,q_auto:sensitive,fl_lossy,c_fill,g_auto/9f9901054abf41798c39acaf010d2906_9366/NMD_R1_Shoes_White_GV7549_01_standard.jpg,https://assets.adidas.com/images/h_840,f_auto,q_auto:sensitive,fl_lossy,c_fill,g_auto/114ddd9ce4ee46209af4acaf010d3879_9366/NMD_R1_Shoes_White_GV7549_02_standard_hover.jpg,https://assets.adidas.com/images/h_840,f_auto,q_auto:sensitive,fl_lossy,c_fill,g_auto/a1603f19e57d43698945acaf010d3d21_9366/NMD_R1_Shoes_White_GV7549_03_standard.jpg,https://assets.adidas.com/images/h_840,f_auto,q_auto:sensitive,fl_lossy,c_fill,g_auto/a8aab874c3424545916dacaf010d439c_9366/NMD_R1_Shoes_White_GV7549_04_standard.jpg,https://assets.adidas.com/images/h_840,f_auto,q_auto:sensitive,fl_lossy,c_fill,g_auto/f68db1bb1bb0404da08dacaf010d4a4f_9366/NMD_R1_Shoes_White_GV7549_05_standard.jpg}
+19	ULTRABOOST 4.0 DNA SHOES	https://assets.adidas.com/images/h_840,f_auto,q_auto:sensitive,fl_lossy/c79a34cb2e4a4bbe81c8ac1e011ac76c_9366/Ultraboost_4.0_DNA_Shoes_Black_FY9318_01_standard.jpg	180	22	mens	sneakers	7.0	KlbMrM5e	Core Black / Core Black / Cloud White	{https://assets.adidas.com/images/h_840,f_auto,q_auto:sensitive,fl_lossy,c_fill,g_auto/c79a34cb2e4a4bbe81c8ac1e011ac76c_9366/Ultraboost_4.0_DNA_Shoes_Black_FY9318_01_standard.jpg,https://assets.adidas.com/images/h_840,f_auto,q_auto:sensitive,fl_lossy,c_fill,g_auto/e7751e74dcbd49a48d17ad2e01640f98_9366/Ultraboost_4.0_DNA_Shoes_Black_FY9318_010_hover_standard.jpg,https://assets.adidas.com/images/h_840,f_auto,q_auto:sensitive,fl_lossy,c_fill,g_auto/79202a4f55c541e9bbe6ac1e011b044c_9366/Ultraboost_4.0_DNA_Shoes_Black_FY9318_02_standard.jpg,https://assets.adidas.com/images/h_840,f_auto,q_auto:sensitive,fl_lossy,c_fill,g_auto/b59f668891d64e02b722ac1e011c7e26_9366/Ultraboost_4.0_DNA_Shoes_Black_FY9318_03_standard.jpg,https://assets.adidas.com/images/h_840,f_auto,q_auto:sensitive,fl_lossy,c_fill,g_auto/8c2e06ad8ea7461db753ac1e011923c6_9366/Ultraboost_4.0_DNA_Shoes_Black_FY9318_04_standard.jpg}
+11	ADIDAS ULTRABOOST DNA X LEGO® PLATES SHOES	https://assets.adidas.com/images/h_840,f_auto,q_auto:sensitive,fl_lossy/1070aebbb55841e1aae5ac9f00b39879_9366/adidas_Ultraboost_DNA_x_LEGO(r)_Plates_Shoes_White_FY7690_01_standard.jpg	200	7	mens	sneakers	6.0	ZsTbktWR	\N	{https://assets.adidas.com/images/h_840,f_auto,q_auto:sensitive,fl_lossy,c_fill,g_auto/1070aebbb55841e1aae5ac9f00b39879_9366/adidas_Ultraboost_DNA_x_LEGO(r)_Plates_Shoes_White_FY7690_01_standard.jpg,https://assets.adidas.com/images/h_840,f_auto,q_auto:sensitive,fl_lossy,c_fill,g_auto/6d236d64954d46229a40ace800e3425d_9366/adidas_Ultraboost_DNA_x_LEGO(r)_Plates_Shoes_White_FY7690_HM2.jpg,https://assets.adidas.com/images/h_840,f_auto,q_auto:sensitive,fl_lossy,c_fill,g_auto/7e11f8c4382443bcb59bace800e341c7_9366/adidas_Ultraboost_DNA_x_LEGO(r)_Plates_Shoes_White_FY7690_HM3.jpg,https://assets.adidas.com/images/h_840,f_auto,q_auto:sensitive,fl_lossy,c_fill,g_auto/a934bad24b874d20b987ace800e34291_9366/adidas_Ultraboost_DNA_x_LEGO(r)_Plates_Shoes_White_FY7690_HM4.jpg,https://assets.adidas.com/images/h_840,f_auto,q_auto:sensitive,fl_lossy,c_fill,g_auto/5be4d27aa99a4ed6a239ac9f0116d7bd_9366/adidas_Ultraboost_DNA_x_LEGO(r)_Plates_Shoes_White_FY7690_011_hover_standard.jpg}
+16	FORUM MID TT SHOES	https://assets.adidas.com/images/h_840,f_auto,q_auto:sensitive,fl_lossy/25f6bc7840f8413eb684acb6001e788d_9366/Forum_Mid_TT_Shoes_White_FY4707_01_standard.jpg	110	2	mens	sneakers	9.0	JHy5vOSg	\N	{https://assets.adidas.com/images/h_840,f_auto,q_auto:sensitive,fl_lossy,c_fill,g_auto/25f6bc7840f8413eb684acb6001e788d_9366/Forum_Mid_TT_Shoes_White_FY4707_01_standard.jpg,https://assets.adidas.com/images/h_840,f_auto,q_auto:sensitive,fl_lossy,c_fill,g_auto/03222a6506214a23a96cacb6001e5b55_9366/Forum_Mid_TT_Shoes_White_FY4707_02_standard_hover.jpg,https://assets.adidas.com/images/h_840,f_auto,q_auto:sensitive,fl_lossy,c_fill,g_auto/2c6a85403d364dd58349acb6001e4002_9366/Forum_Mid_TT_Shoes_White_FY4707_03_standard.jpg,https://assets.adidas.com/images/h_840,f_auto,q_auto:sensitive,fl_lossy,c_fill,g_auto/8721740cf48141a798a3acb60018fa2a_9366/Forum_Mid_TT_Shoes_White_FY4707_04_standard.jpg,https://assets.adidas.com/images/h_840,f_auto,q_auto:sensitive,fl_lossy,c_fill,g_auto/65dbf2e2c8834ad78bb8acb6001d4ed6_9366/Forum_Mid_TT_Shoes_White_FY4707_05_standard.jpg}
+60	The Glove Boot	https://media.everlane.com/image/upload/c_fill,dpr_1.0,f_auto,g_face:center,q_auto,w_auto:100:1200/v1/i/638777eb_81bd.jpg	115	11	womens	boots	6.5	GBK7H3iw	Brown	{https://media.everlane.com/image/upload/c_fill,dpr_1.0,f_auto,g_face:center,q_auto,w_auto:100:1200/v1/i/638777eb_81bd.jpg,https://media.everlane.com/image/upload/c_fill,dpr_1.0,f_auto,g_face:center,q_auto,w_auto:100:1200/v1/i/048bd7df_79e2.jpg,https://media.everlane.com/image/upload/c_fill,dpr_1.0,f_auto,g_face:center,q_auto,w_auto:100:1200/v1/i/cbb77887_2093.jpg,https://media.everlane.com/image/upload/c_fill,dpr_1.0,f_auto,g_face:center,q_auto,w_auto:100:1200/v1/i/339baf79_4300.jpg,https://media.everlane.com/image/upload/c_fill,dpr_1.0,f_auto,g_face:center,q_auto,w_auto:100:1200/v1/i/848eb639_00fd.jpg}
+61	Nike Everyday	https://static.nike.com/a/images/t_PDP_1728_v1/f_auto,b_rgb:f5f5f5/i1-b7cc3679-70ba-4f96-83a8-2a83cfaea544/everyday-kids-cushioned-crew-socks-3-pairs-NwTzexGn.png	15	32	womens	socks	small	3Rbzb7Ky	Black	{}
+62	Nike Sportswear	https://static.nike.com/a/images/t_PDP_864_v1/f_auto,b_rgb:f5f5f5/d81577f0-440f-477b-b9d3-fd11219430a2/sportswear-womens-boxy-t-shirt-0wQfr3.png	35	32	womens	tops	small	Fds5BIhv	White	{https://static.nike.com/a/images/t_PDP_864_v1/f_auto,b_rgb:f5f5f5/d81577f0-440f-477b-b9d3-fd11219430a2/sportswear-womens-boxy-t-shirt-0wQfr3.png,https://static.nike.com/a/images/t_PDP_864_v1/f_auto,b_rgb:f5f5f5,q_80/c4012842-f5b1-419f-bdb4-06979bb002ce/sportswear-womens-boxy-t-shirt-0wQfr3.png,https://static.nike.com/a/images/t_PDP_864_v1/f_auto,b_rgb:f5f5f5,q_80/c302f46c-6686-498d-8e61-685e9168d144/sportswear-womens-boxy-t-shirt-0wQfr3.png,https://static.nike.com/a/images/t_PDP_864_v1/f_auto,b_rgb:f5f5f5,q_80/10b9a2a4-919d-4117-9423-52e456c20c8a/sportswear-womens-boxy-t-shirt-0wQfr3.png,https://static.nike.com/a/images/t_PDP_864_v1/f_auto,b_rgb:f5f5f5,q_80/428d873d-11fc-498e-99ef-377772cbe1a5/sportswear-womens-boxy-t-shirt-0wQfr3.png}
+63	Nike Sportswear Swoosh	https://static.nike.com/a/images/t_PDP_864_v1/f_auto,b_rgb:f5f5f5/7fa7b092-6023-4863-8b9c-9cc825dc17c9/sportswear-swoosh-womens-woven-pants-JG4qPw.png	85	34	womens	bottoms	xsmall	vltDzxax	Mint	{https://static.nike.com/a/images/t_PDP_864_v1/f_auto,b_rgb:f5f5f5/7fa7b092-6023-4863-8b9c-9cc825dc17c9/sportswear-swoosh-womens-woven-pants-JG4qPw.png,https://static.nike.com/a/images/t_PDP_864_v1/f_auto,b_rgb:f5f5f5,q_80/213f11db-1ab0-4830-8701-b24d11ccfcf8/sportswear-swoosh-womens-woven-pants-JG4qPw.png,https://static.nike.com/a/images/t_PDP_864_v1/f_auto,b_rgb:f5f5f5,q_80/0a031a0f-4973-44a3-84c7-b39c07915a2e/sportswear-swoosh-womens-woven-pants-JG4qPw.png,https://static.nike.com/a/images/t_PDP_864_v1/f_auto,b_rgb:f5f5f5,q_80/838e8b48-7ab8-4160-968c-094e585b1853/sportswear-swoosh-womens-woven-pants-JG4qPw.png,https://static.nike.com/a/images/t_PDP_864_v1/f_auto,b_rgb:f5f5f5,q_80/a9e1bdba-bcd9-4c62-9af4-b464a51ad373/sportswear-swoosh-womens-woven-pants-JG4qPw.png}
+76	Men's Benassi Just Do It Slide Sandals	https://slimages.macys.com/is/image/MCY/products/8/optimized/3418748_fpx.tif?op_sharpen=1&wid=1230&hei=1500&fit=fit,1&$filterxlrg$	25	22	mens	sandels	11.0	wEL8ugsU	\N	{}
+77	Men's Redder Pool Slide Sandals	https://slimages.macys.com/is/image/MCY/products/6/optimized/16397456_fpx.tif?op_sharpen=1&wid=1230&hei=1500&fit=fit,1&$filterxlrg$	24.99	4	mens	sandels	7.0	sK1uIvpU	\N	{}
+64	Women's Full-Zip Fleece	https://static.nike.com/a/images/t_PDP_864_v1/f_auto,b_rgb:f5f5f5/2b1f0229-5dc6-4782-902e-df0deba58a2f/sportswear-womens-full-zip-fleece-hoodie-bg6b74.png	75	11	womens	sweaters	large	toe5vhVU	Black / Blue / Pink	{https://static.nike.com/a/images/t_PDP_864_v1/f_auto,b_rgb:f5f5f5/2b1f0229-5dc6-4782-902e-df0deba58a2f/sportswear-womens-full-zip-fleece-hoodie-bg6b74.png,https://static.nike.com/a/images/t_PDP_864_v1/f_auto,b_rgb:f5f5f5,q_80/9408f7da-20cb-46f3-b35a-4dde0a93b184/sportswear-womens-full-zip-fleece-hoodie-bg6b74.png,https://static.nike.com/a/images/t_PDP_864_v1/f_auto,b_rgb:f5f5f5,q_80/414b66a1-9c05-4f53-b956-d333cf3a0872/sportswear-womens-full-zip-fleece-hoodie-bg6b74.png,https://static.nike.com/a/images/t_PDP_864_v1/f_auto,b_rgb:f5f5f5,q_80/ca6b2c7b-a7d8-4e98-998d-ddbf95075159/sportswear-womens-full-zip-fleece-hoodie-bg6b74.png,https://static.nike.com/a/images/t_PDP_864_v1/f_auto,b_rgb:f5f5f5,q_80/07442ede-f502-4c9e-b47c-dd5da2cbd448/sportswear-womens-full-zip-fleece-hoodie-bg6b74.png}
+65	RB3016 CLUBMASTER CLASSIC	https://assets.sunglasshut.com/is/image/LuxotticaRetail/805289653653__STD__shad__qt.png?impolicy=SGH_bgtransparent	161	32	womens	sunglasses	0.0	h0259QTG	\N	{}
+68	Little Kids' Tie-Dye Crew	https://static.nike.com/a/images/t_PDP_864_v1/f_auto,b_rgb:f5f5f5/421d9834-00e0-4a22-9c0d-de356951d63e/little-kids-tie-dye-crew-socks-3-pairs-3z3Csq.png	18	3	kids	socks	small	nYVvUBuu	Multi	{}
+69	Nike Woodside 2 High ACG	https://static.nike.com/a/images/t_PDP_864_v1/f_auto,b_rgb:f5f5f5/boakpneklqbiwunbrxnx/woodside-2-high-acg-big-kids-boot-aG0LdZ.png	85	5	kids	boots	6.5	3iMx2DT7	Brown	{https://static.nike.com/a/images/t_PDP_864_v1/f_auto,b_rgb:f5f5f5/boakpneklqbiwunbrxnx/woodside-2-high-acg-big-kids-boot-aG0LdZ.png,https://static.nike.com/a/images/t_PDP_864_v1/f_auto,b_rgb:f5f5f5,q_80/vv34j45dw76yaxz9x7l2/woodside-2-high-acg-big-kids-boot-aG0LdZ.png,https://static.nike.com/a/images/t_PDP_864_v1/f_auto,b_rgb:f5f5f5,q_80/jelgaxix9zsk34keswhs/woodside-2-high-acg-big-kids-boot-aG0LdZ.png,https://static.nike.com/a/images/t_PDP_864_v1/f_auto,b_rgb:f5f5f5,q_80/kkrd7ywmyltonqqqntpu/woodside-2-high-acg-big-kids-boot-aG0LdZ.png,https://static.nike.com/a/images/t_PDP_864_v1/f_auto,b_rgb:f5f5f5,q_80/xazxd4ns9uni5zlex7eg/woodside-2-high-acg-big-kids-boot-aG0LdZ.png}
+71	COURT RALLYE SLIP X STAR WARS SHOES	https://assets.adidas.com/images/h_840,f_auto,q_auto:sensitive,fl_lossy/c2b42bdf6bdc4bf7874bad19017e7c13_9366/Court_Rallye_Slip_x_Star_Wars_Shoes_Black_FY5312_01_standard.jpg	60	64	mens	sneakers	9.5	e1UFVNjx	\N	{https://assets.adidas.com/images/h_840,f_auto,q_auto:sensitive,fl_lossy,c_fill,g_auto/c2b42bdf6bdc4bf7874bad19017e7c13_9366/Court_Rallye_Slip_x_Star_Wars_Shoes_Black_FY5312_01_standard.jpg,https://assets.adidas.com/images/h_840,f_auto,q_auto:sensitive,fl_lossy,c_fill,g_auto/80aaf09c02924918bcf1ad19017dbace_9366/Court_Rallye_Slip_x_Star_Wars_Shoes_Black_FY5312_011_hover_standard.jpg,https://assets.adidas.com/images/h_840,f_auto,q_auto:sensitive,fl_lossy,c_fill,g_auto/e4ff0366604049feb5e4ad190183402c_9366/Court_Rallye_Slip_x_Star_Wars_Shoes_Black_FY5312_012_hover_standard.jpg,https://assets.adidas.com/images/h_840,f_auto,q_auto:sensitive,fl_lossy,c_fill,g_auto/a8935c7d91804e07a7baad19017e5ee6_9366/Court_Rallye_Slip_x_Star_Wars_Shoes_Black_FY5312_02_standard.jpg,https://assets.adidas.com/images/h_840,f_auto,q_auto:sensitive,fl_lossy,c_fill,g_auto/4a8e8d93f6d14114a295ad19017e3b72_9366/Court_Rallye_Slip_x_Star_Wars_Shoes_Black_FY5312_03_standard.jpg}
+89	Original Leather Boots Men Autumn Shoes Male Leather Casual Boots Men Comfy Anti-Slip Lace-up Boots	https://img.joomcdn.net/c36517d21c889721a8022aed86c4f04eef15c7f5_original.jpeg	65	6	mens	boots	9.5	jtaaDMuU	\N	{}
+90	President	https://cdn.shopify.com/s/files/1/0419/1525/products/1024x1024-Men-President-BlackMatte-LB1_36b80244-495d-4c0f-b166-3e5646099774_672x672.jpg?v=1569061396	199.99	22	mens	boots	8.5	PkyeOgtB	\N	{}
+72	COURT RALLYE SLIP X STAR WARS SHOES	https://assets.adidas.com/images/h_840,f_auto,q_auto:sensitive,fl_lossy/c2b42bdf6bdc4bf7874bad19017e7c13_9366/Court_Rallye_Slip_x_Star_Wars_Shoes_Black_FY5312_01_standard.jpg	60	64	mens	sneakers	7.0	e1UFVNjx	\N	{https://assets.adidas.com/images/h_840,f_auto,q_auto:sensitive,fl_lossy,c_fill,g_auto/c2b42bdf6bdc4bf7874bad19017e7c13_9366/Court_Rallye_Slip_x_Star_Wars_Shoes_Black_FY5312_01_standard.jpg,https://assets.adidas.com/images/h_840,f_auto,q_auto:sensitive,fl_lossy,c_fill,g_auto/80aaf09c02924918bcf1ad19017dbace_9366/Court_Rallye_Slip_x_Star_Wars_Shoes_Black_FY5312_011_hover_standard.jpg,https://assets.adidas.com/images/h_840,f_auto,q_auto:sensitive,fl_lossy,c_fill,g_auto/e4ff0366604049feb5e4ad190183402c_9366/Court_Rallye_Slip_x_Star_Wars_Shoes_Black_FY5312_012_hover_standard.jpg,https://assets.adidas.com/images/h_840,f_auto,q_auto:sensitive,fl_lossy,c_fill,g_auto/a8935c7d91804e07a7baad19017e5ee6_9366/Court_Rallye_Slip_x_Star_Wars_Shoes_Black_FY5312_02_standard.jpg,https://assets.adidas.com/images/h_840,f_auto,q_auto:sensitive,fl_lossy,c_fill,g_auto/4a8e8d93f6d14114a295ad19017e3b72_9366/Court_Rallye_Slip_x_Star_Wars_Shoes_Black_FY5312_03_standard.jpg}
+73	COURT RALLYE SLIP X STAR WARS SHOES	https://assets.adidas.com/images/h_840,f_auto,q_auto:sensitive,fl_lossy/c2b42bdf6bdc4bf7874bad19017e7c13_9366/Court_Rallye_Slip_x_Star_Wars_Shoes_Black_FY5312_01_standard.jpg	60	64	mens	sneakers	10.0	e1UFVNjx	\N	{https://assets.adidas.com/images/h_840,f_auto,q_auto:sensitive,fl_lossy,c_fill,g_auto/c2b42bdf6bdc4bf7874bad19017e7c13_9366/Court_Rallye_Slip_x_Star_Wars_Shoes_Black_FY5312_01_standard.jpg,https://assets.adidas.com/images/h_840,f_auto,q_auto:sensitive,fl_lossy,c_fill,g_auto/80aaf09c02924918bcf1ad19017dbace_9366/Court_Rallye_Slip_x_Star_Wars_Shoes_Black_FY5312_011_hover_standard.jpg,https://assets.adidas.com/images/h_840,f_auto,q_auto:sensitive,fl_lossy,c_fill,g_auto/e4ff0366604049feb5e4ad190183402c_9366/Court_Rallye_Slip_x_Star_Wars_Shoes_Black_FY5312_012_hover_standard.jpg,https://assets.adidas.com/images/h_840,f_auto,q_auto:sensitive,fl_lossy,c_fill,g_auto/a8935c7d91804e07a7baad19017e5ee6_9366/Court_Rallye_Slip_x_Star_Wars_Shoes_Black_FY5312_02_standard.jpg,https://assets.adidas.com/images/h_840,f_auto,q_auto:sensitive,fl_lossy,c_fill,g_auto/4a8e8d93f6d14114a295ad19017e3b72_9366/Court_Rallye_Slip_x_Star_Wars_Shoes_Black_FY5312_03_standard.jpg}
+95	Dickies Men's Multi-pack Dri-tech Moisture Control Crew Socks	https://images-na.ssl-images-amazon.com/images/I/91Dmp7X6RzL._AC_UX679_.jpg	12.99	155	mens	socks	6-10	XvQhw41g	\N	\N
+96	Fruit of the Loom Men's Dual Defense No Show Socks 12 Pair	https://images-na.ssl-images-amazon.com/images/I/71jFn3LK0-L._AC_UX679_.jpg	11.5	321	mens	socks	8-13	PPmUugUb	\N	\N
+97	Fruit of the Loom Men's Dual Defense No Show Socks 12 Pair	https://images-na.ssl-images-amazon.com/images/I/71jFn3LK0-L._AC_UX679_.jpg	11.5	321	mens	socks	8-13	PPmUugUb	\N	\N
+78	Men's Redder Pool Slide Sandals	https://slimages.macys.com/is/image/MCY/products/6/optimized/16397456_fpx.tif?op_sharpen=1&wid=1230&hei=1500&fit=fit,1&$filterxlrg$	24.99	11	mens	sandels	9.0	sK1uIvpU	\N	{}
+81	Polo Ralph Lauren	https://slimages.macys.com/is/image/MCY/products/3/optimized/16756553_fpx.tif?op_sharpen=1&wid=1230&hei=1500&fit=fit,1&$filterxlrg$	50	4	mens	sandels	7.0	4yif2RAa	\N	{}
+80	Polo Ralph Lauren	https://slimages.macys.com/is/image/MCY/products/3/optimized/16756553_fpx.tif?op_sharpen=1&wid=1230&hei=1500&fit=fit,1&$filterxlrg$	50	33	mens	sandels	8.0	4yif2RAa	\N	{}
+79	Polo Ralph Lauren	https://slimages.macys.com/is/image/MCY/products/3/optimized/16756553_fpx.tif?op_sharpen=1&wid=1230&hei=1500&fit=fit,1&$filterxlrg$	50	6	mens	sandels	13.0	4yif2RAa	\N	{}
+83	Men's Bolt Slip-On Thong Flip-Flop Sandals	https://slimages.macys.com/is/image/MCY/products/5/optimized/18482245_fpx.tif?op_sharpen=1&wid=1230&hei=1500&fit=fit,1&$filterxlrg$	11	12	mens	sandels	6.0	lFVFlb28	\N	{}
+86	Men's Bolt Slip-On Thong Flip-Flop Sandals	https://slimages.macys.com/is/image/MCY/products/5/optimized/18482245_fpx.tif?op_sharpen=1&wid=1230&hei=1500&fit=fit,1&$filterxlrg$	11	65	mens	sandels	7.0	lFVFlb28	\N	{}
+87	Men's Bolt Slip-On Thong Flip-Flop Sandals	https://slimages.macys.com/is/image/MCY/products/5/optimized/18482245_fpx.tif?op_sharpen=1&wid=1230&hei=1500&fit=fit,1&$filterxlrg$	11	17	mens	sandels	11.0	lFVFlb28	\N	{}
+88	Men's Riker Pool Slide Sandals	https://slimages.macys.com/is/image/MCY/products/8/optimized/17336218_fpx.tif?op_sharpen=1&wid=1230&hei=1500&fit=fit,1&$filterxlrg$	24.99	16	mens	sandels	9.0	qYwpFEkm	\N	{}
+91	President	https://cdn.shopify.com/s/files/1/0419/1525/products/1024x1024-Men-President-BlackMatte-LB1_36b80244-495d-4c0f-b166-3e5646099774_672x672.jpg?v=1569061396	199.99	75	mens	boots	7.5	PkyeOgtB	\N	{}
+92	DECARSDZ Men Boots Autumn Comfy Durable outsole Lace-up Fashion Shoes Men 2021 Leather Casual Boots Men Brand design Men's Boots	https://ae01.alicdn.com/kf/H279458f6f35b4525ae992451f169d01bc/DECARSDZ-Men-Boots-Autumn-Comfy-Durable-outsole-Lace-up-Fashion-Shoes-Men-2021-Leather-Casual-Boots.jpg_q50.jpg	150.65	23	mens	boots	8.0	Sv0tfLVW	\N	{}
+93	MEN'S RUST BROWN CHELSEA BOOTS BY BERNARD DE WULF	https://cdn.shopify.com/s/files/1/1594/9235/products/DWChelseaBootsMen_Rust2_bootsmen_leatherchelseabootsmen_leatherboots_bootsmen_brownchelseaboots_dewulfmenshoes_dewulfmenboots_800x.jpg?v=1602180231	100	23	mens	boots	10.0	T7VPIhIr	\N	{}
+94	MEN'S RUST BROWN CHELSEA BOOTS BY BERNARD DE WULF	https://cdn.shopify.com/s/files/1/1594/9235/products/DWChelseaBootsMen_Rust2_bootsmen_leatherchelseabootsmen_leatherboots_bootsmen_brownchelseaboots_dewulfmenshoes_dewulfmenboots_800x.jpg?v=1602180231	100	65	mens	boots	11.0	T7VPIhIr	\N	{}
+101	ESSENTIALS 3-STRIPES HOODIE	https://assets.adidas.com/images/h_840,f_auto,q_auto:sensitive,fl_lossy/1743e1ab810d4ddb8b41ac9200e87ddb_9366/Essentials_3-Stripes_Hoodie_Grey_GK9080_21_model.jpg	60	23	mens	sweaters	Large	apc2VapV	\N	{}
+10	8 ZX 1000 THE SIMPSONS FLAMING MOE SHOES	https://assets.adidas.com/images/h_840,f_auto,q_auto:sensitive,fl_lossy/3f81a506a80e4f80a18eacb70070a69a_9366/ZX_1000_The_Simpsons_Flaming_Moe_Shoes_Purple_H05790_01_standard.jpg	120	4	mens	sneakers	9.0	P6mR6wG8	\N	{https://assets.adidas.com/images/h_840,f_auto,q_auto:sensitive,fl_lossy,c_fill,g_auto/3f81a506a80e4f80a18eacb70070a69a_9366/ZX_1000_The_Simpsons_Flaming_Moe_Shoes_Purple_H05790_01_standard.jpg,https://assets.adidas.com/images/h_840,f_auto,q_auto:sensitive,fl_lossy,c_fill,g_auto/569d5d904fa141d3987dacb70070cc2b_9366/ZX_1000_The_Simpsons_Flaming_Moe_Shoes_Purple_H05790_011_hover_standard.jpg,https://assets.adidas.com/images/h_840,f_auto,q_auto:sensitive,fl_lossy,c_fill,g_auto/9f053810b3b742da946facb70070b370_9366/ZX_1000_The_Simpsons_Flaming_Moe_Shoes_Purple_H05790_02_standard.jpg,https://assets.adidas.com/images/h_840,f_auto,q_auto:sensitive,fl_lossy,c_fill,g_auto/6c056c41aa004e4f90d6acb70070b9a8_9366/ZX_1000_The_Simpsons_Flaming_Moe_Shoes_Purple_H05790_03_standard.jpg,https://assets.adidas.com/images/h_840,f_auto,q_auto:sensitive,fl_lossy,c_fill,g_auto/680ab6d45b8c47af9a44acb70070bf7c_9366/ZX_1000_The_Simpsons_Flaming_Moe_Shoes_Purple_H05790_04_standard.jpg}
+44	ULTRABOOST DNA 1.0 SHOES	https://assets.adidas.com/images/h_840,f_auto,q_auto:sensitive,fl_lossy/cdfdf1409e054322b9e0ac6d011da5e2_9366/Ultraboost_DNA_1.0_Shoes_Green_H05264_01_standard.jpg	180	22	mens	sneakers	7.0	h4HMDzyc	Bahia Mint / Eqt Green / Cloud White	{https://assets.adidas.com/images/h_840,f_auto,q_auto:sensitive,fl_lossy/cdfdf1409e054322b9e0ac6d011da5e2_9366/Ultraboost_DNA_1.0_Shoes_Green_H05264_01_standard.jpg,https://assets.adidas.com/images/h_840,f_auto,q_auto:sensitive,fl_lossy/02705e8729c7435e9bb9ac6d01265a01_9366/Ultraboost_DNA_1.0_Shoes_Green_H05264_02_standard.jpg,https://assets.adidas.com/images/h_840,f_auto,q_auto:sensitive,fl_lossy/ac3cfbfce4a84b598864ac6d011963ac_9366/Ultraboost_DNA_1.0_Shoes_Green_H05264_03_standard.jpg,https://assets.adidas.com/images/h_840,f_auto,q_auto:sensitive,fl_lossy/a14abd8e93004e4b9706ac6d0115d8f0_9366/Ultraboost_DNA_1.0_Shoes_Green_H05264_04_standard.jpg,https://assets.adidas.com/images/h_840,f_auto,q_auto:sensitive,fl_lossy/44bcb47866b04e739aa4ac6d0119f6ef_9366/Ultraboost_DNA_1.0_Shoes_Green_H05264_05_standard.jpg}
+14	ULTRABOOST DNA 1.0 SHOES	https://assets.adidas.com/images/h_840,f_auto,q_auto:sensitive,fl_lossy/4d8c5bb222fa420c9a14ac6d012069dd_9366/Ultraboost_DNA_1.0_Shoes_Turquoise_H05263_01_standard.jpg	180	17	mens	sneakers	12.0	LntxHxzH	Light Aqua / Shock Yellow / Purple	{https://assets.adidas.com/images/h_840,f_auto,q_auto:sensitive,fl_lossy,c_fill,g_auto/4d8c5bb222fa420c9a14ac6d012069dd_9366/Ultraboost_DNA_1.0_Shoes_Turquoise_H05263_01_standard.jpg,https://assets.adidas.com/images/h_840,f_auto,q_auto:sensitive,fl_lossy,c_fill,g_auto/672dcc4bbf3c42b6aa58ac6d01204e86_9366/Ultraboost_DNA_1.0_Shoes_Turquoise_H05263_02_standard.jpg,https://assets.adidas.com/images/h_840,f_auto,q_auto:sensitive,fl_lossy,c_fill,g_auto/affc1bec28514c32b525ac6d01211aed_9366/Ultraboost_DNA_1.0_Shoes_Turquoise_H05263_03_standard.jpg,https://assets.adidas.com/images/h_840,f_auto,q_auto:sensitive,fl_lossy,c_fill,g_auto/e82a57fb45054f8bb03eac6d011df574_9366/Ultraboost_DNA_1.0_Shoes_Turquoise_H05263_04_standard.jpg,https://assets.adidas.com/images/h_840,f_auto,q_auto:sensitive,fl_lossy,c_fill,g_auto/5dbecf4b98d647d4884eac6d0124b707_9366/Ultraboost_DNA_1.0_Shoes_Turquoise_H05263_05_standard.jpg}
+70	COURT RALLYE SLIP X STAR WARS SHOES	https://assets.adidas.com/images/h_840,f_auto,q_auto:sensitive,fl_lossy/c2b42bdf6bdc4bf7874bad19017e7c13_9366/Court_Rallye_Slip_x_Star_Wars_Shoes_Black_FY5312_01_standard.jpg	60	61	mens	sneakers	6.5	e1UFVNjx	\N	{https://assets.adidas.com/images/h_840,f_auto,q_auto:sensitive,fl_lossy,c_fill,g_auto/c2b42bdf6bdc4bf7874bad19017e7c13_9366/Court_Rallye_Slip_x_Star_Wars_Shoes_Black_FY5312_01_standard.jpg,https://assets.adidas.com/images/h_840,f_auto,q_auto:sensitive,fl_lossy,c_fill,g_auto/80aaf09c02924918bcf1ad19017dbace_9366/Court_Rallye_Slip_x_Star_Wars_Shoes_Black_FY5312_011_hover_standard.jpg,https://assets.adidas.com/images/h_840,f_auto,q_auto:sensitive,fl_lossy,c_fill,g_auto/e4ff0366604049feb5e4ad190183402c_9366/Court_Rallye_Slip_x_Star_Wars_Shoes_Black_FY5312_012_hover_standard.jpg,https://assets.adidas.com/images/h_840,f_auto,q_auto:sensitive,fl_lossy,c_fill,g_auto/a8935c7d91804e07a7baad19017e5ee6_9366/Court_Rallye_Slip_x_Star_Wars_Shoes_Black_FY5312_02_standard.jpg,https://assets.adidas.com/images/h_840,f_auto,q_auto:sensitive,fl_lossy,c_fill,g_auto/4a8e8d93f6d14114a295ad19017e3b72_9366/Court_Rallye_Slip_x_Star_Wars_Shoes_Black_FY5312_03_standard.jpg}
+\.
+
+
+--
+-- Data for Name: api_resettoken; Type: TABLE DATA; Schema: public; Owner: Eric
+--
+
+COPY public.api_resettoken (id, token, date_added, user_id) FROM stdin;
+5	6QN471K7quXX8AnnDsF5	2021-07-17 19:37:19.820176-04	4
+\.
+
+
+--
+-- Data for Name: api_shippinginfo; Type: TABLE DATA; Schema: public; Owner: Eric
+--
+
+COPY public.api_shippinginfo (id, address, state, city, zipcode, date_added, customer_id, order_id, email) FROM stdin;
+1	123 Apple St	NY	Brooklyn	13213	2021-06-20 04:20:55.312487-04	15	2	Ericliao132@gmail.com
+2	123 Banana St 	NY	Brooklyn	12321	2021-06-20 04:25:31.730574-04	7	3	Ericliao132@gmail.com
+3	123 Apple St	NY	fdsf	32133	2021-06-23 13:17:59.055032-04	7	5	Ericliao132@gmail.com
+4	123 Apple St	CA	Los Angeles	12345	2021-06-27 18:54:32.217402-04	7	6	Eric@gmail.com
+5	dsadsa	CA	fds	fds	2021-06-30 04:24:48.300103-04	16	7	fasdsad@gmail.com
+6	gf	AL	dsf	gfd	2021-06-30 04:26:16.015973-04	17	8	fdsfds@gmail.com
+7	fdsfds	AL	fdsfds	fsd	2021-06-30 04:28:54.82993-04	18	9	fdsfsd
+8	fds	AL	fds	fds	2021-06-30 04:36:03.41891-04	19	10	bgfbgf@gmail.com
+9	dsa	AL	fds	fds	2021-06-30 04:37:02.008726-04	20	11	bgdffdk@gmail.com
+10	3321 dfsa	AR	vdfvdf	12333	2021-10-02 18:09:24.463406-04	21	12	dsadsasa@gmail.com
+\.
+
+
+--
+-- Data for Name: api_temporder; Type: TABLE DATA; Schema: public; Owner: Eric
+--
+
+COPY public.api_temporder (id, order_id, info, total, date_added, user_id) FROM stdin;
+3	5NY80800EU9014207	{"email": "fsa", "address": "fsa", "zip": "fas", "city": "dsa", "state": "AL", "cart": {"0": {"id": 47, "name": "Nike Wildhorse 7", "image": "https://static.nike.com/a/images/t_PDP_864_v1/f_auto,b_rgb:f5f5f5/eaf8461f-ffc5-478b-b171-d7b70f70f068/air-zoom-pegasus-38-womens-running-shoe-2bvJvW.png", "images": ["https://static.nike.com/a/images/t_PDP_864_v1/f_auto,b_rgb:f5f5f5/eaf8461f-ffc5-478b-b171-d7b70f70f068/air-zoom-pegasus-38-womens-running-shoe-2bvJvW.png", "https://static.nike.com/a/images/t_PDP_864_v1/f_auto,b_rgb:f5f5f5,q_80/724c24ff-7e4b-479b-ba5e-2bc0f570257f/air-zoom-pegasus-38-womens-running-shoe-2bvJvW.png", "https://static.nike.com/a/images/t_PDP_864_v1/f_auto,b_rgb:f5f5f5,q_80/6d268ac7-c1f9-413b-9109-2f2c529e7980/air-zoom-pegasus-38-womens-running-shoe-2bvJvW.png", "https://static.nike.com/a/images/t_PDP_864_v1/f_auto,b_rgb:f5f5f5,q_80/9b099cc2-fdec-4f08-ad92-f83d8d348c91/air-zoom-pegasus-38-womens-running-shoe-2bvJvW.png", "https://static.nike.com/a/images/t_PDP_864_v1/f_auto,b_rgb:f5f5f5,q_80/a527c01d-0708-42d7-9a6c-3aa21a734b73/air-zoom-pegasus-38-womens-running-shoe-2bvJvW.png"], "price": 130, "stock": 1, "itemCategory": "womens", "itemType": "sneakers", "size": "9.0", "productID": "mKXusFwE", "colors": "White / Red", "quantity": 1}}, "coupon": "JGFNB3"}	112.32	2021-06-19 21:37:38.577405-04	\N
+4	6TY86365N56232409	{"email": "fsa", "address": "fsa", "zip": "fas", "city": "dsa", "state": "AL", "cart": {"0": {"id": 47, "name": "Nike Wildhorse 7", "image": "https://static.nike.com/a/images/t_PDP_864_v1/f_auto,b_rgb:f5f5f5/eaf8461f-ffc5-478b-b171-d7b70f70f068/air-zoom-pegasus-38-womens-running-shoe-2bvJvW.png", "images": ["https://static.nike.com/a/images/t_PDP_864_v1/f_auto,b_rgb:f5f5f5/eaf8461f-ffc5-478b-b171-d7b70f70f068/air-zoom-pegasus-38-womens-running-shoe-2bvJvW.png", "https://static.nike.com/a/images/t_PDP_864_v1/f_auto,b_rgb:f5f5f5,q_80/724c24ff-7e4b-479b-ba5e-2bc0f570257f/air-zoom-pegasus-38-womens-running-shoe-2bvJvW.png", "https://static.nike.com/a/images/t_PDP_864_v1/f_auto,b_rgb:f5f5f5,q_80/6d268ac7-c1f9-413b-9109-2f2c529e7980/air-zoom-pegasus-38-womens-running-shoe-2bvJvW.png", "https://static.nike.com/a/images/t_PDP_864_v1/f_auto,b_rgb:f5f5f5,q_80/9b099cc2-fdec-4f08-ad92-f83d8d348c91/air-zoom-pegasus-38-womens-running-shoe-2bvJvW.png", "https://static.nike.com/a/images/t_PDP_864_v1/f_auto,b_rgb:f5f5f5,q_80/a527c01d-0708-42d7-9a6c-3aa21a734b73/air-zoom-pegasus-38-womens-running-shoe-2bvJvW.png"], "price": 130, "stock": 1, "itemCategory": "womens", "itemType": "sneakers", "size": "9.0", "productID": "mKXusFwE", "colors": "White / Red", "quantity": 1}}, "coupon": "JGFNB3"}	112.32	2021-06-19 21:42:03.002936-04	\N
+5	8FB55782RT9259624	{"email": "fsa", "address": "fsa", "zip": "fas", "city": "dsa", "state": "AL", "cart": {"0": {"id": 47, "name": "Nike Wildhorse 7", "image": "https://static.nike.com/a/images/t_PDP_864_v1/f_auto,b_rgb:f5f5f5/eaf8461f-ffc5-478b-b171-d7b70f70f068/air-zoom-pegasus-38-womens-running-shoe-2bvJvW.png", "images": ["https://static.nike.com/a/images/t_PDP_864_v1/f_auto,b_rgb:f5f5f5/eaf8461f-ffc5-478b-b171-d7b70f70f068/air-zoom-pegasus-38-womens-running-shoe-2bvJvW.png", "https://static.nike.com/a/images/t_PDP_864_v1/f_auto,b_rgb:f5f5f5,q_80/724c24ff-7e4b-479b-ba5e-2bc0f570257f/air-zoom-pegasus-38-womens-running-shoe-2bvJvW.png", "https://static.nike.com/a/images/t_PDP_864_v1/f_auto,b_rgb:f5f5f5,q_80/6d268ac7-c1f9-413b-9109-2f2c529e7980/air-zoom-pegasus-38-womens-running-shoe-2bvJvW.png", "https://static.nike.com/a/images/t_PDP_864_v1/f_auto,b_rgb:f5f5f5,q_80/9b099cc2-fdec-4f08-ad92-f83d8d348c91/air-zoom-pegasus-38-womens-running-shoe-2bvJvW.png", "https://static.nike.com/a/images/t_PDP_864_v1/f_auto,b_rgb:f5f5f5,q_80/a527c01d-0708-42d7-9a6c-3aa21a734b73/air-zoom-pegasus-38-womens-running-shoe-2bvJvW.png"], "price": 130, "stock": 1, "itemCategory": "womens", "itemType": "sneakers", "size": "9.0", "productID": "mKXusFwE", "colors": "White / Red", "quantity": 1}}, "coupon": "JGFNB3"}	112.32	2021-06-19 21:43:05.633938-04	\N
+6	9VX83354BY1662846	{"email": "fsa", "address": "fsa", "zip": "fas", "city": "dsa", "state": "AL", "cart": {"0": {"id": 47, "name": "Nike Wildhorse 7", "image": "https://static.nike.com/a/images/t_PDP_864_v1/f_auto,b_rgb:f5f5f5/eaf8461f-ffc5-478b-b171-d7b70f70f068/air-zoom-pegasus-38-womens-running-shoe-2bvJvW.png", "images": ["https://static.nike.com/a/images/t_PDP_864_v1/f_auto,b_rgb:f5f5f5/eaf8461f-ffc5-478b-b171-d7b70f70f068/air-zoom-pegasus-38-womens-running-shoe-2bvJvW.png", "https://static.nike.com/a/images/t_PDP_864_v1/f_auto,b_rgb:f5f5f5,q_80/724c24ff-7e4b-479b-ba5e-2bc0f570257f/air-zoom-pegasus-38-womens-running-shoe-2bvJvW.png", "https://static.nike.com/a/images/t_PDP_864_v1/f_auto,b_rgb:f5f5f5,q_80/6d268ac7-c1f9-413b-9109-2f2c529e7980/air-zoom-pegasus-38-womens-running-shoe-2bvJvW.png", "https://static.nike.com/a/images/t_PDP_864_v1/f_auto,b_rgb:f5f5f5,q_80/9b099cc2-fdec-4f08-ad92-f83d8d348c91/air-zoom-pegasus-38-womens-running-shoe-2bvJvW.png", "https://static.nike.com/a/images/t_PDP_864_v1/f_auto,b_rgb:f5f5f5,q_80/a527c01d-0708-42d7-9a6c-3aa21a734b73/air-zoom-pegasus-38-womens-running-shoe-2bvJvW.png"], "price": 130, "stock": 1, "itemCategory": "womens", "itemType": "sneakers", "size": "9.0", "productID": "mKXusFwE", "colors": "White / Red", "quantity": 1}}, "coupon": "JGFNB3"}	112.32	2021-06-19 21:44:29.456593-04	\N
+7	6PS70692CV215835V	{"email": "fsa", "address": "fsa", "zip": "fas", "city": "dsa", "state": "AL", "cart": {"0": {"id": 47, "name": "Nike Wildhorse 7", "image": "https://static.nike.com/a/images/t_PDP_864_v1/f_auto,b_rgb:f5f5f5/eaf8461f-ffc5-478b-b171-d7b70f70f068/air-zoom-pegasus-38-womens-running-shoe-2bvJvW.png", "images": ["https://static.nike.com/a/images/t_PDP_864_v1/f_auto,b_rgb:f5f5f5/eaf8461f-ffc5-478b-b171-d7b70f70f068/air-zoom-pegasus-38-womens-running-shoe-2bvJvW.png", "https://static.nike.com/a/images/t_PDP_864_v1/f_auto,b_rgb:f5f5f5,q_80/724c24ff-7e4b-479b-ba5e-2bc0f570257f/air-zoom-pegasus-38-womens-running-shoe-2bvJvW.png", "https://static.nike.com/a/images/t_PDP_864_v1/f_auto,b_rgb:f5f5f5,q_80/6d268ac7-c1f9-413b-9109-2f2c529e7980/air-zoom-pegasus-38-womens-running-shoe-2bvJvW.png", "https://static.nike.com/a/images/t_PDP_864_v1/f_auto,b_rgb:f5f5f5,q_80/9b099cc2-fdec-4f08-ad92-f83d8d348c91/air-zoom-pegasus-38-womens-running-shoe-2bvJvW.png", "https://static.nike.com/a/images/t_PDP_864_v1/f_auto,b_rgb:f5f5f5,q_80/a527c01d-0708-42d7-9a6c-3aa21a734b73/air-zoom-pegasus-38-womens-running-shoe-2bvJvW.png"], "price": 130, "stock": 1, "itemCategory": "womens", "itemType": "sneakers", "size": "9.0", "productID": "mKXusFwE", "colors": "White / Red", "quantity": 1}}, "coupon": "JGFNB3"}	112.32	2021-06-19 21:47:07.462382-04	\N
+35	62R49371X84335134	{"first_name": "Eric", "last_name": "Liao", "email": "Eric@gmail.com", "address": "123 Apple St", "zip": "12345", "city": "Los Angeles", "state": "CA", "coupon": "JGFNB3 ", "cart": {"0": {"id": 14, "name": "ULTRABOOST DNA 1.0 SHOES", "image": "https://assets.adidas.com/images/h_840,f_auto,q_auto:sensitive,fl_lossy/4d8c5bb222fa420c9a14ac6d012069dd_9366/Ultraboost_DNA_1.0_Shoes_Turquoise_H05263_01_standard.jpg", "images": ["https://assets.adidas.com/images/h_840,f_auto,q_auto:sensitive,fl_lossy,c_fill,g_auto/4d8c5bb222fa420c9a14ac6d012069dd_9366/Ultraboost_DNA_1.0_Shoes_Turquoise_H05263_01_standard.jpg", "https://assets.adidas.com/images/h_840,f_auto,q_auto:sensitive,fl_lossy,c_fill,g_auto/672dcc4bbf3c42b6aa58ac6d01204e86_9366/Ultraboost_DNA_1.0_Shoes_Turquoise_H05263_02_standard.jpg", "https://assets.adidas.com/images/h_840,f_auto,q_auto:sensitive,fl_lossy,c_fill,g_auto/affc1bec28514c32b525ac6d01211aed_9366/Ultraboost_DNA_1.0_Shoes_Turquoise_H05263_03_standard.jpg", "https://assets.adidas.com/images/h_840,f_auto,q_auto:sensitive,fl_lossy,c_fill,g_auto/e82a57fb45054f8bb03eac6d011df574_9366/Ultraboost_DNA_1.0_Shoes_Turquoise_H05263_04_standard.jpg", "https://assets.adidas.com/images/h_840,f_auto,q_auto:sensitive,fl_lossy,c_fill,g_auto/5dbecf4b98d647d4884eac6d0124b707_9366/Ultraboost_DNA_1.0_Shoes_Turquoise_H05263_05_standard.jpg"], "price": 180, "stock": 22, "itemCategory": "mens", "itemType": "sneakers", "size": "12.0", "productID": "LntxHxzH", "colors": "Light Aqua / Shock Yellow / Purple", "quantity": 4}, "1": {"id": 10, "name": "8 ZX 1000 THE SIMPSONS FLAMING MOE SHOES", "image": "https://assets.adidas.com/images/h_840,f_auto,q_auto:sensitive,fl_lossy/3f81a506a80e4f80a18eacb70070a69a_9366/ZX_1000_The_Simpsons_Flaming_Moe_Shoes_Purple_H05790_01_standard.jpg", "images": ["https://assets.adidas.com/images/h_840", "f_auto", "q_auto:sensitive", "fl_lossy", "c_fill", "g_auto/3f81a506a80e4f80a18eacb70070a69a_9366/ZX_1000_The_Simpsons_Flaming_Moe_Shoes_Purple_H05790_01_standard.jpg", "https://assets.adidas.com/images/h_840", "f_auto", "q_auto:sensitive", "fl_lossy", "c_fill", "g_auto/569d5d904fa141d3987dacb70070cc2b_9366/ZX_1000_The_Simpsons_Flaming_Moe_Shoes_Purple_H05790_011_hover_standard.jpg", "https://assets.adidas.com/images/h_840", "f_auto", "q_auto:sensitive", "fl_lossy", "c_fill", "g_auto/9f053810b3b742da946facb70070b370_9366/ZX_1000_The_Simpsons_Flaming_Moe_Shoes_Purple_H05790_02_standard.jpg", "https://assets.adidas.com/images/h_840", "f_auto", "q_auto:sensitive", "fl_lossy", "c_fill", "g_auto/6c056c41aa004e4f90d6acb70070b9a8_9366/ZX_1000_The_Simpsons_Flaming_Moe_Shoes_Purple_H05790_03_standard.jpg", "https://assets.adidas.com/images/h_840", "f_auto", "q_auto:sensitive", "fl_lossy", "c_fill", "g_auto/680ab6d45b8c47af9a44acb70070bf7c_9366/ZX_1000_The_Simpsons_Flaming_Moe_Shoes_Purple_H05790_04_standard.jpg"], "price": 120, "stock": 5, "itemCategory": "mens", "itemType": "sneakers", "size": "9.0", "productID": "P6mR6wG8", "colors": null, "quantity": 1}}}	907.2	2021-06-27 18:54:14.224625-04	4
+8	6828140585523621J	{"email": "fsa", "address": "fsa", "zip": "fas", "city": "dsa", "state": "AL", "cart": {"0": {"id": 47, "name": "Nike Wildhorse 7", "image": "https://static.nike.com/a/images/t_PDP_864_v1/f_auto,b_rgb:f5f5f5/eaf8461f-ffc5-478b-b171-d7b70f70f068/air-zoom-pegasus-38-womens-running-shoe-2bvJvW.png", "images": ["https://static.nike.com/a/images/t_PDP_864_v1/f_auto,b_rgb:f5f5f5/eaf8461f-ffc5-478b-b171-d7b70f70f068/air-zoom-pegasus-38-womens-running-shoe-2bvJvW.png", "https://static.nike.com/a/images/t_PDP_864_v1/f_auto,b_rgb:f5f5f5,q_80/724c24ff-7e4b-479b-ba5e-2bc0f570257f/air-zoom-pegasus-38-womens-running-shoe-2bvJvW.png", "https://static.nike.com/a/images/t_PDP_864_v1/f_auto,b_rgb:f5f5f5,q_80/6d268ac7-c1f9-413b-9109-2f2c529e7980/air-zoom-pegasus-38-womens-running-shoe-2bvJvW.png", "https://static.nike.com/a/images/t_PDP_864_v1/f_auto,b_rgb:f5f5f5,q_80/9b099cc2-fdec-4f08-ad92-f83d8d348c91/air-zoom-pegasus-38-womens-running-shoe-2bvJvW.png", "https://static.nike.com/a/images/t_PDP_864_v1/f_auto,b_rgb:f5f5f5,q_80/a527c01d-0708-42d7-9a6c-3aa21a734b73/air-zoom-pegasus-38-womens-running-shoe-2bvJvW.png"], "price": 130, "stock": 1, "itemCategory": "womens", "itemType": "sneakers", "size": "9.0", "productID": "mKXusFwE", "colors": "White / Red", "quantity": 1}}, "coupon": "JGFNB3"}	112.32	2021-06-19 21:47:21.489437-04	\N
+9	8YU68114U44297427	{"email": "fsa", "address": "fsa", "zip": "fas", "city": "dsa", "state": "AL", "cart": {"0": {"id": 47, "name": "Nike Wildhorse 7", "image": "https://static.nike.com/a/images/t_PDP_864_v1/f_auto,b_rgb:f5f5f5/eaf8461f-ffc5-478b-b171-d7b70f70f068/air-zoom-pegasus-38-womens-running-shoe-2bvJvW.png", "images": ["https://static.nike.com/a/images/t_PDP_864_v1/f_auto,b_rgb:f5f5f5/eaf8461f-ffc5-478b-b171-d7b70f70f068/air-zoom-pegasus-38-womens-running-shoe-2bvJvW.png", "https://static.nike.com/a/images/t_PDP_864_v1/f_auto,b_rgb:f5f5f5,q_80/724c24ff-7e4b-479b-ba5e-2bc0f570257f/air-zoom-pegasus-38-womens-running-shoe-2bvJvW.png", "https://static.nike.com/a/images/t_PDP_864_v1/f_auto,b_rgb:f5f5f5,q_80/6d268ac7-c1f9-413b-9109-2f2c529e7980/air-zoom-pegasus-38-womens-running-shoe-2bvJvW.png", "https://static.nike.com/a/images/t_PDP_864_v1/f_auto,b_rgb:f5f5f5,q_80/9b099cc2-fdec-4f08-ad92-f83d8d348c91/air-zoom-pegasus-38-womens-running-shoe-2bvJvW.png", "https://static.nike.com/a/images/t_PDP_864_v1/f_auto,b_rgb:f5f5f5,q_80/a527c01d-0708-42d7-9a6c-3aa21a734b73/air-zoom-pegasus-38-womens-running-shoe-2bvJvW.png"], "price": 130, "stock": 1, "itemCategory": "womens", "itemType": "sneakers", "size": "9.0", "productID": "mKXusFwE", "colors": "White / Red", "quantity": 1}}, "coupon": "JGFNB3"}	112.32	2021-06-19 21:51:05.383847-04	\N
+10	5V711848WA959825Y	{"email": "fsa", "address": "fsa", "zip": "fas", "city": "dsa", "state": "AL", "cart": {"0": {"id": 47, "name": "Nike Wildhorse 7", "image": "https://static.nike.com/a/images/t_PDP_864_v1/f_auto,b_rgb:f5f5f5/eaf8461f-ffc5-478b-b171-d7b70f70f068/air-zoom-pegasus-38-womens-running-shoe-2bvJvW.png", "images": ["https://static.nike.com/a/images/t_PDP_864_v1/f_auto,b_rgb:f5f5f5/eaf8461f-ffc5-478b-b171-d7b70f70f068/air-zoom-pegasus-38-womens-running-shoe-2bvJvW.png", "https://static.nike.com/a/images/t_PDP_864_v1/f_auto,b_rgb:f5f5f5,q_80/724c24ff-7e4b-479b-ba5e-2bc0f570257f/air-zoom-pegasus-38-womens-running-shoe-2bvJvW.png", "https://static.nike.com/a/images/t_PDP_864_v1/f_auto,b_rgb:f5f5f5,q_80/6d268ac7-c1f9-413b-9109-2f2c529e7980/air-zoom-pegasus-38-womens-running-shoe-2bvJvW.png", "https://static.nike.com/a/images/t_PDP_864_v1/f_auto,b_rgb:f5f5f5,q_80/9b099cc2-fdec-4f08-ad92-f83d8d348c91/air-zoom-pegasus-38-womens-running-shoe-2bvJvW.png", "https://static.nike.com/a/images/t_PDP_864_v1/f_auto,b_rgb:f5f5f5,q_80/a527c01d-0708-42d7-9a6c-3aa21a734b73/air-zoom-pegasus-38-womens-running-shoe-2bvJvW.png"], "price": 130, "stock": 1, "itemCategory": "womens", "itemType": "sneakers", "size": "9.0", "productID": "mKXusFwE", "colors": "White / Red", "quantity": 1}}, "coupon": "JGFNB3"}	112.32	2021-06-19 21:52:00.66251-04	\N
+11	9FU27756S70448420	{"email": "fsa", "address": "fsa", "zip": "fas", "city": "dsa", "state": "AL", "cart": {"0": {"id": 47, "name": "Nike Wildhorse 7", "image": "https://static.nike.com/a/images/t_PDP_864_v1/f_auto,b_rgb:f5f5f5/eaf8461f-ffc5-478b-b171-d7b70f70f068/air-zoom-pegasus-38-womens-running-shoe-2bvJvW.png", "images": ["https://static.nike.com/a/images/t_PDP_864_v1/f_auto,b_rgb:f5f5f5/eaf8461f-ffc5-478b-b171-d7b70f70f068/air-zoom-pegasus-38-womens-running-shoe-2bvJvW.png", "https://static.nike.com/a/images/t_PDP_864_v1/f_auto,b_rgb:f5f5f5,q_80/724c24ff-7e4b-479b-ba5e-2bc0f570257f/air-zoom-pegasus-38-womens-running-shoe-2bvJvW.png", "https://static.nike.com/a/images/t_PDP_864_v1/f_auto,b_rgb:f5f5f5,q_80/6d268ac7-c1f9-413b-9109-2f2c529e7980/air-zoom-pegasus-38-womens-running-shoe-2bvJvW.png", "https://static.nike.com/a/images/t_PDP_864_v1/f_auto,b_rgb:f5f5f5,q_80/9b099cc2-fdec-4f08-ad92-f83d8d348c91/air-zoom-pegasus-38-womens-running-shoe-2bvJvW.png", "https://static.nike.com/a/images/t_PDP_864_v1/f_auto,b_rgb:f5f5f5,q_80/a527c01d-0708-42d7-9a6c-3aa21a734b73/air-zoom-pegasus-38-womens-running-shoe-2bvJvW.png"], "price": 130, "stock": 1, "itemCategory": "womens", "itemType": "sneakers", "size": "9.0", "productID": "mKXusFwE", "colors": "White / Red", "quantity": 1}}, "coupon": "JGFNB3"}	112.32	2021-06-19 21:54:48.696041-04	\N
+33	78631695DM366705V	{"first_name": "Eric", "last_name": "Liao", "email": "Ericliao132@gmail.com", "address": "123 Apple St", "zip": "32133", "city": "fdsf", "state": "NY", "cart": {"0": {"id": 39, "name": "HIGH KEY Aviator Sunglasses", "image": "https://cdn.shopify.com/s/files/1/0898/5824/products/HighKey_Black-Fade_1025x.jpg?v=1602612822", "images": null, "price": 65, "stock": 22, "itemCategory": "mens", "itemType": "sunglasses", "size": "0.0", "productID": "EQSOKxkQ", "colors": null, "quantity": 1}}}	70.2	2021-06-23 13:17:12.629332-04	4
+12	6HV70385A27177645	{"email": "fsa", "address": "fsa", "zip": "fas", "city": "dsa", "state": "AL", "cart": {"0": {"id": 47, "name": "Nike Wildhorse 7", "image": "https://static.nike.com/a/images/t_PDP_864_v1/f_auto,b_rgb:f5f5f5/eaf8461f-ffc5-478b-b171-d7b70f70f068/air-zoom-pegasus-38-womens-running-shoe-2bvJvW.png", "images": ["https://static.nike.com/a/images/t_PDP_864_v1/f_auto,b_rgb:f5f5f5/eaf8461f-ffc5-478b-b171-d7b70f70f068/air-zoom-pegasus-38-womens-running-shoe-2bvJvW.png", "https://static.nike.com/a/images/t_PDP_864_v1/f_auto,b_rgb:f5f5f5,q_80/724c24ff-7e4b-479b-ba5e-2bc0f570257f/air-zoom-pegasus-38-womens-running-shoe-2bvJvW.png", "https://static.nike.com/a/images/t_PDP_864_v1/f_auto,b_rgb:f5f5f5,q_80/6d268ac7-c1f9-413b-9109-2f2c529e7980/air-zoom-pegasus-38-womens-running-shoe-2bvJvW.png", "https://static.nike.com/a/images/t_PDP_864_v1/f_auto,b_rgb:f5f5f5,q_80/9b099cc2-fdec-4f08-ad92-f83d8d348c91/air-zoom-pegasus-38-womens-running-shoe-2bvJvW.png", "https://static.nike.com/a/images/t_PDP_864_v1/f_auto,b_rgb:f5f5f5,q_80/a527c01d-0708-42d7-9a6c-3aa21a734b73/air-zoom-pegasus-38-womens-running-shoe-2bvJvW.png"], "price": 130, "stock": 1, "itemCategory": "womens", "itemType": "sneakers", "size": "9.0", "productID": "mKXusFwE", "colors": "White / Red", "quantity": 1}}, "coupon": "JGFNB3"}	112.32	2021-06-19 21:56:01.188889-04	\N
+13	3N895317YY565901A	{"email": "fsa", "address": "fsa", "zip": "fas", "city": "dsa", "state": "AL", "cart": {"0": {"id": 47, "name": "Nike Wildhorse 7", "image": "https://static.nike.com/a/images/t_PDP_864_v1/f_auto,b_rgb:f5f5f5/eaf8461f-ffc5-478b-b171-d7b70f70f068/air-zoom-pegasus-38-womens-running-shoe-2bvJvW.png", "images": ["https://static.nike.com/a/images/t_PDP_864_v1/f_auto,b_rgb:f5f5f5/eaf8461f-ffc5-478b-b171-d7b70f70f068/air-zoom-pegasus-38-womens-running-shoe-2bvJvW.png", "https://static.nike.com/a/images/t_PDP_864_v1/f_auto,b_rgb:f5f5f5,q_80/724c24ff-7e4b-479b-ba5e-2bc0f570257f/air-zoom-pegasus-38-womens-running-shoe-2bvJvW.png", "https://static.nike.com/a/images/t_PDP_864_v1/f_auto,b_rgb:f5f5f5,q_80/6d268ac7-c1f9-413b-9109-2f2c529e7980/air-zoom-pegasus-38-womens-running-shoe-2bvJvW.png", "https://static.nike.com/a/images/t_PDP_864_v1/f_auto,b_rgb:f5f5f5,q_80/9b099cc2-fdec-4f08-ad92-f83d8d348c91/air-zoom-pegasus-38-womens-running-shoe-2bvJvW.png", "https://static.nike.com/a/images/t_PDP_864_v1/f_auto,b_rgb:f5f5f5,q_80/a527c01d-0708-42d7-9a6c-3aa21a734b73/air-zoom-pegasus-38-womens-running-shoe-2bvJvW.png"], "price": 130, "stock": 1, "itemCategory": "womens", "itemType": "sneakers", "size": "9.0", "productID": "mKXusFwE", "colors": "White / Red", "quantity": 1}}, "coupon": "JGFNB3"}	112.32	2021-06-19 21:57:26.378308-04	\N
+14	72W57054LA887413F	{"email": "fsa", "address": "fsa", "zip": "fas", "city": "dsa", "state": "AL", "cart": {"0": {"id": 47, "name": "Nike Wildhorse 7", "image": "https://static.nike.com/a/images/t_PDP_864_v1/f_auto,b_rgb:f5f5f5/eaf8461f-ffc5-478b-b171-d7b70f70f068/air-zoom-pegasus-38-womens-running-shoe-2bvJvW.png", "images": ["https://static.nike.com/a/images/t_PDP_864_v1/f_auto,b_rgb:f5f5f5/eaf8461f-ffc5-478b-b171-d7b70f70f068/air-zoom-pegasus-38-womens-running-shoe-2bvJvW.png", "https://static.nike.com/a/images/t_PDP_864_v1/f_auto,b_rgb:f5f5f5,q_80/724c24ff-7e4b-479b-ba5e-2bc0f570257f/air-zoom-pegasus-38-womens-running-shoe-2bvJvW.png", "https://static.nike.com/a/images/t_PDP_864_v1/f_auto,b_rgb:f5f5f5,q_80/6d268ac7-c1f9-413b-9109-2f2c529e7980/air-zoom-pegasus-38-womens-running-shoe-2bvJvW.png", "https://static.nike.com/a/images/t_PDP_864_v1/f_auto,b_rgb:f5f5f5,q_80/9b099cc2-fdec-4f08-ad92-f83d8d348c91/air-zoom-pegasus-38-womens-running-shoe-2bvJvW.png", "https://static.nike.com/a/images/t_PDP_864_v1/f_auto,b_rgb:f5f5f5,q_80/a527c01d-0708-42d7-9a6c-3aa21a734b73/air-zoom-pegasus-38-womens-running-shoe-2bvJvW.png"], "price": 130, "stock": 1, "itemCategory": "womens", "itemType": "sneakers", "size": "9.0", "productID": "mKXusFwE", "colors": "White / Red", "quantity": 1}}, "coupon": "JGFNB3"}	112.32	2021-06-19 21:58:50.145123-04	\N
+15	21R85067JJ454280H	{"email": "fsa", "address": "fsa", "zip": "fas", "city": "dsa", "state": "AL", "cart": {"0": {"id": 47, "name": "Nike Wildhorse 7", "image": "https://static.nike.com/a/images/t_PDP_864_v1/f_auto,b_rgb:f5f5f5/eaf8461f-ffc5-478b-b171-d7b70f70f068/air-zoom-pegasus-38-womens-running-shoe-2bvJvW.png", "images": ["https://static.nike.com/a/images/t_PDP_864_v1/f_auto,b_rgb:f5f5f5/eaf8461f-ffc5-478b-b171-d7b70f70f068/air-zoom-pegasus-38-womens-running-shoe-2bvJvW.png", "https://static.nike.com/a/images/t_PDP_864_v1/f_auto,b_rgb:f5f5f5,q_80/724c24ff-7e4b-479b-ba5e-2bc0f570257f/air-zoom-pegasus-38-womens-running-shoe-2bvJvW.png", "https://static.nike.com/a/images/t_PDP_864_v1/f_auto,b_rgb:f5f5f5,q_80/6d268ac7-c1f9-413b-9109-2f2c529e7980/air-zoom-pegasus-38-womens-running-shoe-2bvJvW.png", "https://static.nike.com/a/images/t_PDP_864_v1/f_auto,b_rgb:f5f5f5,q_80/9b099cc2-fdec-4f08-ad92-f83d8d348c91/air-zoom-pegasus-38-womens-running-shoe-2bvJvW.png", "https://static.nike.com/a/images/t_PDP_864_v1/f_auto,b_rgb:f5f5f5,q_80/a527c01d-0708-42d7-9a6c-3aa21a734b73/air-zoom-pegasus-38-womens-running-shoe-2bvJvW.png"], "price": 130, "stock": 1, "itemCategory": "womens", "itemType": "sneakers", "size": "9.0", "productID": "mKXusFwE", "colors": "White / Red", "quantity": 1}}, "coupon": "JGFNB3"}	112.32	2021-06-19 22:00:37.540271-04	\N
+16	19M204723P5150521	{"email": "fsa", "address": "fsa", "zip": "fas", "city": "dsa", "state": "AL", "cart": {"0": {"id": 47, "name": "Nike Wildhorse 7", "image": "https://static.nike.com/a/images/t_PDP_864_v1/f_auto,b_rgb:f5f5f5/eaf8461f-ffc5-478b-b171-d7b70f70f068/air-zoom-pegasus-38-womens-running-shoe-2bvJvW.png", "images": ["https://static.nike.com/a/images/t_PDP_864_v1/f_auto,b_rgb:f5f5f5/eaf8461f-ffc5-478b-b171-d7b70f70f068/air-zoom-pegasus-38-womens-running-shoe-2bvJvW.png", "https://static.nike.com/a/images/t_PDP_864_v1/f_auto,b_rgb:f5f5f5,q_80/724c24ff-7e4b-479b-ba5e-2bc0f570257f/air-zoom-pegasus-38-womens-running-shoe-2bvJvW.png", "https://static.nike.com/a/images/t_PDP_864_v1/f_auto,b_rgb:f5f5f5,q_80/6d268ac7-c1f9-413b-9109-2f2c529e7980/air-zoom-pegasus-38-womens-running-shoe-2bvJvW.png", "https://static.nike.com/a/images/t_PDP_864_v1/f_auto,b_rgb:f5f5f5,q_80/9b099cc2-fdec-4f08-ad92-f83d8d348c91/air-zoom-pegasus-38-womens-running-shoe-2bvJvW.png", "https://static.nike.com/a/images/t_PDP_864_v1/f_auto,b_rgb:f5f5f5,q_80/a527c01d-0708-42d7-9a6c-3aa21a734b73/air-zoom-pegasus-38-womens-running-shoe-2bvJvW.png"], "price": 130, "stock": 1, "itemCategory": "womens", "itemType": "sneakers", "size": "9.0", "productID": "mKXusFwE", "colors": "White / Red", "quantity": 1}}, "coupon": "JGFNB3"}	112.32	2021-06-19 22:01:07.166768-04	\N
+34	7F361375TJ1361748	{"first_name": "Eric", "last_name": "Liao", "email": "Ericliao132@gmail.com", "address": "123 Apple St", "zip": "32133", "city": "fdsf", "state": "NY", "cart": {"0": {"id": 39, "name": "HIGH KEY Aviator Sunglasses", "image": "https://cdn.shopify.com/s/files/1/0898/5824/products/HighKey_Black-Fade_1025x.jpg?v=1602612822", "images": null, "price": 65, "stock": 22, "itemCategory": "mens", "itemType": "sunglasses", "size": "0.0", "productID": "EQSOKxkQ", "colors": null, "quantity": 1}}}	70.2	2021-06-23 13:17:46.972648-04	4
+17	4TX11180RE961932N	{"email": "fsa", "address": "fsa", "zip": "fas", "city": "dsa", "state": "AL", "cart": {"0": {"id": 47, "name": "Nike Wildhorse 7", "image": "https://static.nike.com/a/images/t_PDP_864_v1/f_auto,b_rgb:f5f5f5/eaf8461f-ffc5-478b-b171-d7b70f70f068/air-zoom-pegasus-38-womens-running-shoe-2bvJvW.png", "images": ["https://static.nike.com/a/images/t_PDP_864_v1/f_auto,b_rgb:f5f5f5/eaf8461f-ffc5-478b-b171-d7b70f70f068/air-zoom-pegasus-38-womens-running-shoe-2bvJvW.png", "https://static.nike.com/a/images/t_PDP_864_v1/f_auto,b_rgb:f5f5f5,q_80/724c24ff-7e4b-479b-ba5e-2bc0f570257f/air-zoom-pegasus-38-womens-running-shoe-2bvJvW.png", "https://static.nike.com/a/images/t_PDP_864_v1/f_auto,b_rgb:f5f5f5,q_80/6d268ac7-c1f9-413b-9109-2f2c529e7980/air-zoom-pegasus-38-womens-running-shoe-2bvJvW.png", "https://static.nike.com/a/images/t_PDP_864_v1/f_auto,b_rgb:f5f5f5,q_80/9b099cc2-fdec-4f08-ad92-f83d8d348c91/air-zoom-pegasus-38-womens-running-shoe-2bvJvW.png", "https://static.nike.com/a/images/t_PDP_864_v1/f_auto,b_rgb:f5f5f5,q_80/a527c01d-0708-42d7-9a6c-3aa21a734b73/air-zoom-pegasus-38-womens-running-shoe-2bvJvW.png"], "price": 130, "stock": 1, "itemCategory": "womens", "itemType": "sneakers", "size": "9.0", "productID": "mKXusFwE", "colors": "White / Red", "quantity": 1}}, "coupon": "JGFNB3"}	112.32	2021-06-19 22:02:07.643077-04	\N
+18	6EY27591JN292400K	{"email": "fsa", "address": "fsa", "zip": "fas", "city": "dsa", "state": "AL", "cart": {"0": {"id": 47, "name": "Nike Wildhorse 7", "image": "https://static.nike.com/a/images/t_PDP_864_v1/f_auto,b_rgb:f5f5f5/eaf8461f-ffc5-478b-b171-d7b70f70f068/air-zoom-pegasus-38-womens-running-shoe-2bvJvW.png", "images": ["https://static.nike.com/a/images/t_PDP_864_v1/f_auto,b_rgb:f5f5f5/eaf8461f-ffc5-478b-b171-d7b70f70f068/air-zoom-pegasus-38-womens-running-shoe-2bvJvW.png", "https://static.nike.com/a/images/t_PDP_864_v1/f_auto,b_rgb:f5f5f5,q_80/724c24ff-7e4b-479b-ba5e-2bc0f570257f/air-zoom-pegasus-38-womens-running-shoe-2bvJvW.png", "https://static.nike.com/a/images/t_PDP_864_v1/f_auto,b_rgb:f5f5f5,q_80/6d268ac7-c1f9-413b-9109-2f2c529e7980/air-zoom-pegasus-38-womens-running-shoe-2bvJvW.png", "https://static.nike.com/a/images/t_PDP_864_v1/f_auto,b_rgb:f5f5f5,q_80/9b099cc2-fdec-4f08-ad92-f83d8d348c91/air-zoom-pegasus-38-womens-running-shoe-2bvJvW.png", "https://static.nike.com/a/images/t_PDP_864_v1/f_auto,b_rgb:f5f5f5,q_80/a527c01d-0708-42d7-9a6c-3aa21a734b73/air-zoom-pegasus-38-womens-running-shoe-2bvJvW.png"], "price": 130, "stock": 1, "itemCategory": "womens", "itemType": "sneakers", "size": "9.0", "productID": "mKXusFwE", "colors": "White / Red", "quantity": 1}}, "coupon": "JGFNB3"}	112.32	2021-06-19 22:03:05.011276-04	\N
+19	13G062731X0357401	{"email": "fsa", "address": "fsa", "zip": "fas", "city": "dsa", "state": "AL", "cart": {"0": {"id": 47, "name": "Nike Wildhorse 7", "image": "https://static.nike.com/a/images/t_PDP_864_v1/f_auto,b_rgb:f5f5f5/eaf8461f-ffc5-478b-b171-d7b70f70f068/air-zoom-pegasus-38-womens-running-shoe-2bvJvW.png", "images": ["https://static.nike.com/a/images/t_PDP_864_v1/f_auto,b_rgb:f5f5f5/eaf8461f-ffc5-478b-b171-d7b70f70f068/air-zoom-pegasus-38-womens-running-shoe-2bvJvW.png", "https://static.nike.com/a/images/t_PDP_864_v1/f_auto,b_rgb:f5f5f5,q_80/724c24ff-7e4b-479b-ba5e-2bc0f570257f/air-zoom-pegasus-38-womens-running-shoe-2bvJvW.png", "https://static.nike.com/a/images/t_PDP_864_v1/f_auto,b_rgb:f5f5f5,q_80/6d268ac7-c1f9-413b-9109-2f2c529e7980/air-zoom-pegasus-38-womens-running-shoe-2bvJvW.png", "https://static.nike.com/a/images/t_PDP_864_v1/f_auto,b_rgb:f5f5f5,q_80/9b099cc2-fdec-4f08-ad92-f83d8d348c91/air-zoom-pegasus-38-womens-running-shoe-2bvJvW.png", "https://static.nike.com/a/images/t_PDP_864_v1/f_auto,b_rgb:f5f5f5,q_80/a527c01d-0708-42d7-9a6c-3aa21a734b73/air-zoom-pegasus-38-womens-running-shoe-2bvJvW.png"], "price": 130, "stock": 1, "itemCategory": "womens", "itemType": "sneakers", "size": "9.0", "productID": "mKXusFwE", "colors": "White / Red", "quantity": 1}}, "coupon": "JGFNB3"}	112.32	2021-06-19 22:05:35.511422-04	\N
+20	8YL9311643137243V	{"email": "fsa", "address": "fsa", "zip": "fas", "city": "dsa", "state": "AL", "cart": {"0": {"id": 47, "name": "Nike Wildhorse 7", "image": "https://static.nike.com/a/images/t_PDP_864_v1/f_auto,b_rgb:f5f5f5/eaf8461f-ffc5-478b-b171-d7b70f70f068/air-zoom-pegasus-38-womens-running-shoe-2bvJvW.png", "images": ["https://static.nike.com/a/images/t_PDP_864_v1/f_auto,b_rgb:f5f5f5/eaf8461f-ffc5-478b-b171-d7b70f70f068/air-zoom-pegasus-38-womens-running-shoe-2bvJvW.png", "https://static.nike.com/a/images/t_PDP_864_v1/f_auto,b_rgb:f5f5f5,q_80/724c24ff-7e4b-479b-ba5e-2bc0f570257f/air-zoom-pegasus-38-womens-running-shoe-2bvJvW.png", "https://static.nike.com/a/images/t_PDP_864_v1/f_auto,b_rgb:f5f5f5,q_80/6d268ac7-c1f9-413b-9109-2f2c529e7980/air-zoom-pegasus-38-womens-running-shoe-2bvJvW.png", "https://static.nike.com/a/images/t_PDP_864_v1/f_auto,b_rgb:f5f5f5,q_80/9b099cc2-fdec-4f08-ad92-f83d8d348c91/air-zoom-pegasus-38-womens-running-shoe-2bvJvW.png", "https://static.nike.com/a/images/t_PDP_864_v1/f_auto,b_rgb:f5f5f5,q_80/a527c01d-0708-42d7-9a6c-3aa21a734b73/air-zoom-pegasus-38-womens-running-shoe-2bvJvW.png"], "price": 130, "stock": 1, "itemCategory": "womens", "itemType": "sneakers", "size": "9.0", "productID": "mKXusFwE", "colors": "White / Red", "quantity": 1}}, "coupon": "JGFNB3"}	112.32	2021-06-19 22:09:50.924905-04	\N
+21	2PY25865H3041382R	{"email": "fsa", "address": "fsa", "zip": "fas", "city": "dsa", "state": "AL", "cart": {"0": {"id": 47, "name": "Nike Wildhorse 7", "image": "https://static.nike.com/a/images/t_PDP_864_v1/f_auto,b_rgb:f5f5f5/eaf8461f-ffc5-478b-b171-d7b70f70f068/air-zoom-pegasus-38-womens-running-shoe-2bvJvW.png", "images": ["https://static.nike.com/a/images/t_PDP_864_v1/f_auto,b_rgb:f5f5f5/eaf8461f-ffc5-478b-b171-d7b70f70f068/air-zoom-pegasus-38-womens-running-shoe-2bvJvW.png", "https://static.nike.com/a/images/t_PDP_864_v1/f_auto,b_rgb:f5f5f5,q_80/724c24ff-7e4b-479b-ba5e-2bc0f570257f/air-zoom-pegasus-38-womens-running-shoe-2bvJvW.png", "https://static.nike.com/a/images/t_PDP_864_v1/f_auto,b_rgb:f5f5f5,q_80/6d268ac7-c1f9-413b-9109-2f2c529e7980/air-zoom-pegasus-38-womens-running-shoe-2bvJvW.png", "https://static.nike.com/a/images/t_PDP_864_v1/f_auto,b_rgb:f5f5f5,q_80/9b099cc2-fdec-4f08-ad92-f83d8d348c91/air-zoom-pegasus-38-womens-running-shoe-2bvJvW.png", "https://static.nike.com/a/images/t_PDP_864_v1/f_auto,b_rgb:f5f5f5,q_80/a527c01d-0708-42d7-9a6c-3aa21a734b73/air-zoom-pegasus-38-womens-running-shoe-2bvJvW.png"], "price": 130, "stock": 1, "itemCategory": "womens", "itemType": "sneakers", "size": "9.0", "productID": "mKXusFwE", "colors": "White / Red", "quantity": 1}}, "coupon": "JGFNB3"}	112.32	2021-06-19 22:11:02.865134-04	\N
+22	2RU56881WH0744500	{"email": "fsa", "address": "fsa", "zip": "fas", "city": "dsa", "state": "AL", "cart": {"0": {"id": 47, "name": "Nike Wildhorse 7", "image": "https://static.nike.com/a/images/t_PDP_864_v1/f_auto,b_rgb:f5f5f5/eaf8461f-ffc5-478b-b171-d7b70f70f068/air-zoom-pegasus-38-womens-running-shoe-2bvJvW.png", "images": ["https://static.nike.com/a/images/t_PDP_864_v1/f_auto,b_rgb:f5f5f5/eaf8461f-ffc5-478b-b171-d7b70f70f068/air-zoom-pegasus-38-womens-running-shoe-2bvJvW.png", "https://static.nike.com/a/images/t_PDP_864_v1/f_auto,b_rgb:f5f5f5,q_80/724c24ff-7e4b-479b-ba5e-2bc0f570257f/air-zoom-pegasus-38-womens-running-shoe-2bvJvW.png", "https://static.nike.com/a/images/t_PDP_864_v1/f_auto,b_rgb:f5f5f5,q_80/6d268ac7-c1f9-413b-9109-2f2c529e7980/air-zoom-pegasus-38-womens-running-shoe-2bvJvW.png", "https://static.nike.com/a/images/t_PDP_864_v1/f_auto,b_rgb:f5f5f5,q_80/9b099cc2-fdec-4f08-ad92-f83d8d348c91/air-zoom-pegasus-38-womens-running-shoe-2bvJvW.png", "https://static.nike.com/a/images/t_PDP_864_v1/f_auto,b_rgb:f5f5f5,q_80/a527c01d-0708-42d7-9a6c-3aa21a734b73/air-zoom-pegasus-38-womens-running-shoe-2bvJvW.png"], "price": 130, "stock": 1, "itemCategory": "womens", "itemType": "sneakers", "size": "9.0", "productID": "mKXusFwE", "colors": "White / Red", "quantity": 1}}, "coupon": "JGFNB3"}	112.32	2021-06-19 22:11:32.859786-04	\N
+36	62R49371X84335134	{"first_name": "Eric", "last_name": "Liao", "email": "Eric@gmail.com", "address": "123 Apple St", "zip": "12345", "city": "Los Angeles", "state": "CA", "coupon": "JGFNB3 ", "cart": {"0": {"id": 14, "name": "ULTRABOOST DNA 1.0 SHOES", "image": "https://assets.adidas.com/images/h_840,f_auto,q_auto:sensitive,fl_lossy/4d8c5bb222fa420c9a14ac6d012069dd_9366/Ultraboost_DNA_1.0_Shoes_Turquoise_H05263_01_standard.jpg", "images": ["https://assets.adidas.com/images/h_840,f_auto,q_auto:sensitive,fl_lossy,c_fill,g_auto/4d8c5bb222fa420c9a14ac6d012069dd_9366/Ultraboost_DNA_1.0_Shoes_Turquoise_H05263_01_standard.jpg", "https://assets.adidas.com/images/h_840,f_auto,q_auto:sensitive,fl_lossy,c_fill,g_auto/672dcc4bbf3c42b6aa58ac6d01204e86_9366/Ultraboost_DNA_1.0_Shoes_Turquoise_H05263_02_standard.jpg", "https://assets.adidas.com/images/h_840,f_auto,q_auto:sensitive,fl_lossy,c_fill,g_auto/affc1bec28514c32b525ac6d01211aed_9366/Ultraboost_DNA_1.0_Shoes_Turquoise_H05263_03_standard.jpg", "https://assets.adidas.com/images/h_840,f_auto,q_auto:sensitive,fl_lossy,c_fill,g_auto/e82a57fb45054f8bb03eac6d011df574_9366/Ultraboost_DNA_1.0_Shoes_Turquoise_H05263_04_standard.jpg", "https://assets.adidas.com/images/h_840,f_auto,q_auto:sensitive,fl_lossy,c_fill,g_auto/5dbecf4b98d647d4884eac6d0124b707_9366/Ultraboost_DNA_1.0_Shoes_Turquoise_H05263_05_standard.jpg"], "price": 180, "stock": 22, "itemCategory": "mens", "itemType": "sneakers", "size": "12.0", "productID": "LntxHxzH", "colors": "Light Aqua / Shock Yellow / Purple", "quantity": 4}, "1": {"id": 10, "name": "8 ZX 1000 THE SIMPSONS FLAMING MOE SHOES", "image": "https://assets.adidas.com/images/h_840,f_auto,q_auto:sensitive,fl_lossy/3f81a506a80e4f80a18eacb70070a69a_9366/ZX_1000_The_Simpsons_Flaming_Moe_Shoes_Purple_H05790_01_standard.jpg", "images": ["https://assets.adidas.com/images/h_840", "f_auto", "q_auto:sensitive", "fl_lossy", "c_fill", "g_auto/3f81a506a80e4f80a18eacb70070a69a_9366/ZX_1000_The_Simpsons_Flaming_Moe_Shoes_Purple_H05790_01_standard.jpg", "https://assets.adidas.com/images/h_840", "f_auto", "q_auto:sensitive", "fl_lossy", "c_fill", "g_auto/569d5d904fa141d3987dacb70070cc2b_9366/ZX_1000_The_Simpsons_Flaming_Moe_Shoes_Purple_H05790_011_hover_standard.jpg", "https://assets.adidas.com/images/h_840", "f_auto", "q_auto:sensitive", "fl_lossy", "c_fill", "g_auto/9f053810b3b742da946facb70070b370_9366/ZX_1000_The_Simpsons_Flaming_Moe_Shoes_Purple_H05790_02_standard.jpg", "https://assets.adidas.com/images/h_840", "f_auto", "q_auto:sensitive", "fl_lossy", "c_fill", "g_auto/6c056c41aa004e4f90d6acb70070b9a8_9366/ZX_1000_The_Simpsons_Flaming_Moe_Shoes_Purple_H05790_03_standard.jpg", "https://assets.adidas.com/images/h_840", "f_auto", "q_auto:sensitive", "fl_lossy", "c_fill", "g_auto/680ab6d45b8c47af9a44acb70070bf7c_9366/ZX_1000_The_Simpsons_Flaming_Moe_Shoes_Purple_H05790_04_standard.jpg"], "price": 120, "stock": 5, "itemCategory": "mens", "itemType": "sneakers", "size": "9.0", "productID": "P6mR6wG8", "colors": null, "quantity": 1}}}	907.2	2021-06-27 18:54:14.235814-04	\N
+23	98S34732UJ9500115	{"email": "fsa", "address": "fsa", "zip": "fas", "city": "dsa", "state": "AL", "cart": {"0": {"id": 47, "name": "Nike Wildhorse 7", "image": "https://static.nike.com/a/images/t_PDP_864_v1/f_auto,b_rgb:f5f5f5/eaf8461f-ffc5-478b-b171-d7b70f70f068/air-zoom-pegasus-38-womens-running-shoe-2bvJvW.png", "images": ["https://static.nike.com/a/images/t_PDP_864_v1/f_auto,b_rgb:f5f5f5/eaf8461f-ffc5-478b-b171-d7b70f70f068/air-zoom-pegasus-38-womens-running-shoe-2bvJvW.png", "https://static.nike.com/a/images/t_PDP_864_v1/f_auto,b_rgb:f5f5f5,q_80/724c24ff-7e4b-479b-ba5e-2bc0f570257f/air-zoom-pegasus-38-womens-running-shoe-2bvJvW.png", "https://static.nike.com/a/images/t_PDP_864_v1/f_auto,b_rgb:f5f5f5,q_80/6d268ac7-c1f9-413b-9109-2f2c529e7980/air-zoom-pegasus-38-womens-running-shoe-2bvJvW.png", "https://static.nike.com/a/images/t_PDP_864_v1/f_auto,b_rgb:f5f5f5,q_80/9b099cc2-fdec-4f08-ad92-f83d8d348c91/air-zoom-pegasus-38-womens-running-shoe-2bvJvW.png", "https://static.nike.com/a/images/t_PDP_864_v1/f_auto,b_rgb:f5f5f5,q_80/a527c01d-0708-42d7-9a6c-3aa21a734b73/air-zoom-pegasus-38-womens-running-shoe-2bvJvW.png"], "price": 130, "stock": 1, "itemCategory": "womens", "itemType": "sneakers", "size": "9.0", "productID": "mKXusFwE", "colors": "White / Red", "quantity": 1}}, "coupon": "JGFNB3"}	112.32	2021-06-19 22:14:04.12601-04	\N
+24	56065728AM8023035	{"email": "fsa", "address": "fsa", "zip": "fas", "city": "dsa", "state": "AL", "cart": {"0": {"id": 47, "name": "Nike Wildhorse 7", "image": "https://static.nike.com/a/images/t_PDP_864_v1/f_auto,b_rgb:f5f5f5/eaf8461f-ffc5-478b-b171-d7b70f70f068/air-zoom-pegasus-38-womens-running-shoe-2bvJvW.png", "images": ["https://static.nike.com/a/images/t_PDP_864_v1/f_auto,b_rgb:f5f5f5/eaf8461f-ffc5-478b-b171-d7b70f70f068/air-zoom-pegasus-38-womens-running-shoe-2bvJvW.png", "https://static.nike.com/a/images/t_PDP_864_v1/f_auto,b_rgb:f5f5f5,q_80/724c24ff-7e4b-479b-ba5e-2bc0f570257f/air-zoom-pegasus-38-womens-running-shoe-2bvJvW.png", "https://static.nike.com/a/images/t_PDP_864_v1/f_auto,b_rgb:f5f5f5,q_80/6d268ac7-c1f9-413b-9109-2f2c529e7980/air-zoom-pegasus-38-womens-running-shoe-2bvJvW.png", "https://static.nike.com/a/images/t_PDP_864_v1/f_auto,b_rgb:f5f5f5,q_80/9b099cc2-fdec-4f08-ad92-f83d8d348c91/air-zoom-pegasus-38-womens-running-shoe-2bvJvW.png", "https://static.nike.com/a/images/t_PDP_864_v1/f_auto,b_rgb:f5f5f5,q_80/a527c01d-0708-42d7-9a6c-3aa21a734b73/air-zoom-pegasus-38-womens-running-shoe-2bvJvW.png"], "price": 130, "stock": 1, "itemCategory": "womens", "itemType": "sneakers", "size": "9.0", "productID": "mKXusFwE", "colors": "White / Red", "quantity": 1}}, "coupon": "JGFNB3"}	112.32	2021-06-19 22:15:59.034632-04	\N
+25	8GM87489YU166874T	{"email": "fsa", "address": "fsa", "zip": "fas", "city": "dsa", "state": "AL", "cart": {"0": {"id": 47, "name": "Nike Wildhorse 7", "image": "https://static.nike.com/a/images/t_PDP_864_v1/f_auto,b_rgb:f5f5f5/eaf8461f-ffc5-478b-b171-d7b70f70f068/air-zoom-pegasus-38-womens-running-shoe-2bvJvW.png", "images": ["https://static.nike.com/a/images/t_PDP_864_v1/f_auto,b_rgb:f5f5f5/eaf8461f-ffc5-478b-b171-d7b70f70f068/air-zoom-pegasus-38-womens-running-shoe-2bvJvW.png", "https://static.nike.com/a/images/t_PDP_864_v1/f_auto,b_rgb:f5f5f5,q_80/724c24ff-7e4b-479b-ba5e-2bc0f570257f/air-zoom-pegasus-38-womens-running-shoe-2bvJvW.png", "https://static.nike.com/a/images/t_PDP_864_v1/f_auto,b_rgb:f5f5f5,q_80/6d268ac7-c1f9-413b-9109-2f2c529e7980/air-zoom-pegasus-38-womens-running-shoe-2bvJvW.png", "https://static.nike.com/a/images/t_PDP_864_v1/f_auto,b_rgb:f5f5f5,q_80/9b099cc2-fdec-4f08-ad92-f83d8d348c91/air-zoom-pegasus-38-womens-running-shoe-2bvJvW.png", "https://static.nike.com/a/images/t_PDP_864_v1/f_auto,b_rgb:f5f5f5,q_80/a527c01d-0708-42d7-9a6c-3aa21a734b73/air-zoom-pegasus-38-womens-running-shoe-2bvJvW.png"], "price": 130, "stock": 1, "itemCategory": "womens", "itemType": "sneakers", "size": "9.0", "productID": "mKXusFwE", "colors": "White / Red", "quantity": 1}}, "coupon": "JGFNB3"}	112.32	2021-06-19 22:26:53.409657-04	4
+27	2WW45286MF484953W	{"email": "fsa", "address": "fsa", "zip": "fas", "city": "dsa", "state": "AL", "cart": {"0": {"id": 47, "name": "Nike Wildhorse 7", "image": "https://static.nike.com/a/images/t_PDP_864_v1/f_auto,b_rgb:f5f5f5/eaf8461f-ffc5-478b-b171-d7b70f70f068/air-zoom-pegasus-38-womens-running-shoe-2bvJvW.png", "images": ["https://static.nike.com/a/images/t_PDP_864_v1/f_auto,b_rgb:f5f5f5/eaf8461f-ffc5-478b-b171-d7b70f70f068/air-zoom-pegasus-38-womens-running-shoe-2bvJvW.png", "https://static.nike.com/a/images/t_PDP_864_v1/f_auto,b_rgb:f5f5f5,q_80/724c24ff-7e4b-479b-ba5e-2bc0f570257f/air-zoom-pegasus-38-womens-running-shoe-2bvJvW.png", "https://static.nike.com/a/images/t_PDP_864_v1/f_auto,b_rgb:f5f5f5,q_80/6d268ac7-c1f9-413b-9109-2f2c529e7980/air-zoom-pegasus-38-womens-running-shoe-2bvJvW.png", "https://static.nike.com/a/images/t_PDP_864_v1/f_auto,b_rgb:f5f5f5,q_80/9b099cc2-fdec-4f08-ad92-f83d8d348c91/air-zoom-pegasus-38-womens-running-shoe-2bvJvW.png", "https://static.nike.com/a/images/t_PDP_864_v1/f_auto,b_rgb:f5f5f5,q_80/a527c01d-0708-42d7-9a6c-3aa21a734b73/air-zoom-pegasus-38-womens-running-shoe-2bvJvW.png"], "price": 130, "stock": 1, "itemCategory": "womens", "itemType": "sneakers", "size": "9.0", "productID": "mKXusFwE", "colors": "White / Red", "quantity": 1}}, "coupon": "JGFNB3"}	112.32	2021-06-19 22:29:22.931103-04	4
+28	8WY80195RT593052F	{"email": "fsa", "address": "fsa", "zip": "fas", "city": "dsa", "state": "AL", "cart": {"0": {"id": 47, "name": "Nike Wildhorse 7", "image": "https://static.nike.com/a/images/t_PDP_864_v1/f_auto,b_rgb:f5f5f5/eaf8461f-ffc5-478b-b171-d7b70f70f068/air-zoom-pegasus-38-womens-running-shoe-2bvJvW.png", "images": ["https://static.nike.com/a/images/t_PDP_864_v1/f_auto,b_rgb:f5f5f5/eaf8461f-ffc5-478b-b171-d7b70f70f068/air-zoom-pegasus-38-womens-running-shoe-2bvJvW.png", "https://static.nike.com/a/images/t_PDP_864_v1/f_auto,b_rgb:f5f5f5,q_80/724c24ff-7e4b-479b-ba5e-2bc0f570257f/air-zoom-pegasus-38-womens-running-shoe-2bvJvW.png", "https://static.nike.com/a/images/t_PDP_864_v1/f_auto,b_rgb:f5f5f5,q_80/6d268ac7-c1f9-413b-9109-2f2c529e7980/air-zoom-pegasus-38-womens-running-shoe-2bvJvW.png", "https://static.nike.com/a/images/t_PDP_864_v1/f_auto,b_rgb:f5f5f5,q_80/9b099cc2-fdec-4f08-ad92-f83d8d348c91/air-zoom-pegasus-38-womens-running-shoe-2bvJvW.png", "https://static.nike.com/a/images/t_PDP_864_v1/f_auto,b_rgb:f5f5f5,q_80/a527c01d-0708-42d7-9a6c-3aa21a734b73/air-zoom-pegasus-38-womens-running-shoe-2bvJvW.png"], "price": 130, "stock": 1, "itemCategory": "womens", "itemType": "sneakers", "size": "9.0", "productID": "mKXusFwE", "colors": "White / Red", "quantity": 1}}, "coupon": "JGFNB3"}	112.32	2021-06-19 22:29:58.099199-04	4
+37	25E87528H18522449	{"first_name": "Eric", "last_name": "Liao", "email": "Eric@gmail.com", "address": "123 Apple St", "zip": "12345", "city": "Los Angeles", "state": "CA", "coupon": "JGFNB3 ", "cart": {"0": {"id": 14, "name": "ULTRABOOST DNA 1.0 SHOES", "image": "https://assets.adidas.com/images/h_840,f_auto,q_auto:sensitive,fl_lossy/4d8c5bb222fa420c9a14ac6d012069dd_9366/Ultraboost_DNA_1.0_Shoes_Turquoise_H05263_01_standard.jpg", "images": ["https://assets.adidas.com/images/h_840,f_auto,q_auto:sensitive,fl_lossy,c_fill,g_auto/4d8c5bb222fa420c9a14ac6d012069dd_9366/Ultraboost_DNA_1.0_Shoes_Turquoise_H05263_01_standard.jpg", "https://assets.adidas.com/images/h_840,f_auto,q_auto:sensitive,fl_lossy,c_fill,g_auto/672dcc4bbf3c42b6aa58ac6d01204e86_9366/Ultraboost_DNA_1.0_Shoes_Turquoise_H05263_02_standard.jpg", "https://assets.adidas.com/images/h_840,f_auto,q_auto:sensitive,fl_lossy,c_fill,g_auto/affc1bec28514c32b525ac6d01211aed_9366/Ultraboost_DNA_1.0_Shoes_Turquoise_H05263_03_standard.jpg", "https://assets.adidas.com/images/h_840,f_auto,q_auto:sensitive,fl_lossy,c_fill,g_auto/e82a57fb45054f8bb03eac6d011df574_9366/Ultraboost_DNA_1.0_Shoes_Turquoise_H05263_04_standard.jpg", "https://assets.adidas.com/images/h_840,f_auto,q_auto:sensitive,fl_lossy,c_fill,g_auto/5dbecf4b98d647d4884eac6d0124b707_9366/Ultraboost_DNA_1.0_Shoes_Turquoise_H05263_05_standard.jpg"], "price": 180, "stock": 22, "itemCategory": "mens", "itemType": "sneakers", "size": "12.0", "productID": "LntxHxzH", "colors": "Light Aqua / Shock Yellow / Purple", "quantity": 4}, "1": {"id": 10, "name": "8 ZX 1000 THE SIMPSONS FLAMING MOE SHOES", "image": "https://assets.adidas.com/images/h_840,f_auto,q_auto:sensitive,fl_lossy/3f81a506a80e4f80a18eacb70070a69a_9366/ZX_1000_The_Simpsons_Flaming_Moe_Shoes_Purple_H05790_01_standard.jpg", "images": ["https://assets.adidas.com/images/h_840", "f_auto", "q_auto:sensitive", "fl_lossy", "c_fill", "g_auto/3f81a506a80e4f80a18eacb70070a69a_9366/ZX_1000_The_Simpsons_Flaming_Moe_Shoes_Purple_H05790_01_standard.jpg", "https://assets.adidas.com/images/h_840", "f_auto", "q_auto:sensitive", "fl_lossy", "c_fill", "g_auto/569d5d904fa141d3987dacb70070cc2b_9366/ZX_1000_The_Simpsons_Flaming_Moe_Shoes_Purple_H05790_011_hover_standard.jpg", "https://assets.adidas.com/images/h_840", "f_auto", "q_auto:sensitive", "fl_lossy", "c_fill", "g_auto/9f053810b3b742da946facb70070b370_9366/ZX_1000_The_Simpsons_Flaming_Moe_Shoes_Purple_H05790_02_standard.jpg", "https://assets.adidas.com/images/h_840", "f_auto", "q_auto:sensitive", "fl_lossy", "c_fill", "g_auto/6c056c41aa004e4f90d6acb70070b9a8_9366/ZX_1000_The_Simpsons_Flaming_Moe_Shoes_Purple_H05790_03_standard.jpg", "https://assets.adidas.com/images/h_840", "f_auto", "q_auto:sensitive", "fl_lossy", "c_fill", "g_auto/680ab6d45b8c47af9a44acb70070bf7c_9366/ZX_1000_The_Simpsons_Flaming_Moe_Shoes_Purple_H05790_04_standard.jpg"], "price": 120, "stock": 5, "itemCategory": "mens", "itemType": "sneakers", "size": "9.0", "productID": "P6mR6wG8", "colors": null, "quantity": 1}}}	907.2	2021-06-27 18:54:24.859679-04	4
+29	8SM56347970621325	{"first_name": "Eric", "last_name": "Liao", "email": "Ericliao132@gmail.com", "address": "123 Apple St", "zip": "12333", "city": "Brooklyn", "state": "NY", "cart": {"0": {"id": 47, "name": "Nike Wildhorse 7", "image": "https://static.nike.com/a/images/t_PDP_864_v1/f_auto,b_rgb:f5f5f5/eaf8461f-ffc5-478b-b171-d7b70f70f068/air-zoom-pegasus-38-womens-running-shoe-2bvJvW.png", "images": ["https://static.nike.com/a/images/t_PDP_864_v1/f_auto,b_rgb:f5f5f5/eaf8461f-ffc5-478b-b171-d7b70f70f068/air-zoom-pegasus-38-womens-running-shoe-2bvJvW.png", "https://static.nike.com/a/images/t_PDP_864_v1/f_auto,b_rgb:f5f5f5,q_80/724c24ff-7e4b-479b-ba5e-2bc0f570257f/air-zoom-pegasus-38-womens-running-shoe-2bvJvW.png", "https://static.nike.com/a/images/t_PDP_864_v1/f_auto,b_rgb:f5f5f5,q_80/6d268ac7-c1f9-413b-9109-2f2c529e7980/air-zoom-pegasus-38-womens-running-shoe-2bvJvW.png", "https://static.nike.com/a/images/t_PDP_864_v1/f_auto,b_rgb:f5f5f5,q_80/9b099cc2-fdec-4f08-ad92-f83d8d348c91/air-zoom-pegasus-38-womens-running-shoe-2bvJvW.png", "https://static.nike.com/a/images/t_PDP_864_v1/f_auto,b_rgb:f5f5f5,q_80/a527c01d-0708-42d7-9a6c-3aa21a734b73/air-zoom-pegasus-38-womens-running-shoe-2bvJvW.png"], "price": 130, "stock": 1, "itemCategory": "womens", "itemType": "sneakers", "size": "9.0", "productID": "mKXusFwE", "colors": "White / Red", "quantity": 1}}}	140.4	2021-06-20 03:56:11.875435-04	4
+30	5RR91076FY367861C	{"first_name": "Eric", "last_name": "Liao", "email": "Ericliao132@gmail.com", "address": "123 Apple St", "zip": "13213", "city": "Brooklyn", "state": "NY", "cart": {"10": {"id": 47, "name": "Nike Wildhorse 7", "image": "https://static.nike.com/a/images/t_PDP_864_v1/f_auto,b_rgb:f5f5f5/eaf8461f-ffc5-478b-b171-d7b70f70f068/air-zoom-pegasus-38-womens-running-shoe-2bvJvW.png", "images": ["https://static.nike.com/a/images/t_PDP_864_v1/f_auto,b_rgb:f5f5f5/eaf8461f-ffc5-478b-b171-d7b70f70f068/air-zoom-pegasus-38-womens-running-shoe-2bvJvW.png", "https://static.nike.com/a/images/t_PDP_864_v1/f_auto,b_rgb:f5f5f5,q_80/724c24ff-7e4b-479b-ba5e-2bc0f570257f/air-zoom-pegasus-38-womens-running-shoe-2bvJvW.png", "https://static.nike.com/a/images/t_PDP_864_v1/f_auto,b_rgb:f5f5f5,q_80/6d268ac7-c1f9-413b-9109-2f2c529e7980/air-zoom-pegasus-38-womens-running-shoe-2bvJvW.png", "https://static.nike.com/a/images/t_PDP_864_v1/f_auto,b_rgb:f5f5f5,q_80/9b099cc2-fdec-4f08-ad92-f83d8d348c91/air-zoom-pegasus-38-womens-running-shoe-2bvJvW.png", "https://static.nike.com/a/images/t_PDP_864_v1/f_auto,b_rgb:f5f5f5,q_80/a527c01d-0708-42d7-9a6c-3aa21a734b73/air-zoom-pegasus-38-womens-running-shoe-2bvJvW.png"], "price": 130, "stock": 1, "itemCategory": "womens", "itemType": "sneakers", "size": "9.0", "productID": "mKXusFwE", "colors": "White / Red", "quantity": 1}, "1": {"id": 9, "name": "ULTRABOOST DNA 1.0 SHOES", "image": "https://assets.adidas.com/images/w_600,f_auto,q_auto/1bc0bb5605f444dba249ac6d01273c46_9366/Ultraboost_DNA_1.0_Shoes_White_H05265_01_standard.jpg", "images": null, "price": 180, "stock": 10, "itemCategory": "mens", "itemType": "sneakers", "size": "10.0", "productID": "d1wUKB8k", "colors": null, "quantity": 2}, "2": {"id": 10, "name": "8 ZX 1000 THE SIMPSONS FLAMING MOE SHOES", "image": "https://assets.adidas.com/images/h_840,f_auto,q_auto:sensitive,fl_lossy/3f81a506a80e4f80a18eacb70070a69a_9366/ZX_1000_The_Simpsons_Flaming_Moe_Shoes_Purple_H05790_01_standard.jpg", "images": null, "price": 120, "stock": 5, "itemCategory": "mens", "itemType": "sneakers", "size": "9.0", "productID": "P6mR6wG8", "colors": null, "quantity": 3}, "3": {"id": 11, "name": "ADIDAS ULTRABOOST DNA X LEGO\\u00ae PLATES SHOES", "image": "https://assets.adidas.com/images/h_840,f_auto,q_auto:sensitive,fl_lossy/1070aebbb55841e1aae5ac9f00b39879_9366/adidas_Ultraboost_DNA_x_LEGO(r)_Plates_Shoes_White_FY7690_01_standard.jpg", "images": null, "price": 200, "stock": 7, "itemCategory": "mens", "itemType": "sneakers", "size": "6.0", "productID": "ZsTbktWR", "colors": null, "quantity": 1}}}	1134	2021-06-20 03:56:49.473078-04	\N
+31	0WX6945634650051V	{"first_name": "Eric", "last_name": "Liao", "email": "Ericliao132@gmail.com", "address": "123 Banana St ", "zip": "12321", "city": "Brooklyn", "state": "NY", "coupon": "JGFNB3", "cart": {"0": {"id": 47, "name": "Nike Wildhorse 7", "image": "https://static.nike.com/a/images/t_PDP_864_v1/f_auto,b_rgb:f5f5f5/eaf8461f-ffc5-478b-b171-d7b70f70f068/air-zoom-pegasus-38-womens-running-shoe-2bvJvW.png", "images": ["https://static.nike.com/a/images/t_PDP_864_v1/f_auto,b_rgb:f5f5f5/eaf8461f-ffc5-478b-b171-d7b70f70f068/air-zoom-pegasus-38-womens-running-shoe-2bvJvW.png", "https://static.nike.com/a/images/t_PDP_864_v1/f_auto,b_rgb:f5f5f5,q_80/724c24ff-7e4b-479b-ba5e-2bc0f570257f/air-zoom-pegasus-38-womens-running-shoe-2bvJvW.png", "https://static.nike.com/a/images/t_PDP_864_v1/f_auto,b_rgb:f5f5f5,q_80/6d268ac7-c1f9-413b-9109-2f2c529e7980/air-zoom-pegasus-38-womens-running-shoe-2bvJvW.png", "https://static.nike.com/a/images/t_PDP_864_v1/f_auto,b_rgb:f5f5f5,q_80/9b099cc2-fdec-4f08-ad92-f83d8d348c91/air-zoom-pegasus-38-womens-running-shoe-2bvJvW.png", "https://static.nike.com/a/images/t_PDP_864_v1/f_auto,b_rgb:f5f5f5,q_80/a527c01d-0708-42d7-9a6c-3aa21a734b73/air-zoom-pegasus-38-womens-running-shoe-2bvJvW.png"], "price": 130, "stock": 1, "itemCategory": "womens", "itemType": "sneakers", "size": "9.0", "productID": "mKXusFwE", "colors": "White / Red", "quantity": 1}, "3": {"id": 11, "name": "ADIDAS ULTRABOOST DNA X LEGO\\u00ae PLATES SHOES", "image": "https://assets.adidas.com/images/h_840,f_auto,q_auto:sensitive,fl_lossy/1070aebbb55841e1aae5ac9f00b39879_9366/adidas_Ultraboost_DNA_x_LEGO(r)_Plates_Shoes_White_FY7690_01_standard.jpg", "images": null, "price": 200, "stock": 7, "itemCategory": "mens", "itemType": "sneakers", "size": "6.0", "productID": "ZsTbktWR", "colors": null, "quantity": 1}}}	285.12	2021-06-20 04:24:24.52364-04	4
+32	40M45746PD1893508	{"first_name": "Eric", "last_name": "Liao", "email": "Ericliao132@gmail.com", "address": "123 Apple St", "zip": "32133", "city": "fdsf", "state": "NY", "cart": {"0": {"id": 39, "name": "HIGH KEY Aviator Sunglasses", "image": "https://cdn.shopify.com/s/files/1/0898/5824/products/HighKey_Black-Fade_1025x.jpg?v=1602612822", "images": null, "price": 65, "stock": 22, "itemCategory": "mens", "itemType": "sunglasses", "size": "0.0", "productID": "EQSOKxkQ", "colors": null, "quantity": 1}}}	70.2	2021-06-23 13:14:45.876479-04	4
+38	25E87528H18522449	{"first_name": "Eric", "last_name": "Liao", "email": "Eric@gmail.com", "address": "123 Apple St", "zip": "12345", "city": "Los Angeles", "state": "CA", "coupon": "JGFNB3 ", "cart": {"0": {"id": 14, "name": "ULTRABOOST DNA 1.0 SHOES", "image": "https://assets.adidas.com/images/h_840,f_auto,q_auto:sensitive,fl_lossy/4d8c5bb222fa420c9a14ac6d012069dd_9366/Ultraboost_DNA_1.0_Shoes_Turquoise_H05263_01_standard.jpg", "images": ["https://assets.adidas.com/images/h_840,f_auto,q_auto:sensitive,fl_lossy,c_fill,g_auto/4d8c5bb222fa420c9a14ac6d012069dd_9366/Ultraboost_DNA_1.0_Shoes_Turquoise_H05263_01_standard.jpg", "https://assets.adidas.com/images/h_840,f_auto,q_auto:sensitive,fl_lossy,c_fill,g_auto/672dcc4bbf3c42b6aa58ac6d01204e86_9366/Ultraboost_DNA_1.0_Shoes_Turquoise_H05263_02_standard.jpg", "https://assets.adidas.com/images/h_840,f_auto,q_auto:sensitive,fl_lossy,c_fill,g_auto/affc1bec28514c32b525ac6d01211aed_9366/Ultraboost_DNA_1.0_Shoes_Turquoise_H05263_03_standard.jpg", "https://assets.adidas.com/images/h_840,f_auto,q_auto:sensitive,fl_lossy,c_fill,g_auto/e82a57fb45054f8bb03eac6d011df574_9366/Ultraboost_DNA_1.0_Shoes_Turquoise_H05263_04_standard.jpg", "https://assets.adidas.com/images/h_840,f_auto,q_auto:sensitive,fl_lossy,c_fill,g_auto/5dbecf4b98d647d4884eac6d0124b707_9366/Ultraboost_DNA_1.0_Shoes_Turquoise_H05263_05_standard.jpg"], "price": 180, "stock": 22, "itemCategory": "mens", "itemType": "sneakers", "size": "12.0", "productID": "LntxHxzH", "colors": "Light Aqua / Shock Yellow / Purple", "quantity": 4}, "1": {"id": 10, "name": "8 ZX 1000 THE SIMPSONS FLAMING MOE SHOES", "image": "https://assets.adidas.com/images/h_840,f_auto,q_auto:sensitive,fl_lossy/3f81a506a80e4f80a18eacb70070a69a_9366/ZX_1000_The_Simpsons_Flaming_Moe_Shoes_Purple_H05790_01_standard.jpg", "images": ["https://assets.adidas.com/images/h_840", "f_auto", "q_auto:sensitive", "fl_lossy", "c_fill", "g_auto/3f81a506a80e4f80a18eacb70070a69a_9366/ZX_1000_The_Simpsons_Flaming_Moe_Shoes_Purple_H05790_01_standard.jpg", "https://assets.adidas.com/images/h_840", "f_auto", "q_auto:sensitive", "fl_lossy", "c_fill", "g_auto/569d5d904fa141d3987dacb70070cc2b_9366/ZX_1000_The_Simpsons_Flaming_Moe_Shoes_Purple_H05790_011_hover_standard.jpg", "https://assets.adidas.com/images/h_840", "f_auto", "q_auto:sensitive", "fl_lossy", "c_fill", "g_auto/9f053810b3b742da946facb70070b370_9366/ZX_1000_The_Simpsons_Flaming_Moe_Shoes_Purple_H05790_02_standard.jpg", "https://assets.adidas.com/images/h_840", "f_auto", "q_auto:sensitive", "fl_lossy", "c_fill", "g_auto/6c056c41aa004e4f90d6acb70070b9a8_9366/ZX_1000_The_Simpsons_Flaming_Moe_Shoes_Purple_H05790_03_standard.jpg", "https://assets.adidas.com/images/h_840", "f_auto", "q_auto:sensitive", "fl_lossy", "c_fill", "g_auto/680ab6d45b8c47af9a44acb70070bf7c_9366/ZX_1000_The_Simpsons_Flaming_Moe_Shoes_Purple_H05790_04_standard.jpg"], "price": 120, "stock": 5, "itemCategory": "mens", "itemType": "sneakers", "size": "9.0", "productID": "P6mR6wG8", "colors": null, "quantity": 1}}}	907.2	2021-06-27 18:54:24.863003-04	\N
+39	77T27572R6226472M	{"first_name": "fds", "last_name": "fds", "email": "fasdsad@gmail.com", "address": "dsadsa", "zip": "fds", "city": "fds", "state": "CA", "cart": {"0": {"id": 70, "name": "COURT RALLYE SLIP X STAR WARS SHOES", "image": "https://assets.adidas.com/images/h_840,f_auto,q_auto:sensitive,fl_lossy/c2b42bdf6bdc4bf7874bad19017e7c13_9366/Court_Rallye_Slip_x_Star_Wars_Shoes_Black_FY5312_01_standard.jpg", "images": ["https://assets.adidas.com/images/h_840", "f_auto", "q_auto:sensitive", "fl_lossy", "c_fill", "g_auto/c2b42bdf6bdc4bf7874bad19017e7c13_9366/Court_Rallye_Slip_x_Star_Wars_Shoes_Black_FY5312_01_standard.jpg", "https://assets.adidas.com/images/h_840", "f_auto", "q_auto:sensitive", "fl_lossy", "c_fill", "g_auto/80aaf09c02924918bcf1ad19017dbace_9366/Court_Rallye_Slip_x_Star_Wars_Shoes_Black_FY5312_011_hover_standard.jpg", "https://assets.adidas.com/images/h_840", "f_auto", "q_auto:sensitive", "fl_lossy", "c_fill", "g_auto/e4ff0366604049feb5e4ad190183402c_9366/Court_Rallye_Slip_x_Star_Wars_Shoes_Black_FY5312_012_hover_standard.jpg", "https://assets.adidas.com/images/h_840", "f_auto", "q_auto:sensitive", "fl_lossy", "c_fill", "g_auto/a8935c7d91804e07a7baad19017e5ee6_9366/Court_Rallye_Slip_x_Star_Wars_Shoes_Black_FY5312_02_standard.jpg", "https://assets.adidas.com/images/h_840", "f_auto", "q_auto:sensitive", "fl_lossy", "c_fill", "g_auto/4a8e8d93f6d14114a295ad19017e3b72_9366/Court_Rallye_Slip_x_Star_Wars_Shoes_Black_FY5312_03_standard.jpg"], "price": 60, "stock": 64, "itemCategory": "mens", "itemType": "sneakers", "size": "6.5", "productID": "e1UFVNjx", "colors": null, "quantity": 2}}}	129.6	2021-06-30 04:23:45.125479-04	\N
+40	1W478362JB599851V	{"first_name": "fds", "last_name": "bgf", "email": "fdsfds@gmail.com", "address": "gf", "zip": "gfd", "city": "dsf", "state": "AL", "cart": {"0": {"id": 44, "name": "ULTRABOOST DNA 1.0 SHOES", "image": "https://assets.adidas.com/images/h_840,f_auto,q_auto:sensitive,fl_lossy/cdfdf1409e054322b9e0ac6d011da5e2_9366/Ultraboost_DNA_1.0_Shoes_Green_H05264_01_standard.jpg", "images": ["https://assets.adidas.com/images/h_840", "f_auto", "q_auto:sensitive", "fl_lossy/cdfdf1409e054322b9e0ac6d011da5e2_9366/Ultraboost_DNA_1.0_Shoes_Green_H05264_01_standard.jpg", "https://assets.adidas.com/images/h_840", "f_auto", "q_auto:sensitive", "fl_lossy/02705e8729c7435e9bb9ac6d01265a01_9366/Ultraboost_DNA_1.0_Shoes_Green_H05264_02_standard.jpg", "https://assets.adidas.com/images/h_840", "f_auto", "q_auto:sensitive", "fl_lossy/ac3cfbfce4a84b598864ac6d011963ac_9366/Ultraboost_DNA_1.0_Shoes_Green_H05264_03_standard.jpg", "https://assets.adidas.com/images/h_840", "f_auto", "q_auto:sensitive", "fl_lossy/a14abd8e93004e4b9706ac6d0115d8f0_9366/Ultraboost_DNA_1.0_Shoes_Green_H05264_04_standard.jpg", "https://assets.adidas.com/images/h_840", "f_auto", "q_auto:sensitive", "fl_lossy/44bcb47866b04e739aa4ac6d0119f6ef_9366/Ultraboost_DNA_1.0_Shoes_Green_H05264_05_standard.jpg"], "price": 180, "stock": 23, "itemCategory": "mens", "itemType": "sneakers", "size": "7.0", "productID": "h4HMDzyc", "colors": "Bahia Mint / Eqt Green / Cloud White", "quantity": 1}}}	194.4	2021-06-30 04:26:07.079742-04	\N
+41	2HS1174282020150G	{"first_name": "fdsfds", "last_name": "fsd", "email": "fdsfsd", "address": "fdsfds", "zip": "fsd", "city": "fdsfds", "state": "AL", "cart": {"0": {"id": 16, "name": "FORUM MID TT SHOES", "image": "https://assets.adidas.com/images/h_840,f_auto,q_auto:sensitive,fl_lossy/25f6bc7840f8413eb684acb6001e788d_9366/Forum_Mid_TT_Shoes_White_FY4707_01_standard.jpg", "images": ["https://assets.adidas.com/images/h_840", "f_auto", "q_auto:sensitive", "fl_lossy", "c_fill", "g_auto/25f6bc7840f8413eb684acb6001e788d_9366/Forum_Mid_TT_Shoes_White_FY4707_01_standard.jpg", "https://assets.adidas.com/images/h_840", "f_auto", "q_auto:sensitive", "fl_lossy", "c_fill", "g_auto/03222a6506214a23a96cacb6001e5b55_9366/Forum_Mid_TT_Shoes_White_FY4707_02_standard_hover.jpg", "https://assets.adidas.com/images/h_840", "f_auto", "q_auto:sensitive", "fl_lossy", "c_fill", "g_auto/2c6a85403d364dd58349acb6001e4002_9366/Forum_Mid_TT_Shoes_White_FY4707_03_standard.jpg", "https://assets.adidas.com/images/h_840", "f_auto", "q_auto:sensitive", "fl_lossy", "c_fill", "g_auto/8721740cf48141a798a3acb60018fa2a_9366/Forum_Mid_TT_Shoes_White_FY4707_04_standard.jpg", "https://assets.adidas.com/images/h_840", "f_auto", "q_auto:sensitive", "fl_lossy", "c_fill", "g_auto/65dbf2e2c8834ad78bb8acb6001d4ed6_9366/Forum_Mid_TT_Shoes_White_FY4707_05_standard.jpg"], "price": 110, "stock": 3, "itemCategory": "mens", "itemType": "sneakers", "size": "9.0", "productID": "JHy5vOSg", "colors": null, "quantity": 1}}}	118.8	2021-06-30 04:28:45.733202-04	\N
+42	6LD32481K3109170N	{"first_name": "fds", "last_name": "fds", "email": "bgfbgf@gmail.com", "address": "fds", "zip": "fds", "city": "fds", "state": "AL", "cart": {"0": {"id": 45, "name": "ULTRABOOST DNA 1.0 SHOES", "image": "https://assets.adidas.com/images/h_840,f_auto,q_auto:sensitive,fl_lossy/cdfdf1409e054322b9e0ac6d011da5e2_9366/Ultraboost_DNA_1.0_Shoes_Green_H05264_01_standard.jpg", "images": ["https://assets.adidas.com/images/h_840", "f_auto", "q_auto:sensitive", "fl_lossy/cdfdf1409e054322b9e0ac6d011da5e2_9366/Ultraboost_DNA_1.0_Shoes_Green_H05264_01_standard.jpg", "https://assets.adidas.com/images/h_840", "f_auto", "q_auto:sensitive", "fl_lossy/02705e8729c7435e9bb9ac6d01265a01_9366/Ultraboost_DNA_1.0_Shoes_Green_H05264_02_standard.jpg", "https://assets.adidas.com/images/h_840", "f_auto", "q_auto:sensitive", "fl_lossy/ac3cfbfce4a84b598864ac6d011963ac_9366/Ultraboost_DNA_1.0_Shoes_Green_H05264_03_standard.jpg", "https://assets.adidas.com/images/h_840", "f_auto", "q_auto:sensitive", "fl_lossy/a14abd8e93004e4b9706ac6d0115d8f0_9366/Ultraboost_DNA_1.0_Shoes_Green_H05264_04_standard.jpg", "https://assets.adidas.com/images/h_840", "f_auto", "q_auto:sensitive", "fl_lossy/44bcb47866b04e739aa4ac6d0119f6ef_9366/Ultraboost_DNA_1.0_Shoes_Green_H05264_05_standard.jpg"], "price": 180, "stock": 33, "itemCategory": "mens", "itemType": "sneakers", "size": "6.0", "productID": "h4HMDzyc", "colors": "Bahia Mint / Eqt Green / Cloud White", "quantity": 1}}}	194.4	2021-06-30 04:34:59.166496-04	\N
+43	9JV71607AF019454H	{"first_name": "fdsfds", "last_name": "fasdf", "email": "bgdffdk@gmail.com", "address": "dsa", "zip": "fds", "city": "fds", "state": "AL", "coupon": "JGFNB3 ", "cart": {"0": {"id": 14, "name": "ULTRABOOST DNA 1.0 SHOES", "image": "https://assets.adidas.com/images/h_840,f_auto,q_auto:sensitive,fl_lossy/4d8c5bb222fa420c9a14ac6d012069dd_9366/Ultraboost_DNA_1.0_Shoes_Turquoise_H05263_01_standard.jpg", "images": ["https://assets.adidas.com/images/h_840", "f_auto", "q_auto:sensitive", "fl_lossy", "c_fill", "g_auto/4d8c5bb222fa420c9a14ac6d012069dd_9366/Ultraboost_DNA_1.0_Shoes_Turquoise_H05263_01_standard.jpg", "https://assets.adidas.com/images/h_840", "f_auto", "q_auto:sensitive", "fl_lossy", "c_fill", "g_auto/672dcc4bbf3c42b6aa58ac6d01204e86_9366/Ultraboost_DNA_1.0_Shoes_Turquoise_H05263_02_standard.jpg", "https://assets.adidas.com/images/h_840", "f_auto", "q_auto:sensitive", "fl_lossy", "c_fill", "g_auto/affc1bec28514c32b525ac6d01211aed_9366/Ultraboost_DNA_1.0_Shoes_Turquoise_H05263_03_standard.jpg", "https://assets.adidas.com/images/h_840", "f_auto", "q_auto:sensitive", "fl_lossy", "c_fill", "g_auto/e82a57fb45054f8bb03eac6d011df574_9366/Ultraboost_DNA_1.0_Shoes_Turquoise_H05263_04_standard.jpg", "https://assets.adidas.com/images/h_840", "f_auto", "q_auto:sensitive", "fl_lossy", "c_fill", "g_auto/5dbecf4b98d647d4884eac6d0124b707_9366/Ultraboost_DNA_1.0_Shoes_Turquoise_H05263_05_standard.jpg"], "price": 180, "stock": 18, "itemCategory": "mens", "itemType": "sneakers", "size": "12.0", "productID": "LntxHxzH", "colors": "Light Aqua / Shock Yellow / Purple", "quantity": 1}}}	155.52	2021-06-30 04:36:51.716631-04	7
+44	85V949665S765544U	{"first_name": "fgds", "last_name": "fds", "email": "dsadsasa@gmail.com", "address": "3321 dfsa", "zip": "12333", "city": "vdfvdf", "state": "AR", "cart": {"0": {"id": 70, "name": "COURT RALLYE SLIP X STAR WARS SHOES", "image": "https://assets.adidas.com/images/h_840,f_auto,q_auto:sensitive,fl_lossy/c2b42bdf6bdc4bf7874bad19017e7c13_9366/Court_Rallye_Slip_x_Star_Wars_Shoes_Black_FY5312_01_standard.jpg", "images": ["https://assets.adidas.com/images/h_840", "f_auto", "q_auto:sensitive", "fl_lossy", "c_fill", "g_auto/c2b42bdf6bdc4bf7874bad19017e7c13_9366/Court_Rallye_Slip_x_Star_Wars_Shoes_Black_FY5312_01_standard.jpg", "https://assets.adidas.com/images/h_840", "f_auto", "q_auto:sensitive", "fl_lossy", "c_fill", "g_auto/80aaf09c02924918bcf1ad19017dbace_9366/Court_Rallye_Slip_x_Star_Wars_Shoes_Black_FY5312_011_hover_standard.jpg", "https://assets.adidas.com/images/h_840", "f_auto", "q_auto:sensitive", "fl_lossy", "c_fill", "g_auto/e4ff0366604049feb5e4ad190183402c_9366/Court_Rallye_Slip_x_Star_Wars_Shoes_Black_FY5312_012_hover_standard.jpg", "https://assets.adidas.com/images/h_840", "f_auto", "q_auto:sensitive", "fl_lossy", "c_fill", "g_auto/a8935c7d91804e07a7baad19017e5ee6_9366/Court_Rallye_Slip_x_Star_Wars_Shoes_Black_FY5312_02_standard.jpg", "https://assets.adidas.com/images/h_840", "f_auto", "q_auto:sensitive", "fl_lossy", "c_fill", "g_auto/4a8e8d93f6d14114a295ad19017e3b72_9366/Court_Rallye_Slip_x_Star_Wars_Shoes_Black_FY5312_03_standard.jpg"], "price": 60, "stock": 62, "itemCategory": "mens", "itemType": "sneakers", "size": "6.5", "productID": "e1UFVNjx", "colors": null, "quantity": 1}}}	64.8	2021-10-02 18:09:12.90634-04	\N
+\.
+
+
+--
+-- Data for Name: auth_group; Type: TABLE DATA; Schema: public; Owner: Eric
+--
+
+COPY public.auth_group (id, name) FROM stdin;
+\.
+
+
+--
+-- Data for Name: auth_group_permissions; Type: TABLE DATA; Schema: public; Owner: Eric
+--
+
+COPY public.auth_group_permissions (id, group_id, permission_id) FROM stdin;
+\.
+
+
+--
+-- Data for Name: auth_permission; Type: TABLE DATA; Schema: public; Owner: Eric
+--
+
+COPY public.auth_permission (id, name, content_type_id, codename) FROM stdin;
+53	Can add customer	7	add_customer
+54	Can change customer	7	change_customer
+55	Can delete customer	7	delete_customer
+56	Can view customer	7	view_customer
+57	Can add order	8	add_order
+58	Can change order	8	change_order
+59	Can delete order	8	delete_order
+60	Can view order	8	view_order
+61	Can add product	9	add_product
+62	Can change product	9	change_product
+63	Can delete product	9	delete_product
+64	Can view product	9	view_product
+65	Can add shipping info	10	add_shippinginfo
+66	Can change shipping info	10	change_shippinginfo
+67	Can delete shipping info	10	delete_shippinginfo
+68	Can view shipping info	10	view_shippinginfo
+69	Can add order item	11	add_orderitem
+70	Can change order item	11	change_orderitem
+71	Can delete order item	11	delete_orderitem
+72	Can view order item	11	view_orderitem
+73	Can add Token	12	add_token
+74	Can change Token	12	change_token
+75	Can delete Token	12	delete_token
+76	Can view Token	12	view_token
+77	Can add token	13	add_tokenproxy
+78	Can change token	13	change_tokenproxy
+79	Can delete token	13	delete_tokenproxy
+80	Can view token	13	view_tokenproxy
+1	Can add log entry	1	add_logentry
+2	Can change log entry	1	change_logentry
+3	Can delete log entry	1	delete_logentry
+4	Can view log entry	1	view_logentry
+5	Can add permission	2	add_permission
+6	Can change permission	2	change_permission
+7	Can delete permission	2	delete_permission
+8	Can view permission	2	view_permission
+9	Can add group	3	add_group
+10	Can change group	3	change_group
+11	Can delete group	3	delete_group
+12	Can view group	3	view_group
+13	Can add user	4	add_user
+14	Can change user	4	change_user
+15	Can delete user	4	delete_user
+16	Can view user	4	view_user
+17	Can add content type	5	add_contenttype
+18	Can change content type	5	change_contenttype
+19	Can delete content type	5	delete_contenttype
+20	Can view content type	5	view_contenttype
+21	Can add session	6	add_session
+22	Can change session	6	change_session
+23	Can delete session	6	delete_session
+24	Can view session	6	view_session
+81	Can add featured	14	add_featured
+82	Can change featured	14	change_featured
+83	Can delete featured	14	delete_featured
+84	Can view featured	14	view_featured
+85	Can add coupons	15	add_coupons
+86	Can change coupons	15	change_coupons
+87	Can delete coupons	15	delete_coupons
+88	Can view coupons	15	view_coupons
+89	Can add temp order	16	add_temporder
+90	Can change temp order	16	change_temporder
+91	Can delete temp order	16	delete_temporder
+92	Can view temp order	16	view_temporder
+93	Can add reset token	17	add_resettoken
+94	Can change reset token	17	change_resettoken
+95	Can delete reset token	17	delete_resettoken
+96	Can view reset token	17	view_resettoken
+25	Can add Token	7	add_token
+26	Can change Token	7	change_token
+27	Can delete Token	7	delete_token
+28	Can view Token	7	view_token
+29	Can add token	8	add_tokenproxy
+30	Can change token	8	change_tokenproxy
+31	Can delete token	8	delete_tokenproxy
+32	Can view token	8	view_tokenproxy
+33	Can add order item	9	add_orderitem
+34	Can change order item	9	change_orderitem
+35	Can delete order item	9	delete_orderitem
+36	Can view order item	9	view_orderitem
+37	Can add product	10	add_product
+38	Can change product	10	change_product
+39	Can delete product	10	delete_product
+40	Can view product	10	view_product
+41	Can add shipping info	11	add_shippinginfo
+42	Can change shipping info	11	change_shippinginfo
+43	Can delete shipping info	11	delete_shippinginfo
+44	Can view shipping info	11	view_shippinginfo
+45	Can add customer	12	add_customer
+46	Can change customer	12	change_customer
+47	Can delete customer	12	delete_customer
+48	Can view customer	12	view_customer
+49	Can add order	13	add_order
+50	Can change order	13	change_order
+51	Can delete order	13	delete_order
+52	Can view order	13	view_order
+\.
+
+
+--
+-- Data for Name: auth_user; Type: TABLE DATA; Schema: public; Owner: Eric
+--
+
+COPY public.auth_user (id, password, last_login, is_superuser, username, first_name, last_name, email, is_staff, is_active, date_joined) FROM stdin;
+2	pbkdf2_sha256$260000$MhBVLnwvRGFcdvtyU4z2KZ$zNa+tyCKy8BISWY/9s+ilYqFg+ihma4awXRM1KF9aJg=	\N	f	fksdkfkds@gmail.com	Eric	Liao	fksdkfkds@gmail.com	f	t	2021-06-07 21:09:29.401762-04
+3	pbkdf2_sha256$260000$GfSLmX6YsYIutvW10vu8hx$hBwFJ28ffE742BXy/3XkaS+GpiADZkb6OKgeFp5ekUs=	\N	f	fdsad@gmail.com	dsadsa	fdsfds	fdsad@gmail.com	f	t	2021-06-07 21:21:55.381368-04
+1	pbkdf2_sha256$260000$F3LLA35H1XZsBZMyDIHdvd$M35LA2+nZ/1/af0DzxoNBu4VYJpw5He3xg/WOUwmRRU=	2021-06-04 05:31:13-04	t	ericliao1@gmail.com			ericliao1@gmail.com	t	t	2021-04-30 23:03:19-04
+6	pbkdf2_sha256$260000$5h2QgSUQcniWaFApdSWcns$Thc4qndrbhMFAODzpa0r+oHUg5NZNZ2iTWGCyPpgaic=	\N	f	teset123@gmail.com	Eric	Liao	teset123@gmail.com	f	t	2021-06-21 18:04:30.905655-04
+7	pbkdf2_sha256$260000$0KbvSuWqnhcjcLCHGop5kd$z58P54577KBcy5obEv0KTWQ25LY3ghh1cBb+PWRJyQU=	\N	f	fdsmfdms@gmail.com	John	Lee	fdsmfdms@gmail.com	f	t	2021-06-30 04:36:22.697068-04
+5	pbkdf2_sha256$260000$eW5EOWi8ZZbolDGdwBCbm8$5IwKPwJ6pQa4MGkWa1Ch5DolC3wyw0PjLORr/fXtPjg=	2021-07-17 06:32:33.384478-04	t	eric			Ericliao134@gmail.com	t	t	2021-06-18 19:19:04.320179-04
+4	pbkdf2_sha256$260000$KbdTzKutlLFB5d4CEdYmeV$+A/KETCCpNeI0GringEPDyHabR+PM4s0cVCBzfbLBsU=	\N	f	ericliao132@gmail.com	Eric	Liao	ericliao132@gmail.com	f	t	2021-06-09 12:53:21.560563-04
+\.
+
+
+--
+-- Data for Name: auth_user_groups; Type: TABLE DATA; Schema: public; Owner: Eric
+--
+
+COPY public.auth_user_groups (id, user_id, group_id) FROM stdin;
+\.
+
+
+--
+-- Data for Name: auth_user_user_permissions; Type: TABLE DATA; Schema: public; Owner: Eric
+--
+
+COPY public.auth_user_user_permissions (id, user_id, permission_id) FROM stdin;
+\.
+
+
+--
+-- Data for Name: authtoken_token; Type: TABLE DATA; Schema: public; Owner: Eric
+--
+
+COPY public.authtoken_token (key, created, user_id) FROM stdin;
+7d608a076e9cbcd973a43acb824e80712543e070	2021-06-07 21:09:29.506018-04	2
+1e12922474bfcd225e702fbf0ce6ef2314b2821a	2021-06-30 04:36:22.972521-04	7
+\.
+
+
+--
+-- Data for Name: django_admin_log; Type: TABLE DATA; Schema: public; Owner: Eric
+--
+
+COPY public.django_admin_log (id, action_time, object_id, object_repr, action_flag, change_message, content_type_id, user_id) FROM stdin;
+1	2021-04-30 23:04:44.884-04	1	Product object (1)	1	[{"added": {}}]	10	1
+2	2021-04-30 23:08:01.564-04	2	Blink Mini – Compact indoor plug-in	1	[{"added": {}}]	10	1
+3	2021-04-30 23:08:36.698-04	3	Wyze Cam v3 1080p HD Indoor/Outdoor Video Camera	1	[{"added": {}}]	10	1
+4	2021-05-01 00:03:46.139-04	4	MUDEELA Planter Pot with Stand	1	[{"added": {}}]	10	1
+5	2021-05-01 00:04:17.313-04	5	Costa Farms Live Hoya Heart	1	[{"added": {}}]	10	1
+6	2021-05-01 00:05:03.295-04	6	B-Best Guardians of The Galaxy Baby Groot Pens Holder Desk	1	[{"added": {}}]	10	1
+7	2021-05-01 00:05:38.885-04	7	Bluebird Hanging Planter Pot - Ceramic - 7" Diameter	1	[{"added": {}}]	10	1
+8	2021-05-01 00:24:58.772-04	8	Spalding NBA Street Outdoor Basketball	1	[{"added": {}}]	10	1
+9	2021-05-15 16:32:46.741-04	9	ULTRABOOST DNA 1.0 SHOES	1	[{"added": {}}]	10	1
+10	2021-05-15 16:33:29.089-04	10	8 ZX 1000 THE SIMPSONS FLAMING MOE SHOES	1	[{"added": {}}]	10	1
+11	2021-05-15 16:33:36.653-04	9	ULTRABOOST DNA 1.0 SHOES	2	[{"changed": {"fields": ["ItemCategory"]}}]	10	1
+12	2021-05-15 16:33:41.746-04	9	ULTRABOOST DNA 1.0 SHOES	2	[{"changed": {"fields": ["ItemType"]}}]	10	1
+13	2021-05-15 16:34:10.902-04	11	ADIDAS ULTRABOOST DNA X LEGO® PLATES SHOES	1	[{"added": {}}]	10	1
+14	2021-05-15 16:35:05.917-04	12	ULTRABOOST DNA 1.0 SHOES	1	[{"added": {}}]	10	1
+15	2021-05-15 16:35:38.131-04	13	NMD_R1 SHOES	1	[{"added": {}}]	10	1
+16	2021-05-15 16:36:09.163-04	14	ULTRABOOST DNA 1.0 SHOES	1	[{"added": {}}]	10	1
+17	2021-05-15 16:36:31.139-04	15	NMD_R1 SHOES	1	[{"added": {}}]	10	1
+18	2021-05-15 16:36:54.204-04	16	FORUM MID TT SHOES	1	[{"added": {}}]	10	1
+19	2021-05-15 16:37:23.387-04	17	NMD_R1 SHOES	1	[{"added": {}}]	10	1
+20	2021-05-15 16:37:49.312-04	18	NMD_R1 SHOES	1	[{"added": {}}]	10	1
+21	2021-05-15 16:38:17.218-04	19	ULTRABOOST 4.0 DNA SHOES	1	[{"added": {}}]	10	1
+22	2021-05-15 16:38:46-04	20	COURT RALLYE SLIP X STAR WARS SHOES	1	[{"added": {}}]	10	1
+23	2021-05-31 02:51:47.669-04	21	Men's Benassi Just Do It Slide Sandals	1	[{"added": {}}]	10	1
+24	2021-05-31 02:52:00.364-04	21	Men's Benassi Just Do It Slide Sandals	2	[{"changed": {"fields": ["ItemCategory", "ItemType"]}}]	10	1
+25	2021-05-31 03:32:42.691-04	22	Men's Redder Pool Slide Sandals	1	[{"added": {}}]	10	1
+26	2021-05-31 03:33:11.291-04	23	Polo Ralph Lauren	1	[{"added": {}}]	10	1
+27	2021-05-31 03:33:41.871-04	24	Men's Bolt Slip-On Thong Flip-Flop Sandals	1	[{"added": {}}]	10	1
+28	2021-05-31 03:34:12.087-04	25	Men's Riker Pool Slide Sandals	1	[{"added": {}}]	10	1
+29	2021-05-31 03:35:18.03-04	25	Men's Riker Pool Slide Sandals	2	[{"changed": {"fields": ["Price"]}}]	10	1
+30	2021-05-31 03:35:27.408-04	22	Men's Redder Pool Slide Sandals	2	[{"changed": {"fields": ["Price"]}}]	10	1
+31	2021-05-31 04:36:15.523-04	26	Under Armour Men's Valsetz RTS 1.5 with Zipper Military and Tactical	1	[{"added": {}}]	10	1
+32	2021-05-31 04:37:03.615-04	27	Merrell Men's Moab 2 Mid Waterproof Hiking Boot	1	[{"added": {}}]	10	1
+33	2021-05-31 04:38:00.629-04	28	Salomon Men's X Ultra 3 Mid GTX Hiking Boots	1	[{"added": {}}]	10	1
+34	2021-05-31 04:38:45.06-04	29	Under Armour Men's Stellar Tac Side Zip Sneaker	1	[{"added": {}}]	10	1
+35	2021-05-31 06:21:38.79-04	30	Dickies Men's Multi-pack Dri-tech Moisture Control Crew Socks	1	[{"added": {}}]	10	1
+36	2021-05-31 06:21:57.164-04	30	Dickies Men's Multi-pack Dri-tech Moisture Control Crew Socks	2	[]	10	1
+37	2021-05-31 06:22:38.549-04	31	PUMA mens 6 Pack Quarter Crew Socks	1	[{"added": {}}]	10	1
+38	2021-05-31 06:23:28.599-04	32	Fruit of the Loom Men's Dual Defense No Show Socks 12 Pair	1	[{"added": {}}]	10	1
+39	2021-05-31 06:29:59.604-04	33	Champion Men's Classic T-Shirt, Screen Print Script	1	[{"added": {}}]	10	1
+40	2021-05-31 06:30:44.074-04	34	Carhartt Men's Workwear Pocket Short Sleeve T-Shirt	1	[{"added": {}}]	10	1
+41	2021-05-31 06:42:56.145-04	33	Champion Men's Classic T-Shirt, Screen Print Script	2	[{"changed": {"fields": ["Image"]}}]	10	1
+42	2021-05-31 06:43:12.905-04	34	Carhartt Men's Workwear Pocket Short Sleeve T-Shirt	2	[{"changed": {"fields": ["Image"]}}]	10	1
+43	2021-05-31 07:06:20.902-04	33	BADGE OF SPORT TEE	2	[{"changed": {"fields": ["Name", "Image", "Price"]}}]	10	1
+44	2021-05-31 07:06:53.644-04	34	LOUNGEWEAR ADICOLOR ESSENTIALS TREFOIL TEE	2	[{"changed": {"fields": ["Name", "Image", "Price"]}}]	10	1
+45	2021-05-31 07:07:12.001-04	34	LOUNGEWEAR ADICOLOR ESSENTIALS TREFOIL TEE	2	[{"changed": {"fields": ["Image"]}}]	10	1
+46	2021-05-31 07:07:24.368-04	34	LOUNGEWEAR ADICOLOR ESSENTIALS TREFOIL TEE	2	[{"changed": {"fields": ["Image"]}}]	10	1
+47	2021-05-31 07:07:33.947-04	33	BADGE OF SPORT TEE	2	[{"changed": {"fields": ["Image"]}}]	10	1
+48	2021-05-31 07:07:41.15-04	34	LOUNGEWEAR ADICOLOR ESSENTIALS TREFOIL TEE	2	[{"changed": {"fields": ["Image"]}}]	10	1
+49	2021-05-31 07:09:59.107-04	35	ADICOLOR CLASSICS 3-STRIPES PANTS	1	[{"added": {}}]	10	1
+50	2021-05-31 07:10:10.286-04	35	ADICOLOR CLASSICS 3-STRIPES PANTS	2	[{"changed": {"fields": ["ItemType"]}}]	10	1
+51	2021-05-31 07:11:56.016-04	36	TREFOIL HOODIE	1	[{"added": {}}]	10	1
+52	2021-05-31 07:12:19.482-04	37	ESSENTIALS 3-STRIPES HOODIE	1	[{"added": {}}]	10	1
+53	2021-05-31 07:12:42.896-04	38	ADIDAS SPORTSWEAR 3-STRIPES HOODED TRACK TOP	1	[{"added": {}}]	10	1
+54	2021-05-31 07:16:08.917-04	39	HIGH KEY Aviator Sunglasses	1	[{"added": {}}]	10	1
+55	2021-05-31 07:16:17.575-04	39	HIGH KEY Aviator Sunglasses	2	[]	10	1
+56	2021-05-31 07:16:57.763-04	39	HIGH KEY Aviator Sunglasses	2	[{"changed": {"fields": ["Image"]}}]	10	1
+57	2021-05-31 07:35:52.768-04	40	BADGE OF SPORT TEE	1	[{"added": {}}]	10	1
+58	2021-05-31 07:36:33.914-04	41	BADGE OF SPORT TEE	1	[{"added": {}}]	10	1
+59	2021-05-31 07:38:48.241-04	33	BADGE OF SPORT TEE	2	[{"changed": {"fields": ["ProductID"]}}]	10	1
+60	2021-05-31 07:38:51.401-04	40	BADGE OF SPORT TEE	2	[{"changed": {"fields": ["ProductID"]}}]	10	1
+61	2021-05-31 07:38:57.93-04	41	BADGE OF SPORT TEE	2	[{"changed": {"fields": ["ProductID"]}}]	10	1
+62	2021-05-31 07:41:41.763-04	41	BADGE OF SPORT TEE	2	[{"changed": {"fields": ["Size"]}}]	10	1
+63	2021-05-31 07:41:48.317-04	40	BADGE OF SPORT TEE	2	[{"changed": {"fields": ["Size"]}}]	10	1
+64	2021-05-31 07:41:55.091-04	33	BADGE OF SPORT TEE	2	[{"changed": {"fields": ["Size"]}}]	10	1
+65	2021-05-31 07:42:10.401-04	37	ESSENTIALS 3-STRIPES HOODIE	2	[{"changed": {"fields": ["Size"]}}]	10	1
+66	2021-05-31 07:42:16.041-04	38	ADIDAS SPORTSWEAR 3-STRIPES HOODED TRACK TOP	2	[{"changed": {"fields": ["Size"]}}]	10	1
+67	2021-05-31 07:42:21.729-04	36	TREFOIL HOODIE	2	[{"changed": {"fields": ["Size"]}}]	10	1
+68	2021-05-31 07:42:40.04-04	34	LOUNGEWEAR ADICOLOR ESSENTIALS TREFOIL TEE	2	[{"changed": {"fields": ["Size"]}}]	10	1
+69	2021-05-31 08:32:02.347-04	35	ADICOLOR CLASSICS 3-STRIPES PANTS	2	[{"changed": {"fields": ["Size"]}}]	10	1
+70	2021-05-31 08:34:33.187-04	30	Dickies Men's Multi-pack Dri-tech Moisture Control Crew Socks	2	[{"changed": {"fields": ["Size"]}}]	10	1
+71	2021-05-31 08:34:38.931-04	31	PUMA mens 6 Pack Quarter Crew Socks	2	[{"changed": {"fields": ["Size"]}}]	10	1
+72	2021-05-31 08:34:46.423-04	32	Fruit of the Loom Men's Dual Defense No Show Socks 12 Pair	2	[{"changed": {"fields": ["Size"]}}]	10	1
+73	2021-06-01 08:47:06.079-04	29	MEN'S RUST BROWN CHELSEA BOOTS BY BERNARD DE WULF	2	[{"changed": {"fields": ["Name", "Image", "Price"]}}]	10	1
+74	2021-06-01 08:47:36.871-04	26	https://cdn.shopify.com/s/files/1/1594/9235/products/DWChelseaBootsMen_Rust2_bootsmen_leatherchelseabootsmen_leatherboots_bootsmen_brownchelseaboots_dewulfmenshoes_dewulfmenboots_800x.jpg?v=1602180231	2	[{"changed": {"fields": ["Name", "Image", "Price"]}}]	10	1
+75	2021-06-01 08:48:22.8-04	27	President	2	[{"changed": {"fields": ["Name", "Image", "Price"]}}]	10	1
+76	2021-06-01 08:48:40.141-04	28	DECARSDZ Men Boots Autumn Comfy Durable outsole Lace-up Fashion Shoes Men 2021 Leather Casual Boots Men Brand design Men's Boots	2	[{"changed": {"fields": ["Name", "Image"]}}]	10	1
+77	2021-06-01 08:49:17.565-04	26	Original Leather Boots Men Autumn Shoes Male Leather Casual Boots Men Comfy Anti-Slip Lace-up Boots	2	[{"changed": {"fields": ["Name"]}}]	10	1
+78	2021-06-01 08:49:46.02-04	27	President	2	[{"changed": {"fields": ["Image"]}}]	10	1
+79	2021-06-01 11:20:16.053247-04	42	test	1	[{"added": {}}]	9	1
+80	2021-06-01 11:49:06.768654-04	43	fasdd	1	[{"added": {}}]	9	1
+81	2021-06-01 11:49:13.7902-04	43	fasdd	3		9	1
+82	2021-06-01 11:49:18.699585-04	42	test	3		9	1
+83	2021-06-01 11:53:22.145612-04	41	BADGE OF SPORT TEE	2	[{"changed": {"fields": ["ProductID"]}}]	9	1
+84	2021-06-01 11:53:25.553711-04	40	BADGE OF SPORT TEE	2	[{"changed": {"fields": ["ProductID"]}}]	9	1
+85	2021-06-01 11:53:28.700636-04	33	BADGE OF SPORT TEE	2	[{"changed": {"fields": ["ProductID"]}}]	9	1
+86	2021-06-01 14:57:25.873734-04	12	ULTRABOOST DNA 1.0 SHOES	2	[{"changed": {"fields": ["Images"]}}]	9	1
+87	2021-06-01 14:58:01.397287-04	12	ULTRABOOST DNA 1.0 SHOES	2	[{"changed": {"fields": ["Images"]}}]	9	1
+88	2021-06-02 08:59:32.628064-04	12	ULTRABOOST DNA 1.0 SHOES	2	[{"changed": {"fields": ["Colors"]}}]	9	1
+89	2021-06-02 09:06:48.058195-04	44	ULTRABOOST DNA 1.0 SHOES	1	[{"added": {}}]	9	1
+90	2021-06-02 09:12:04.660408-04	12	ULTRABOOST DNA 1.0 SHOES	2	[{"changed": {"fields": ["Size"]}}]	9	1
+91	2021-06-02 09:16:07.175219-04	45	ULTRABOOST DNA 1.0 SHOES	1	[{"added": {}}]	9	1
+92	2021-06-04 06:15:53.115575-04	12	ULTRABOOST DNA 1.0 SHOES	2	[{"changed": {"fields": ["Size"]}}]	9	1
+93	2021-06-04 06:16:02.149336-04	45	ULTRABOOST DNA 1.0 SHOES	2	[{"changed": {"fields": ["Size"]}}]	9	1
+94	2021-06-04 15:05:45.387413-04	45	ULTRABOOST DNA 1.0 SHOES	2	[{"changed": {"fields": ["Images"]}}]	9	1
+95	2021-06-04 15:06:17.267482-04	45	ULTRABOOST DNA 1.0 SHOES	2	[{"changed": {"fields": ["Images"]}}]	9	1
+96	2021-06-04 15:06:49.156438-04	45	ULTRABOOST DNA 1.0 SHOES	2	[{"changed": {"fields": ["Images"]}}]	9	1
+97	2021-06-04 15:07:41.576293-04	45	ULTRABOOST DNA 1.0 SHOES	2	[{"changed": {"fields": ["Images"]}}]	9	1
+98	2021-06-04 15:38:39.493191-04	45	ULTRABOOST DNA 1.0 SHOES	2	[]	9	1
+99	2021-06-04 15:41:46.043212-04	44	ULTRABOOST DNA 1.0 SHOES	2	[{"changed": {"fields": ["Images"]}}]	9	1
+100	2021-06-04 15:42:35.212881-04	44	ULTRABOOST DNA 1.0 SHOES	2	[{"changed": {"fields": ["Images"]}}]	9	1
+101	2021-06-04 16:18:15.395969-04	45	ULTRABOOST DNA 1.0 SHOES	2	[]	9	1
+102	2021-06-04 16:19:36.289588-04	45	ULTRABOOST DNA 1.0 SHOES	2	[]	9	1
+103	2021-06-04 16:19:40.257234-04	44	ULTRABOOST DNA 1.0 SHOES	2	[]	9	1
+104	2021-06-04 17:04:12.322867-04	45	ULTRABOOST DNA 1.0 SHOES	2	[{"changed": {"fields": ["Images"]}}]	9	1
+105	2021-06-04 17:04:18.084236-04	45	ULTRABOOST DNA 1.0 SHOES	2	[]	9	1
+106	2021-06-04 17:05:20.717879-04	44	ULTRABOOST DNA 1.0 SHOES	2	[{"changed": {"fields": ["Images"]}}]	9	1
+107	2021-06-04 17:11:53.732629-04	44	ULTRABOOST DNA 1.0 SHOES	2	[{"changed": {"fields": ["Images"]}}]	9	1
+108	2021-06-04 17:13:19.497986-04	44	ULTRABOOST DNA 1.0 SHOES	2	[{"changed": {"fields": ["Images"]}}]	9	1
+109	2021-06-04 17:25:39.606338-04	44	ULTRABOOST DNA 1.0 SHOES	2	[{"changed": {"fields": ["Images"]}}]	9	1
+110	2021-06-04 17:26:32.952464-04	12	ULTRABOOST DNA 1.0 SHOES	2	[{"changed": {"fields": ["Images"]}}]	9	1
+111	2021-06-04 17:27:08.721809-04	44	ULTRABOOST DNA 1.0 SHOES	2	[{"changed": {"fields": ["Images"]}}]	9	1
+112	2021-06-04 17:27:14.087912-04	45	ULTRABOOST DNA 1.0 SHOES	2	[{"changed": {"fields": ["Images"]}}]	9	1
+113	2021-06-06 11:01:46.428941-04	46	LOVE UNITES TANK TOP (GENDER NEUTRAL)	1	[{"added": {}}]	9	1
+114	2021-06-06 11:01:55.096987-04	46	LOVE UNITES TANK TOP (GENDER NEUTRAL)	2	[{"changed": {"fields": ["ItemType"]}}]	9	1
+115	2021-06-06 11:09:37.982586-04	1	LOVE UNITES TANK TOP (GENDER NEUTRAL)	1	[{"added": {}}]	14	1
+116	2021-06-06 11:10:27.524529-04	2	LOUNGEWEAR ADICOLOR ESSENTIALS TREFOIL TEE	1	[{"added": {}}]	14	1
+117	2021-06-06 11:10:56.600728-04	3	ESSENTIALS 3-STRIPES HOODIE	1	[{"added": {}}]	14	1
+118	2021-06-06 11:11:18.098001-04	4	ADIDAS SPORTSWEAR 3-STRIPES HOODED TRACK TOP	1	[{"added": {}}]	14	1
+119	2021-06-06 19:00:46.814358-04	47	Nike Wildhorse 7	1	[{"added": {}}]	9	1
+120	2021-06-06 20:18:45.035224-04	47	Nike Wildhorse 7	2	[{"changed": {"fields": ["Images"]}}]	9	1
+121	2021-06-06 20:19:55.391538-04	47	Nike Wildhorse 7	2	[{"changed": {"fields": ["Images"]}}]	9	1
+122	2021-06-06 20:23:45.624753-04	48	Nike Wildhorse 7	1	[{"added": {}}]	9	1
+123	2021-06-06 20:29:02.411216-04	48	Nike Wildhorse 7	2	[{"changed": {"fields": ["Images"]}}]	9	1
+124	2021-06-06 21:02:11.992545-04	49	Nike React Escape Run	1	[{"added": {}}]	9	1
+125	2021-06-06 21:03:22.270048-04	50	Nike ZoomX Invincible Run Flyknit	1	[{"added": {}}]	9	1
+126	2021-06-06 21:28:10.734606-04	51	Nike Air Zoom Tempo NEXT%	1	[{"added": {}}]	9	1
+127	2021-06-06 21:29:53.268044-04	52	Nike Air Zoom Pegasus 38 Limited Edition	1	[{"added": {}}]	9	1
+128	2021-06-06 21:31:25.889258-04	53	Nike React Infinity Run Flyknit 2	1	[{"added": {}}]	9	1
+129	2021-06-06 21:32:30.454339-04	54	Nike ZoomX Vaporfly Next% 2	1	[{"added": {}}]	9	1
+130	2021-06-06 21:32:42.30108-04	53	Nike React Infinity Run Flyknit 2	2	[{"changed": {"fields": ["Colors"]}}]	9	1
+131	2021-06-06 21:44:37.830528-04	55	Nike Owaysis	1	[{"added": {}}]	9	1
+132	2021-06-06 21:45:42.478295-04	56	Nike On Deck	1	[{"added": {}}]	9	1
+133	2021-06-06 21:45:52.92615-04	55	Nike Owaysis	2	[{"changed": {"fields": ["ItemCategory", "ItemType", "Colors"]}}]	9	1
+134	2021-06-06 21:45:59.080332-04	56	Nike On Deck	2	[]	9	1
+135	2021-06-06 21:46:01.744506-04	55	Nike Owaysis	2	[]	9	1
+136	2021-06-06 21:46:57.931651-04	57	Nike Victori One	1	[{"added": {}}]	9	1
+137	2021-06-06 21:47:50.222995-04	58	Nike Asuna	1	[{"added": {}}]	9	1
+138	2021-06-06 21:48:44.319321-04	59	Nike Bella Kai	1	[{"added": {}}]	9	1
+139	2021-06-08 17:23:50.171616-04	1	ericliao132@gmail.com	2	[{"changed": {"fields": ["Username", "Email address"]}}]	4	1
+140	2021-06-09 12:53:09.223593-04	1	ericliao1@gmail.com	2	[{"changed": {"fields": ["Username", "Email address"]}}]	4	1
+141	2021-06-17 02:30:13.454162-04	1	JGFNB3	1	[{"added": {}}]	15	1
+142	2021-06-17 18:54:32.241216-04	52	Nike Air Zoom Pegasus 38 Limited Edition	2	[{"changed": {"fields": ["Stock"]}}]	9	1
+143	2021-06-18 19:29:53.252338-04	47	Nike Wildhorse 7	2	[{"changed": {"fields": ["Stock"]}}]	9	5
+144	2021-06-18 19:43:06.025853-04	47	Nike Wildhorse 7	2	[{"changed": {"fields": ["Stock"]}}]	9	5
+145	2021-06-19 16:26:56.965901-04	47	Nike Wildhorse 7	2	[{"changed": {"fields": ["Stock"]}}]	9	5
+146	2021-06-19 16:49:33.374093-04	47	Nike Wildhorse 7	2	[{"changed": {"fields": ["Stock"]}}]	9	5
+147	2021-06-19 16:50:06.598359-04	47	Nike Wildhorse 7	2	[{"changed": {"fields": ["Stock"]}}]	9	5
+148	2021-06-19 16:51:47.216837-04	47	Nike Wildhorse 7	2	[{"changed": {"fields": ["Stock"]}}]	9	5
+149	2021-06-19 16:52:08.647496-04	47	Nike Wildhorse 7	2	[{"changed": {"fields": ["Stock"]}}]	9	5
+150	2021-06-19 16:52:30.134121-04	47	Nike Wildhorse 7	2	[{"changed": {"fields": ["Stock"]}}]	9	5
+151	2021-06-19 20:36:32.3187-04	47	Nike Wildhorse 7	2	[{"changed": {"fields": ["Stock"]}}]	9	5
+152	2021-06-19 20:45:46.996319-04	47	Nike Wildhorse 7	2	[{"changed": {"fields": ["Stock"]}}]	9	5
+153	2021-06-19 20:45:55.278135-04	47	Nike Wildhorse 7	2	[{"changed": {"fields": ["Stock"]}}]	9	5
+154	2021-06-19 20:46:15.61586-04	47	Nike Wildhorse 7	2	[{"changed": {"fields": ["Stock"]}}]	9	5
+155	2021-06-19 21:22:37.652858-04	2	TempOrder object (2)	3		16	5
+156	2021-06-19 21:22:40.00907-04	1	TempOrder object (1)	3		16	5
+157	2021-06-20 03:18:45.17137-04	1	Eric	3		7	5
+158	2021-06-20 04:03:43.065252-04	3	Eric	3		7	5
+159	2021-06-20 04:04:21.649793-04	4	Eric	3		7	5
+160	2021-06-20 04:06:09.984177-04	5	NoneLiao	3		7	5
+161	2021-06-20 04:06:28.51343-04	6	EricLiao	3		7	5
+162	2021-06-20 04:08:19.32819-04	30	TempOrder object (30)	2	[{"changed": {"fields": ["User"]}}]	16	5
+163	2021-06-20 04:08:45.156401-04	8	EricLiao	3		7	5
+164	2021-06-20 04:12:55.846486-04	30	TempOrder object (30)	2	[{"changed": {"fields": ["Info"]}}]	16	5
+165	2021-06-20 04:17:51.687058-04	3	1	3		11	5
+166	2021-06-20 04:17:51.706061-04	2	1	3		11	5
+167	2021-06-20 04:17:51.707062-04	1	1	3		11	5
+168	2021-06-20 04:20:52.334899-04	7	2	3		11	5
+169	2021-06-20 04:20:52.3379-04	6	2	3		11	5
+170	2021-06-20 04:20:52.3389-04	5	2	3		11	5
+171	2021-06-20 04:20:52.339899-04	4	2	3		11	5
+172	2021-06-20 06:15:51.784081-04	3	0WX6945634650051V	2	[{"changed": {"fields": ["Total"]}}]	8	5
+173	2021-06-21 17:38:27.678685-04	1	BW7UdlOP514zZu641tSo	3		17	5
+174	2021-06-22 14:56:44.711625-04	17	NMD_R1 SHOES	3		9	5
+175	2021-06-22 14:56:46.477756-04	15	NMD_R1 SHOES	3		9	5
+176	2021-06-22 14:56:48.396117-04	13	NMD_R1 SHOES	3		9	5
+177	2021-06-22 15:04:30.414338-04	14	ULTRABOOST DNA 1.0 SHOES	2	[{"changed": {"fields": ["Images", "Colors"]}}]	9	5
+178	2021-06-22 15:06:13.207807-04	9	ULTRABOOST DNA 1.0 SHOES	2	[{"changed": {"fields": ["Images"]}}]	9	5
+179	2021-06-22 15:07:23.43754-04	10	8 ZX 1000 THE SIMPSONS FLAMING MOE SHOES	2	[{"changed": {"fields": ["Images"]}}]	9	5
+180	2021-06-22 15:09:03.061051-04	11	ADIDAS ULTRABOOST DNA X LEGO® PLATES SHOES	2	[{"changed": {"fields": ["Images"]}}]	9	5
+181	2021-06-22 15:09:59.765401-04	16	FORUM MID TT SHOES	2	[{"changed": {"fields": ["Images"]}}]	9	5
+182	2021-06-22 15:12:10.202751-04	18	NMD_R1 SHOES	2	[{"changed": {"fields": ["Images"]}}]	9	5
+183	2021-06-22 15:13:14.43557-04	19	ULTRABOOST 4.0 DNA SHOES	2	[{"changed": {"fields": ["Images", "Colors"]}}]	9	5
+184	2021-06-22 15:14:03.723077-04	20	COURT RALLYE SLIP X STAR WARS SHOES	2	[{"changed": {"fields": ["Images"]}}]	9	5
+185	2021-06-22 15:14:52.500291-04	11	ADIDAS ULTRABOOST DNA X LEGO® PLATES SHOES	2	[]	9	5
+186	2021-06-22 15:17:03.950901-04	60	The Glove Boot	1	[{"added": {}}]	9	5
+187	2021-06-22 15:18:12.539638-04	61	Nike Everyday	1	[{"added": {}}]	9	5
+188	2021-06-22 15:21:56.540414-04	62	SHEIN Colorblock Twist Front Tee	1	[{"added": {}}]	9	5
+189	2021-06-22 15:24:57.123226-04	62	Nike Sportswear	2	[{"changed": {"fields": ["Name", "Image", "Images", "Price", "Colors"]}}]	9	5
+190	2021-06-22 15:26:20.103205-04	63	Nike Sportswear Swoosh	1	[{"added": {}}]	9	5
+191	2021-06-22 15:27:51.648422-04	64	Women's Full-Zip Fleece	1	[{"added": {}}]	9	5
+192	2021-06-22 15:28:41.503057-04	65	RB3016 CLUBMASTER CLASSIC	1	[{"added": {}}]	9	5
+193	2021-06-22 15:36:45.781704-04	65	RB3016 CLUBMASTER CLASSIC	2	[{"changed": {"fields": ["Size"]}}]	9	5
+194	2021-06-22 15:39:22.881784-04	66	Nike Air Force 1 LE	1	[{"added": {}}]	9	5
+195	2021-06-22 15:45:27.141113-04	67	Little/Big Kids' Slide	1	[{"added": {}}]	9	5
+196	2021-06-22 15:46:44.21348-04	68	Little Kids' Tie-Dye Crew	1	[{"added": {}}]	9	5
+197	2021-06-22 15:46:55.027287-04	68	Little Kids' Tie-Dye Crew	2	[{"changed": {"fields": ["Images"]}}]	9	5
+198	2021-06-22 15:55:49.085056-04	69	Nike Woodside 2 High ACG	1	[{"added": {}}]	9	5
+199	2021-06-22 16:07:29.715937-04	70	COURT RALLYE SLIP X STAR WARS SHOES	2	[{"changed": {"fields": ["Size"]}}]	9	5
+200	2021-06-22 16:08:08.141221-04	72	COURT RALLYE SLIP X STAR WARS SHOES	2	[{"changed": {"fields": ["Size"]}}]	9	5
+201	2021-06-22 16:09:07.72089-04	73	COURT RALLYE SLIP X STAR WARS SHOES	2	[{"changed": {"fields": ["Size"]}}]	9	5
+202	2021-06-22 20:19:11.601426-04	74	Men's Benassi Just Do It Slide Sandals	2	[{"changed": {"fields": ["Stock", "Size"]}}]	9	5
+203	2021-06-22 20:19:20.448853-04	75	Men's Benassi Just Do It Slide Sandals	2	[{"changed": {"fields": ["Stock", "Size"]}}]	9	5
+204	2021-06-22 20:19:27.884272-04	76	Men's Benassi Just Do It Slide Sandals	2	[{"changed": {"fields": ["Stock", "Size"]}}]	9	5
+205	2021-06-22 20:19:54.934412-04	77	Men's Redder Pool Slide Sandals	2	[{"changed": {"fields": ["Stock", "Size"]}}]	9	5
+206	2021-06-22 20:20:03.804556-04	78	Men's Redder Pool Slide Sandals	2	[{"changed": {"fields": ["Stock", "Size"]}}]	9	5
+207	2021-06-22 20:20:38.100162-04	82	Polo Ralph Lauren	3		9	5
+208	2021-06-22 20:20:47.611351-04	81	Polo Ralph Lauren	2	[{"changed": {"fields": ["Size"]}}]	9	5
+209	2021-06-22 20:20:53.402744-04	80	Polo Ralph Lauren	2	[{"changed": {"fields": ["Stock", "Size"]}}]	9	5
+210	2021-06-22 20:21:02.132871-04	79	Polo Ralph Lauren	2	[{"changed": {"fields": ["Stock", "Size"]}}]	9	5
+211	2021-06-22 20:21:28.597671-04	83	Men's Bolt Slip-On Thong Flip-Flop Sandals	2	[{"changed": {"fields": ["Stock", "Size"]}}]	9	5
+212	2021-06-22 20:21:31.85003-04	84	Men's Bolt Slip-On Thong Flip-Flop Sandals	3		9	5
+213	2021-06-22 20:21:34.169987-04	85	Men's Bolt Slip-On Thong Flip-Flop Sandals	3		9	5
+214	2021-06-22 20:21:41.995963-04	86	Men's Bolt Slip-On Thong Flip-Flop Sandals	2	[{"changed": {"fields": ["Stock", "Size"]}}]	9	5
+215	2021-06-22 20:21:49.60272-04	87	Men's Bolt Slip-On Thong Flip-Flop Sandals	2	[{"changed": {"fields": ["Stock", "Size"]}}]	9	5
+216	2021-06-22 20:22:15.525863-04	88	Men's Riker Pool Slide Sandals	2	[{"changed": {"fields": ["Stock", "Size"]}}]	9	5
+217	2021-06-22 20:22:52.11788-04	89	Original Leather Boots Men Autumn Shoes Male Leather Casual Boots Men Comfy Anti-Slip Lace-up Boots	2	[{"changed": {"fields": ["Stock", "Size"]}}]	9	5
+218	2021-06-22 20:22:59.969847-04	90	President	2	[{"changed": {"fields": ["Stock", "Size"]}}]	9	5
+219	2021-06-22 20:23:11.755558-04	91	President	2	[{"changed": {"fields": ["Stock", "Size"]}}]	9	5
+220	2021-06-22 20:23:20.193773-04	92	DECARSDZ Men Boots Autumn Comfy Durable outsole Lace-up Fashion Shoes Men 2021 Leather Casual Boots Men Brand design Men's Boots	2	[{"changed": {"fields": ["Stock", "Size"]}}]	9	5
+221	2021-06-22 20:23:28.114506-04	93	MEN'S RUST BROWN CHELSEA BOOTS BY BERNARD DE WULF	2	[{"changed": {"fields": ["Stock", "Size"]}}]	9	5
+222	2021-06-22 20:23:33.185522-04	94	MEN'S RUST BROWN CHELSEA BOOTS BY BERNARD DE WULF	2	[{"changed": {"fields": ["Stock", "Size"]}}]	9	5
+223	2021-06-22 20:24:04.967186-04	101	ESSENTIALS 3-STRIPES HOODIE	2	[{"changed": {"fields": ["Stock", "Size"]}}]	9	5
+224	2021-06-22 20:24:08.785388-04	100	ESSENTIALS 3-STRIPES HOODIE	3		9	5
+225	2021-06-22 20:24:14.027346-04	99	ESSENTIALS 3-STRIPES HOODIE	2	[{"changed": {"fields": ["Stock", "Size"]}}]	9	5
+226	2021-06-22 20:24:33.082264-04	99	ESSENTIALS 3-STRIPES HOODIE	2	[{"changed": {"fields": ["Size"]}}]	9	5
+227	2021-06-22 20:24:45.030609-04	99	ESSENTIALS 3-STRIPES HOODIE	2	[{"changed": {"fields": ["Size"]}}]	9	5
+228	2021-06-22 20:24:53.172648-04	99	ESSENTIALS 3-STRIPES HOODIE	2	[{"changed": {"fields": ["Size"]}}]	9	5
+229	2021-06-22 20:25:00.591018-04	101	ESSENTIALS 3-STRIPES HOODIE	2	[{"changed": {"fields": ["Size"]}}]	9	5
+230	2021-06-22 20:25:27.706874-04	106	BADGE OF SPORT TEE	3		9	5
+231	2021-06-22 20:25:29.430554-04	98	BADGE OF SPORT TEE	3		9	5
+232	2021-06-23 13:13:58.950334-04	102	HIGH KEY Aviator Sunglasses	3		9	5
+233	2021-06-23 13:14:00.842479-04	103	HIGH KEY Aviator Sunglasses	3		9	5
+234	2021-06-23 13:14:02.701007-04	104	HIGH KEY Aviator Sunglasses	3		9	5
+235	2021-06-23 13:14:04.899005-04	105	HIGH KEY Aviator Sunglasses	3		9	5
+\.
+
+
+--
+-- Data for Name: django_content_type; Type: TABLE DATA; Schema: public; Owner: Eric
+--
+
+COPY public.django_content_type (id, app_label, model) FROM stdin;
+1	admin	logentry
+2	auth	permission
+3	auth	group
+4	auth	user
+5	contenttypes	contenttype
+6	sessions	session
+7	api	customer
+8	api	order
+9	api	product
+10	api	shippinginfo
+11	api	orderitem
+12	authtoken	token
+13	authtoken	tokenproxy
+14	api	featured
+15	api	coupons
+16	api	temporder
+17	api	resettoken
+\.
+
+
+--
+-- Data for Name: django_migrations; Type: TABLE DATA; Schema: public; Owner: Eric
+--
+
+COPY public.django_migrations (id, app, name, applied) FROM stdin;
+1	contenttypes	0001_initial	2021-06-01 10:18:55.852132-04
+2	auth	0001_initial	2021-06-01 10:18:56.446297-04
+3	admin	0001_initial	2021-06-01 10:18:56.574332-04
+4	admin	0002_logentry_remove_auto_add	2021-06-01 10:18:56.580333-04
+5	admin	0003_logentry_add_action_flag_choices	2021-06-01 10:18:56.587335-04
+6	api	0001_initial	2021-06-01 10:18:56.886409-04
+7	api	0002_auto_20210515_1626	2021-06-01 10:18:56.938422-04
+8	api	0003_product_size	2021-06-01 10:18:56.942423-04
+9	api	0004_product_sizeto	2021-06-01 10:18:56.946423-04
+10	api	0005_product_sizeletter	2021-06-01 10:18:56.950424-04
+11	api	0006_alter_product_sizeletter	2021-06-01 10:18:56.953425-04
+12	api	0007_product_productid	2021-06-01 10:18:56.957425-04
+13	api	0008_auto_20210531_0741	2021-06-01 10:18:57.041451-04
+14	api	0009_alter_product_image	2021-06-01 10:18:57.119473-04
+15	api	0010_alter_product_image	2021-06-01 10:18:57.126475-04
+16	api	0011_alter_product_image	2021-06-01 10:18:57.137478-04
+17	api	0012_alter_product_image	2021-06-01 10:18:57.143479-04
+18	api	0013_alter_product_image	2021-06-01 10:18:57.19549-04
+19	contenttypes	0002_remove_content_type_name	2021-06-01 10:18:57.212495-04
+20	auth	0002_alter_permission_name_max_length	2021-06-01 10:18:57.224497-04
+21	auth	0003_alter_user_email_max_length	2021-06-01 10:18:57.231499-04
+22	auth	0004_alter_user_username_opts	2021-06-01 10:18:57.238501-04
+23	auth	0005_alter_user_last_login_null	2021-06-01 10:18:57.245502-04
+24	auth	0006_require_contenttypes_0002	2021-06-01 10:18:57.250503-04
+25	auth	0007_alter_validators_add_error_messages	2021-06-01 10:18:57.256504-04
+26	auth	0008_alter_user_username_max_length	2021-06-01 10:18:57.288519-04
+27	auth	0009_alter_user_last_name_max_length	2021-06-01 10:18:57.296521-04
+28	auth	0010_alter_group_name_max_length	2021-06-01 10:18:57.317526-04
+29	auth	0011_update_proxy_permissions	2021-06-01 10:18:57.324528-04
+30	auth	0012_alter_user_first_name_max_length	2021-06-01 10:18:57.330528-04
+31	authtoken	0001_initial	2021-06-01 10:18:57.410546-04
+32	authtoken	0002_auto_20160226_1747	2021-06-01 10:18:57.431551-04
+33	authtoken	0003_tokenproxy	2021-06-01 10:18:57.435552-04
+34	sessions	0001_initial	2021-06-01 10:18:57.552588-04
+35	api	0014_alter_product_image	2021-06-01 10:32:29.573856-04
+36	api	0015_auto_20210601_1032	2021-06-01 10:33:49.202712-04
+37	api	0016_alter_product_images	2021-06-01 10:44:01.474717-04
+38	api	0017_alter_product_images	2021-06-01 10:44:01.479718-04
+39	api	0018_alter_product_images	2021-06-01 10:44:01.482718-04
+40	api	0019_alter_product_images	2021-06-01 10:44:01.48672-04
+41	api	0020_alter_product_productid	2021-06-01 11:19:45.251421-04
+42	api	0021_alter_product_productid	2021-06-01 11:22:56.983155-04
+43	api	0022_alter_product_productid	2021-06-01 11:22:56.987157-04
+44	api	0021_remove_product_productid	2021-06-01 11:44:35.023066-04
+45	api	0022_product_productid	2021-06-01 11:48:14.58267-04
+46	api	0023_product_colors	2021-06-02 08:58:55.567345-04
+47	api	0024_alter_product_images	2021-06-02 11:32:34.492456-04
+48	api	0025_alter_product_images	2021-06-04 16:17:24.470125-04
+49	api	0026_alter_product_images	2021-06-04 17:06:56.918894-04
+50	api	0027_remove_product_images	2021-06-04 17:16:48.403102-04
+51	api	0028_product_images	2021-06-04 17:19:59.832938-04
+52	api	0029_alter_product_images	2021-06-04 17:24:22.148767-04
+53	api	0030_featured	2021-06-06 11:07:19.195149-04
+54	api	0031_auto_20210606_1109	2021-06-06 11:09:15.302356-04
+55	api	0032_coupons	2021-06-09 16:55:35.515648-04
+56	api	0033_coupons_discount	2021-06-17 02:28:52.058507-04
+57	api	0034_alter_coupons_code	2021-06-17 02:30:02.126743-04
+58	api	0035_temporder	2021-06-19 21:17:04.076594-04
+59	api	0036_alter_temporder_total	2021-06-19 21:18:39.659323-04
+60	api	0037_temporder_date_added	2021-06-19 21:23:13.788435-04
+61	api	0038_rename_cart_temporder_info	2021-06-19 21:25:43.430955-04
+62	api	0039_temporder_user	2021-06-19 22:20:34.477211-04
+63	api	0040_alter_temporder_user	2021-06-19 22:29:14.315389-04
+64	api	0041_shippinginfo_email	2021-06-20 04:03:34.290831-04
+65	api	0042_order_total	2021-06-20 06:15:25.816075-04
+66	api	0043_order_status	2021-06-20 07:41:32.376566-04
+67	api	0044_resettoken	2021-06-21 17:31:59.968263-04
+68	api	0045_alter_resettoken_user	2021-06-21 17:35:03.728271-04
+\.
+
+
+--
+-- Data for Name: django_session; Type: TABLE DATA; Schema: public; Owner: Eric
+--
+
+COPY public.django_session (session_key, session_data, expire_date) FROM stdin;
+7mt7f4en25f7sym5r637vne3qj90ti9d	.eJxVjDsOwjAQRO_iGlm7xAaHkp4zROv94ABKpDipEHcnkVJAM8W8N_N2HS1z6ZaqU9eLuzh0h98uEz912IA8aLiPnsdhnvrsN8XvtPrbKPq67u7fQaFa1nUgyGZiGSI2zGcNEgyPjIlbAk5AcAJDQSNtY5swW24CUBSNuqb7fAEMgjkD:1li0ow:PSIkY_4rKJdtfyNqbIk62dccNyBoSQB7iGLZdIVofmc	2021-05-29 16:23:34.006-04
+fzljgd9xznna32uhvte9cv1tmnt5ftqd	.eJxVjEEOwiAQRe_C2hCnUKAu3fcMZJgZpGpKUtqV8e7apAvd_vfef6mI21ri1mSJE6uLAnX63RLSQ-Yd8B3nW9VU53WZkt4VfdCmx8ryvB7u30HBVr51Bgcg7MEyUCZPFs7EAjkNxuSUXEcSgoNOwJlgnUXsBt9T7il4ZFHvD_QTOGA:1lcfv1:NVM5sae9dwvDADWypGnNqZqmlH8RLRweB2yk1OAZXtA	2021-05-14 23:03:47.233-04
+z9460skberwlvbv6in1e9gsi27e7fczx	.eJxVjEEOgjAQRe_StWloaQfGpXvP0MxMB0FNSSisjHdXEha6_e-9_zKJtnVMW9UlTdmcjTOn341JHlp2kO9UbrOVuazLxHZX7EGrvc5Zn5fD_TsYqY7fmoYGhihAClGBe8cSEF2rLIq9I_RtbLDzKOKRY98xQqcxDKjO5wDm_QHwhTfG:1lnbjs:OtZA-v0qXXZfsAduhZQamGG2QrpDsrRfZNs2w-pCb6U	2021-06-14 02:49:28.585-04
+hsmp4tqxe9hrza0fu91uvjz9nlaftviq	.eJxVjEEOgjAQRe_StWloaQfGpXvP0MxMB0FNSSisjHdXEha6_e-9_zKJtnVMW9UlTdmcjTOn341JHlp2kO9UbrOVuazLxHZX7EGrvc5Zn5fD_TsYqY7fmoYGhihAClGBe8cSEF2rLIq9I_RtbLDzKOKRY98xQqcxDKjO5wDm_QHwhTfG:1lp6Ab:jcZARGG6-Gj_XvTsb9_tIGE6UM3PWIH_QQoWAjSdpKw	2021-06-18 05:31:13.528734-04
+w5hu7pbcarbkof5ya0fyxqopzuc7whbu	.eJxVjMsOwiAQRf-FtSFAebp07zeQmQGkaiAp7cr479qkC93ec859sQjbWuM28hLnxM7MsNPvhkCP3HaQ7tBunVNv6zIj3xV-0MGvPeXn5XD_DiqM-q0RhBUmkC7BS5Nt1pPOyQFhmYQFUKZI8l4hTE5SSGRCIaWkEE4mksjeH-5eOCA:1luNle:oOteA5exuPpdyZgGAsT04HHoxuH5Wf6lGWcmkLB22_A	2021-07-02 19:19:18.242837-04
+v7rcufcao8jy0m99c5s94zw06nub65lz	eyJhdXRoIjoiODY3MzVmYzI1OThlYmZiZWFkN2M1MzdiNWUxOGE3YjhlOWNjZDQzNCJ9:1lw6Lk:vjj1sJD8q9nlh7nyIjZmmCB8mTpLWyIASaUZfrNO7DQ	2021-07-07 13:07:40.772629-04
+4mpl5xm1x6yg86z4tzyglh4md8stpc1n	e30:1lwLWH:ESx-DDJApjhVTzIhgzxbWqT2wh9HW02FRCcjCPLnTDY	2021-07-08 05:19:33.252032-04
+omhm0j9z23n6r9htjjpp84ni3p4dh1rf	e30:1lwRBo:bfZyJMigJoyL2SSOV3IHN5GmxV0eCfGppvEmzXcnOhw	2021-07-08 11:22:48.468034-04
+etraf678qntbldxl050h848eykvrh8rv	eyJhdXRoIjoiMWY4OWE4YzgxMTViYTRlNWEzMmU1ZTVjZTQ4MzYzZjUyNzBhM2ZjNSJ9:1lxd8d:kPF2YqQpUo3jkAlt6BB0-saee0XFy7Kx3xlslWtkhnM	2021-07-11 18:20:27.224652-04
+t8kkm9nbt5qv49dp5r6ckzlcwyykemhw	e30:1lyUmK:WxjF5F7ZxZvZwU47hfvAWeA5E5FZpEI5KmJuQl3H1nM	2021-07-14 03:37:00.556812-04
+qfrmqq3241telj0ewrcfkd19ih7jjchi	e30:1lyV9Y:uhCErcNw166C6_owykxG55gYEF6t68HKESrL50Gu9Oc	2021-07-14 04:01:00.133673-04
+0u7pxwcghqhgy3uld1lyq06zoq1lj36d	e30:1lyVO4:hJTVkQAyDiWu2b4pRh8DgJk9rt84eb15nMS4WKwV0Nk	2021-07-14 04:16:00.769292-04
+41w25gwfm3xd9xh9ir6s3ul8n96xp2ns	e30:1lyVO9:EgLsYEFVfOoBdLE_N69LO2JOEgbJf_1_GGeI-f_y65E	2021-07-14 04:16:05.335065-04
+u08ziwnmg04mutabg8xi9axolpkrg1aq	eyJhdXRoIjoiMWUxMjkyMjQ3NGJmY2QyMjVlNzAyZmJmMGNlNmVmMjMxNGIyODIxYSJ9:1lyVhm:hPWIgFheZbNuXAd_g8HMH1qgHfo0rX1zZ5RZfRJYx3w	2021-07-14 04:36:22.987272-04
+1gvul8no6pf6mi9e0at6cq2a0iwx8wf6	.eJxVjMsOwiAQRf-FtSFAebp07zeQmQGkaiAp7cr479qkC93ec859sQjbWuM28hLnxM7MsNPvhkCP3HaQ7tBunVNv6zIj3xV-0MGvPeXn5XD_DiqM-q0RhBUmkC7BS5Nt1pPOyQFhmYQFUKZI8l4hTE5SSGRCIaWkEE4mksjeH-5eOCA:1m4hcX:thRpQSTZ_A9vtkh-tpwZSyOOhxTtGvtwgSLd7bDJZng	2021-07-31 06:32:33.386479-04
+sevaczg0oe78u1vq9ttge77q8fw8d3yk	eyJhdXRoIjoiZDlkMjk2ZDE3NzNhNTg0ZjQ0YWFmNmQ4OWY4ZTg0NWEwODFkNmU4YyJ9:1m4jcO:9HMt3WRYnLCtP034K8uS4q55J0MCgj7B4wZ0yUtABWo	2021-07-31 08:40:32.126173-04
+nx4qyilrus8i34vyexvrrvx7cgnh0uae	e30:1mDhnh:B4A_K6fX31bzzCHEdRsnz1ac2BQDBJFIMX0zwcI4E-s	2021-08-25 02:33:17.873938-04
+9u15hd1q0i4j5d4ifezyedw7frazpqo9	e30:1mWmPU:Wy799e3hSnq3ym0WyaU6tqnpw25aUdTMVABsrR8_6qA	2021-10-16 17:19:08.128825-04
+\.
+
+
+--
+-- Name: api_coupons_id_seq; Type: SEQUENCE SET; Schema: public; Owner: Eric
+--
+
+SELECT pg_catalog.setval('public.api_coupons_id_seq', 1, true);
+
+
+--
+-- Name: api_customer_id_seq; Type: SEQUENCE SET; Schema: public; Owner: Eric
+--
+
+SELECT pg_catalog.setval('public.api_customer_id_seq', 21, true);
+
+
+--
+-- Name: api_featured_id_seq; Type: SEQUENCE SET; Schema: public; Owner: Eric
+--
+
+SELECT pg_catalog.setval('public.api_featured_id_seq', 4, true);
+
+
+--
+-- Name: api_order_id_seq; Type: SEQUENCE SET; Schema: public; Owner: Eric
+--
+
+SELECT pg_catalog.setval('public.api_order_id_seq', 12, true);
+
+
+--
+-- Name: api_orderitem_id_seq; Type: SEQUENCE SET; Schema: public; Owner: Eric
+--
+
+SELECT pg_catalog.setval('public.api_orderitem_id_seq', 22, true);
+
+
+--
+-- Name: api_product_id_seq; Type: SEQUENCE SET; Schema: public; Owner: Eric
+--
+
+SELECT pg_catalog.setval('public.api_product_id_seq', 106, true);
+
+
+--
+-- Name: api_resettoken_id_seq; Type: SEQUENCE SET; Schema: public; Owner: Eric
+--
+
+SELECT pg_catalog.setval('public.api_resettoken_id_seq', 5, true);
+
+
+--
+-- Name: api_shippinginfo_id_seq; Type: SEQUENCE SET; Schema: public; Owner: Eric
+--
+
+SELECT pg_catalog.setval('public.api_shippinginfo_id_seq', 10, true);
+
+
+--
+-- Name: api_temporder_id_seq; Type: SEQUENCE SET; Schema: public; Owner: Eric
+--
+
+SELECT pg_catalog.setval('public.api_temporder_id_seq', 44, true);
+
+
+--
+-- Name: auth_group_id_seq; Type: SEQUENCE SET; Schema: public; Owner: Eric
+--
+
+SELECT pg_catalog.setval('public.auth_group_id_seq', 1, false);
+
+
+--
+-- Name: auth_group_permissions_id_seq; Type: SEQUENCE SET; Schema: public; Owner: Eric
+--
+
+SELECT pg_catalog.setval('public.auth_group_permissions_id_seq', 1, false);
+
+
+--
+-- Name: auth_permission_id_seq; Type: SEQUENCE SET; Schema: public; Owner: Eric
+--
+
+SELECT pg_catalog.setval('public.auth_permission_id_seq', 96, true);
+
+
+--
+-- Name: auth_user_groups_id_seq; Type: SEQUENCE SET; Schema: public; Owner: Eric
+--
+
+SELECT pg_catalog.setval('public.auth_user_groups_id_seq', 1, false);
+
+
+--
+-- Name: auth_user_id_seq; Type: SEQUENCE SET; Schema: public; Owner: Eric
+--
+
+SELECT pg_catalog.setval('public.auth_user_id_seq', 7, true);
+
+
+--
+-- Name: auth_user_user_permissions_id_seq; Type: SEQUENCE SET; Schema: public; Owner: Eric
+--
+
+SELECT pg_catalog.setval('public.auth_user_user_permissions_id_seq', 1, false);
+
+
+--
+-- Name: django_admin_log_id_seq; Type: SEQUENCE SET; Schema: public; Owner: Eric
+--
+
+SELECT pg_catalog.setval('public.django_admin_log_id_seq', 235, true);
+
+
+--
+-- Name: django_content_type_id_seq; Type: SEQUENCE SET; Schema: public; Owner: Eric
+--
+
+SELECT pg_catalog.setval('public.django_content_type_id_seq', 17, true);
+
+
+--
+-- Name: django_migrations_id_seq; Type: SEQUENCE SET; Schema: public; Owner: Eric
+--
+
+SELECT pg_catalog.setval('public.django_migrations_id_seq', 68, true);
+
+
+--
+-- Name: api_coupons api_coupons_pkey; Type: CONSTRAINT; Schema: public; Owner: Eric
+--
+
+ALTER TABLE ONLY public.api_coupons
+    ADD CONSTRAINT api_coupons_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: api_customer api_customer_pkey; Type: CONSTRAINT; Schema: public; Owner: Eric
+--
+
+ALTER TABLE ONLY public.api_customer
+    ADD CONSTRAINT api_customer_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: api_customer api_customer_user_id_key; Type: CONSTRAINT; Schema: public; Owner: Eric
+--
+
+ALTER TABLE ONLY public.api_customer
+    ADD CONSTRAINT api_customer_user_id_key UNIQUE (user_id);
+
+
+--
+-- Name: api_featured api_featured_pkey; Type: CONSTRAINT; Schema: public; Owner: Eric
+--
+
+ALTER TABLE ONLY public.api_featured
+    ADD CONSTRAINT api_featured_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: api_order api_order_pkey; Type: CONSTRAINT; Schema: public; Owner: Eric
+--
+
+ALTER TABLE ONLY public.api_order
+    ADD CONSTRAINT api_order_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: api_orderitem api_orderitem_pkey; Type: CONSTRAINT; Schema: public; Owner: Eric
+--
+
+ALTER TABLE ONLY public.api_orderitem
+    ADD CONSTRAINT api_orderitem_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: api_product api_product_pkey; Type: CONSTRAINT; Schema: public; Owner: Eric
+--
+
+ALTER TABLE ONLY public.api_product
+    ADD CONSTRAINT api_product_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: api_resettoken api_resettoken_pkey; Type: CONSTRAINT; Schema: public; Owner: Eric
+--
+
+ALTER TABLE ONLY public.api_resettoken
+    ADD CONSTRAINT api_resettoken_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: api_resettoken api_resettoken_user_id_4b3d42c0_uniq; Type: CONSTRAINT; Schema: public; Owner: Eric
+--
+
+ALTER TABLE ONLY public.api_resettoken
+    ADD CONSTRAINT api_resettoken_user_id_4b3d42c0_uniq UNIQUE (user_id);
+
+
+--
+-- Name: api_shippinginfo api_shippinginfo_pkey; Type: CONSTRAINT; Schema: public; Owner: Eric
+--
+
+ALTER TABLE ONLY public.api_shippinginfo
+    ADD CONSTRAINT api_shippinginfo_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: api_temporder api_temporder_pkey; Type: CONSTRAINT; Schema: public; Owner: Eric
+--
+
+ALTER TABLE ONLY public.api_temporder
+    ADD CONSTRAINT api_temporder_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: auth_group auth_group_name_key; Type: CONSTRAINT; Schema: public; Owner: Eric
+--
+
+ALTER TABLE ONLY public.auth_group
+    ADD CONSTRAINT auth_group_name_key UNIQUE (name);
+
+
+--
+-- Name: auth_group_permissions auth_group_permissions_group_id_permission_id_0cd325b0_uniq; Type: CONSTRAINT; Schema: public; Owner: Eric
+--
+
+ALTER TABLE ONLY public.auth_group_permissions
+    ADD CONSTRAINT auth_group_permissions_group_id_permission_id_0cd325b0_uniq UNIQUE (group_id, permission_id);
+
+
+--
+-- Name: auth_group_permissions auth_group_permissions_pkey; Type: CONSTRAINT; Schema: public; Owner: Eric
+--
+
+ALTER TABLE ONLY public.auth_group_permissions
+    ADD CONSTRAINT auth_group_permissions_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: auth_group auth_group_pkey; Type: CONSTRAINT; Schema: public; Owner: Eric
+--
+
+ALTER TABLE ONLY public.auth_group
+    ADD CONSTRAINT auth_group_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: auth_permission auth_permission_content_type_id_codename_01ab375a_uniq; Type: CONSTRAINT; Schema: public; Owner: Eric
+--
+
+ALTER TABLE ONLY public.auth_permission
+    ADD CONSTRAINT auth_permission_content_type_id_codename_01ab375a_uniq UNIQUE (content_type_id, codename);
+
+
+--
+-- Name: auth_permission auth_permission_pkey; Type: CONSTRAINT; Schema: public; Owner: Eric
+--
+
+ALTER TABLE ONLY public.auth_permission
+    ADD CONSTRAINT auth_permission_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: auth_user_groups auth_user_groups_pkey; Type: CONSTRAINT; Schema: public; Owner: Eric
+--
+
+ALTER TABLE ONLY public.auth_user_groups
+    ADD CONSTRAINT auth_user_groups_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: auth_user_groups auth_user_groups_user_id_group_id_94350c0c_uniq; Type: CONSTRAINT; Schema: public; Owner: Eric
+--
+
+ALTER TABLE ONLY public.auth_user_groups
+    ADD CONSTRAINT auth_user_groups_user_id_group_id_94350c0c_uniq UNIQUE (user_id, group_id);
+
+
+--
+-- Name: auth_user auth_user_pkey; Type: CONSTRAINT; Schema: public; Owner: Eric
+--
+
+ALTER TABLE ONLY public.auth_user
+    ADD CONSTRAINT auth_user_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: auth_user_user_permissions auth_user_user_permissions_pkey; Type: CONSTRAINT; Schema: public; Owner: Eric
+--
+
+ALTER TABLE ONLY public.auth_user_user_permissions
+    ADD CONSTRAINT auth_user_user_permissions_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: auth_user_user_permissions auth_user_user_permissions_user_id_permission_id_14a6b632_uniq; Type: CONSTRAINT; Schema: public; Owner: Eric
+--
+
+ALTER TABLE ONLY public.auth_user_user_permissions
+    ADD CONSTRAINT auth_user_user_permissions_user_id_permission_id_14a6b632_uniq UNIQUE (user_id, permission_id);
+
+
+--
+-- Name: auth_user auth_user_username_key; Type: CONSTRAINT; Schema: public; Owner: Eric
+--
+
+ALTER TABLE ONLY public.auth_user
+    ADD CONSTRAINT auth_user_username_key UNIQUE (username);
+
+
+--
+-- Name: authtoken_token authtoken_token_pkey; Type: CONSTRAINT; Schema: public; Owner: Eric
+--
+
+ALTER TABLE ONLY public.authtoken_token
+    ADD CONSTRAINT authtoken_token_pkey PRIMARY KEY (key);
+
+
+--
+-- Name: authtoken_token authtoken_token_user_id_key; Type: CONSTRAINT; Schema: public; Owner: Eric
+--
+
+ALTER TABLE ONLY public.authtoken_token
+    ADD CONSTRAINT authtoken_token_user_id_key UNIQUE (user_id);
+
+
+--
+-- Name: django_admin_log django_admin_log_pkey; Type: CONSTRAINT; Schema: public; Owner: Eric
+--
+
+ALTER TABLE ONLY public.django_admin_log
+    ADD CONSTRAINT django_admin_log_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: django_content_type django_content_type_app_label_model_76bd3d3b_uniq; Type: CONSTRAINT; Schema: public; Owner: Eric
+--
+
+ALTER TABLE ONLY public.django_content_type
+    ADD CONSTRAINT django_content_type_app_label_model_76bd3d3b_uniq UNIQUE (app_label, model);
+
+
+--
+-- Name: django_content_type django_content_type_pkey; Type: CONSTRAINT; Schema: public; Owner: Eric
+--
+
+ALTER TABLE ONLY public.django_content_type
+    ADD CONSTRAINT django_content_type_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: django_migrations django_migrations_pkey; Type: CONSTRAINT; Schema: public; Owner: Eric
+--
+
+ALTER TABLE ONLY public.django_migrations
+    ADD CONSTRAINT django_migrations_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: django_session django_session_pkey; Type: CONSTRAINT; Schema: public; Owner: Eric
+--
+
+ALTER TABLE ONLY public.django_session
+    ADD CONSTRAINT django_session_pkey PRIMARY KEY (session_key);
+
+
+--
+-- Name: api_featured_product_id_e657f641; Type: INDEX; Schema: public; Owner: Eric
+--
+
+CREATE INDEX api_featured_product_id_e657f641 ON public.api_featured USING btree (product_id);
+
+
+--
+-- Name: api_order_customer_id_8cb4e7b7; Type: INDEX; Schema: public; Owner: Eric
+--
+
+CREATE INDEX api_order_customer_id_8cb4e7b7 ON public.api_order USING btree (customer_id);
+
+
+--
+-- Name: api_orderitem_order_id_f9c0afc0; Type: INDEX; Schema: public; Owner: Eric
+--
+
+CREATE INDEX api_orderitem_order_id_f9c0afc0 ON public.api_orderitem USING btree (order_id);
+
+
+--
+-- Name: api_orderitem_product_id_afd9cdd0; Type: INDEX; Schema: public; Owner: Eric
+--
+
+CREATE INDEX api_orderitem_product_id_afd9cdd0 ON public.api_orderitem USING btree (product_id);
+
+
+--
+-- Name: api_shippinginfo_customer_id_9d6e1d82; Type: INDEX; Schema: public; Owner: Eric
+--
+
+CREATE INDEX api_shippinginfo_customer_id_9d6e1d82 ON public.api_shippinginfo USING btree (customer_id);
+
+
+--
+-- Name: api_shippinginfo_order_id_f33e64ad; Type: INDEX; Schema: public; Owner: Eric
+--
+
+CREATE INDEX api_shippinginfo_order_id_f33e64ad ON public.api_shippinginfo USING btree (order_id);
+
+
+--
+-- Name: api_temporder_user_id_909b8673; Type: INDEX; Schema: public; Owner: Eric
+--
+
+CREATE INDEX api_temporder_user_id_909b8673 ON public.api_temporder USING btree (user_id);
+
+
+--
+-- Name: auth_group_name_a6ea08ec_like; Type: INDEX; Schema: public; Owner: Eric
+--
+
+CREATE INDEX auth_group_name_a6ea08ec_like ON public.auth_group USING btree (name varchar_pattern_ops);
+
+
+--
+-- Name: auth_group_permissions_group_id_b120cbf9; Type: INDEX; Schema: public; Owner: Eric
+--
+
+CREATE INDEX auth_group_permissions_group_id_b120cbf9 ON public.auth_group_permissions USING btree (group_id);
+
+
+--
+-- Name: auth_group_permissions_permission_id_84c5c92e; Type: INDEX; Schema: public; Owner: Eric
+--
+
+CREATE INDEX auth_group_permissions_permission_id_84c5c92e ON public.auth_group_permissions USING btree (permission_id);
+
+
+--
+-- Name: auth_permission_content_type_id_2f476e4b; Type: INDEX; Schema: public; Owner: Eric
+--
+
+CREATE INDEX auth_permission_content_type_id_2f476e4b ON public.auth_permission USING btree (content_type_id);
+
+
+--
+-- Name: auth_user_groups_group_id_97559544; Type: INDEX; Schema: public; Owner: Eric
+--
+
+CREATE INDEX auth_user_groups_group_id_97559544 ON public.auth_user_groups USING btree (group_id);
+
+
+--
+-- Name: auth_user_groups_user_id_6a12ed8b; Type: INDEX; Schema: public; Owner: Eric
+--
+
+CREATE INDEX auth_user_groups_user_id_6a12ed8b ON public.auth_user_groups USING btree (user_id);
+
+
+--
+-- Name: auth_user_user_permissions_permission_id_1fbb5f2c; Type: INDEX; Schema: public; Owner: Eric
+--
+
+CREATE INDEX auth_user_user_permissions_permission_id_1fbb5f2c ON public.auth_user_user_permissions USING btree (permission_id);
+
+
+--
+-- Name: auth_user_user_permissions_user_id_a95ead1b; Type: INDEX; Schema: public; Owner: Eric
+--
+
+CREATE INDEX auth_user_user_permissions_user_id_a95ead1b ON public.auth_user_user_permissions USING btree (user_id);
+
+
+--
+-- Name: auth_user_username_6821ab7c_like; Type: INDEX; Schema: public; Owner: Eric
+--
+
+CREATE INDEX auth_user_username_6821ab7c_like ON public.auth_user USING btree (username varchar_pattern_ops);
+
+
+--
+-- Name: authtoken_token_key_10f0b77e_like; Type: INDEX; Schema: public; Owner: Eric
+--
+
+CREATE INDEX authtoken_token_key_10f0b77e_like ON public.authtoken_token USING btree (key varchar_pattern_ops);
+
+
+--
+-- Name: django_admin_log_content_type_id_c4bce8eb; Type: INDEX; Schema: public; Owner: Eric
+--
+
+CREATE INDEX django_admin_log_content_type_id_c4bce8eb ON public.django_admin_log USING btree (content_type_id);
+
+
+--
+-- Name: django_admin_log_user_id_c564eba6; Type: INDEX; Schema: public; Owner: Eric
+--
+
+CREATE INDEX django_admin_log_user_id_c564eba6 ON public.django_admin_log USING btree (user_id);
+
+
+--
+-- Name: django_session_expire_date_a5c62663; Type: INDEX; Schema: public; Owner: Eric
+--
+
+CREATE INDEX django_session_expire_date_a5c62663 ON public.django_session USING btree (expire_date);
+
+
+--
+-- Name: django_session_session_key_c0390e0f_like; Type: INDEX; Schema: public; Owner: Eric
+--
+
+CREATE INDEX django_session_session_key_c0390e0f_like ON public.django_session USING btree (session_key varchar_pattern_ops);
+
+
+--
+-- Name: api_customer api_customer_user_id_905bea02_fk_auth_user_id; Type: FK CONSTRAINT; Schema: public; Owner: Eric
+--
+
+ALTER TABLE ONLY public.api_customer
+    ADD CONSTRAINT api_customer_user_id_905bea02_fk_auth_user_id FOREIGN KEY (user_id) REFERENCES public.auth_user(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- Name: api_featured api_featured_product_id_e657f641_fk_api_product_id; Type: FK CONSTRAINT; Schema: public; Owner: Eric
+--
+
+ALTER TABLE ONLY public.api_featured
+    ADD CONSTRAINT api_featured_product_id_e657f641_fk_api_product_id FOREIGN KEY (product_id) REFERENCES public.api_product(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- Name: api_order api_order_customer_id_8cb4e7b7_fk_api_customer_id; Type: FK CONSTRAINT; Schema: public; Owner: Eric
+--
+
+ALTER TABLE ONLY public.api_order
+    ADD CONSTRAINT api_order_customer_id_8cb4e7b7_fk_api_customer_id FOREIGN KEY (customer_id) REFERENCES public.api_customer(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- Name: api_orderitem api_orderitem_order_id_f9c0afc0_fk_api_order_id; Type: FK CONSTRAINT; Schema: public; Owner: Eric
+--
+
+ALTER TABLE ONLY public.api_orderitem
+    ADD CONSTRAINT api_orderitem_order_id_f9c0afc0_fk_api_order_id FOREIGN KEY (order_id) REFERENCES public.api_order(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- Name: api_orderitem api_orderitem_product_id_afd9cdd0_fk_api_product_id; Type: FK CONSTRAINT; Schema: public; Owner: Eric
+--
+
+ALTER TABLE ONLY public.api_orderitem
+    ADD CONSTRAINT api_orderitem_product_id_afd9cdd0_fk_api_product_id FOREIGN KEY (product_id) REFERENCES public.api_product(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- Name: api_resettoken api_resettoken_user_id_4b3d42c0_fk_auth_user_id; Type: FK CONSTRAINT; Schema: public; Owner: Eric
+--
+
+ALTER TABLE ONLY public.api_resettoken
+    ADD CONSTRAINT api_resettoken_user_id_4b3d42c0_fk_auth_user_id FOREIGN KEY (user_id) REFERENCES public.auth_user(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- Name: api_shippinginfo api_shippinginfo_customer_id_9d6e1d82_fk_api_customer_id; Type: FK CONSTRAINT; Schema: public; Owner: Eric
+--
+
+ALTER TABLE ONLY public.api_shippinginfo
+    ADD CONSTRAINT api_shippinginfo_customer_id_9d6e1d82_fk_api_customer_id FOREIGN KEY (customer_id) REFERENCES public.api_customer(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- Name: api_shippinginfo api_shippinginfo_order_id_f33e64ad_fk_api_order_id; Type: FK CONSTRAINT; Schema: public; Owner: Eric
+--
+
+ALTER TABLE ONLY public.api_shippinginfo
+    ADD CONSTRAINT api_shippinginfo_order_id_f33e64ad_fk_api_order_id FOREIGN KEY (order_id) REFERENCES public.api_order(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- Name: api_temporder api_temporder_user_id_909b8673_fk_auth_user_id; Type: FK CONSTRAINT; Schema: public; Owner: Eric
+--
+
+ALTER TABLE ONLY public.api_temporder
+    ADD CONSTRAINT api_temporder_user_id_909b8673_fk_auth_user_id FOREIGN KEY (user_id) REFERENCES public.auth_user(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- Name: auth_group_permissions auth_group_permissio_permission_id_84c5c92e_fk_auth_perm; Type: FK CONSTRAINT; Schema: public; Owner: Eric
+--
+
+ALTER TABLE ONLY public.auth_group_permissions
+    ADD CONSTRAINT auth_group_permissio_permission_id_84c5c92e_fk_auth_perm FOREIGN KEY (permission_id) REFERENCES public.auth_permission(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- Name: auth_group_permissions auth_group_permissions_group_id_b120cbf9_fk_auth_group_id; Type: FK CONSTRAINT; Schema: public; Owner: Eric
+--
+
+ALTER TABLE ONLY public.auth_group_permissions
+    ADD CONSTRAINT auth_group_permissions_group_id_b120cbf9_fk_auth_group_id FOREIGN KEY (group_id) REFERENCES public.auth_group(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- Name: auth_permission auth_permission_content_type_id_2f476e4b_fk_django_co; Type: FK CONSTRAINT; Schema: public; Owner: Eric
+--
+
+ALTER TABLE ONLY public.auth_permission
+    ADD CONSTRAINT auth_permission_content_type_id_2f476e4b_fk_django_co FOREIGN KEY (content_type_id) REFERENCES public.django_content_type(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- Name: auth_user_groups auth_user_groups_group_id_97559544_fk_auth_group_id; Type: FK CONSTRAINT; Schema: public; Owner: Eric
+--
+
+ALTER TABLE ONLY public.auth_user_groups
+    ADD CONSTRAINT auth_user_groups_group_id_97559544_fk_auth_group_id FOREIGN KEY (group_id) REFERENCES public.auth_group(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- Name: auth_user_groups auth_user_groups_user_id_6a12ed8b_fk_auth_user_id; Type: FK CONSTRAINT; Schema: public; Owner: Eric
+--
+
+ALTER TABLE ONLY public.auth_user_groups
+    ADD CONSTRAINT auth_user_groups_user_id_6a12ed8b_fk_auth_user_id FOREIGN KEY (user_id) REFERENCES public.auth_user(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- Name: auth_user_user_permissions auth_user_user_permi_permission_id_1fbb5f2c_fk_auth_perm; Type: FK CONSTRAINT; Schema: public; Owner: Eric
+--
+
+ALTER TABLE ONLY public.auth_user_user_permissions
+    ADD CONSTRAINT auth_user_user_permi_permission_id_1fbb5f2c_fk_auth_perm FOREIGN KEY (permission_id) REFERENCES public.auth_permission(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- Name: auth_user_user_permissions auth_user_user_permissions_user_id_a95ead1b_fk_auth_user_id; Type: FK CONSTRAINT; Schema: public; Owner: Eric
+--
+
+ALTER TABLE ONLY public.auth_user_user_permissions
+    ADD CONSTRAINT auth_user_user_permissions_user_id_a95ead1b_fk_auth_user_id FOREIGN KEY (user_id) REFERENCES public.auth_user(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- Name: authtoken_token authtoken_token_user_id_35299eff_fk_auth_user_id; Type: FK CONSTRAINT; Schema: public; Owner: Eric
+--
+
+ALTER TABLE ONLY public.authtoken_token
+    ADD CONSTRAINT authtoken_token_user_id_35299eff_fk_auth_user_id FOREIGN KEY (user_id) REFERENCES public.auth_user(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- Name: django_admin_log django_admin_log_content_type_id_c4bce8eb_fk_django_co; Type: FK CONSTRAINT; Schema: public; Owner: Eric
+--
+
+ALTER TABLE ONLY public.django_admin_log
+    ADD CONSTRAINT django_admin_log_content_type_id_c4bce8eb_fk_django_co FOREIGN KEY (content_type_id) REFERENCES public.django_content_type(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- Name: django_admin_log django_admin_log_user_id_c564eba6_fk_auth_user_id; Type: FK CONSTRAINT; Schema: public; Owner: Eric
+--
+
+ALTER TABLE ONLY public.django_admin_log
+    ADD CONSTRAINT django_admin_log_user_id_c564eba6_fk_auth_user_id FOREIGN KEY (user_id) REFERENCES public.auth_user(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- PostgreSQL database dump complete
+--
+

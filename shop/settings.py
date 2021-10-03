@@ -41,7 +41,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'api.apps.ApiConfig',
-    'corsheaders',
+    # 'corsheaders',
     'rest_framework.authtoken'
 ]
 
@@ -58,8 +58,8 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'corsheaders.middleware.CorsMiddleware',
-    'whitenoise.middleware.WhiteNoiseMiddleware'
+    # 'corsheaders.middleware.CorsMiddleware',
+    # 'whitenoise.middleware.WhiteNoiseMiddleware'
 ]
 
 CORS_ORIGIN_WHITELIST = [
@@ -105,8 +105,8 @@ DATABASES = {
          'NAME': 'shop132',
          'USER': 'postgres',
          'PASSWORD': os.getenv("DATABASE_PASSWORD"),
-         'HOST': 'localhost',
-         'PORT': '',
+         'HOST': 'db',
+         'PORT': '5432',
       }
     # 'default': {
     #     'ENGINE': 'django.db.backends.sqlite3',
@@ -162,5 +162,5 @@ STATICFILES_DIRS = [
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 
-DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+# DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+# STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'

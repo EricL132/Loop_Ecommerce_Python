@@ -16,16 +16,16 @@ import BottomMessage from './components/BottomMessage/BottomMessage';
 function App() {
 
 
-  
+
   return (
     <Router>
-      <Navbar/>
+      <Navbar />
       <Switch>
-        <Route path="/pages/men/" render={()=><ProductsPage typeOfPage="men"/>}></Route>
-        <Route path="/pages/women/" render={()=><ProductsPage typeOfPage="women"/>} ></Route>
-        <Route path="/pages/kids/" render={()=><ProductsPage typeOfPage="kids"/>} ></Route>
+        <Route path="/pages/men/" render={() => <ProductsPage typeOfPage="men" />}></Route>
+        <Route path="/pages/women/" render={() => <ProductsPage typeOfPage="women" />} ></Route>
+        <Route path="/pages/kids/" render={() => <ProductsPage typeOfPage="kids" />} ></Route>
 
-        <Route path="/pages/product/:id" exact render={()=><SpecificProductPage/>} ></Route>
+        <Route path="/pages/product/:id" exact render={() => <SpecificProductPage />} ></Route>
         <Route path="/account/login" exact component={LoginPage}></Route>
         <Route path="/account/register" exact component={RegisterPage}></Route>
         <Route path="/account/forgot" exact component={ForgotPassword}></Route>
@@ -35,7 +35,6 @@ function App() {
         <Route path="/order/:id" exact component={OrderSummary}></Route>
         <Route path="/account/reset/:token" exact component={ResetPage}></Route>
         <Route path="/" exact component={Home}></Route>
-
       </Switch>
       <BottomMessage></BottomMessage>
     </Router>
