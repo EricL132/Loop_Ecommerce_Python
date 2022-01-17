@@ -4,6 +4,10 @@ body, html, #root {
 
 }
 
+:root{
+  --error_red : rgb(210, 0, 0);
+}
+
 * {
   box-sizing: border-box;
 }

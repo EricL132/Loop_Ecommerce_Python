@@ -208,13 +208,13 @@ export default function CheckOutPage() {
                 <div className="right_side_container">
                     <div className="customer_info_container">
                         <h1 className="shipping_header">Contact Infomation {!loggedIn ? <Link to="/account/login" onClick={closeCart}><button className="account_button" >Have an Account?</button></Link> : null}</h1>
-                        <form onChange={changeCustomerInfo}>
-                            <input id="email" autoComplete="new-password" className="checkout_inputs" placeholder="Email" style={{ marginTop: "0px" }}></input>
+                        <form onChange={changeCustomerInfo} className="checkout_form" spellCheck="false">
+                            <input id="email" autoComplete="new-password" className="checkout_inputs" placeholder="Email" ></input>
                             <h1 className="shipping_header">Shipping Infomation</h1>
                             <input id="first_name" autoComplete="new-password" className="smaller_checkout_inputs checkout_inputs " placeholder="First Name"></input>
                             <input id="last_name" autoComplete="new-password" className="smaller_checkout_inputs checkout_inputs " placeholder="Last Name"></input>
 
-                            <input id="address" autoComplete="new-password" className="checkout_inputs" placeholder="Address" style={{ marginTop: "0px" }}></input>
+                            <input id="address" autoComplete="new-password" className="checkout_inputs" placeholder="Address" ></input>
                             <input id="zip" autoComplete="new-password" className=" smaller_checkout_inputs checkout_inputs " placeholder="Zip"></input>
                             <input id="city" autoComplete="new-password" className="smaller_checkout_inputs checkout_inputs" placeholder="City"></input>
                             <select id="state" className="state_select" >
@@ -278,8 +278,8 @@ export default function CheckOutPage() {
                         </div>
                         <div id="payment_button">
                             <button className="payment_options_button" onClick={ValidateCheckOut}>Continue To Payment</button>
-                            <span className="payment_error">{paymentError}</span>
                         </div>
+                        <span className="payment_error">{paymentError}</span>
 
                     </div>
                 </div>
