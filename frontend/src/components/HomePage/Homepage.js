@@ -65,7 +65,7 @@ export default function HomePage(props) {
 
             <div className="home-mid-container">
                 <span className="coupon-span">Use code JGFNB3 for 20% off</span>
-                <div>
+                <div className="home_nav_container">
                     <Link to="/pages/men/sneakers"><button className="home-button mens-button fill-b">Mens</button></Link>
                     <Link to="/pages/women/sneakers"><button className="home-button womens-button fill-b">Womens</button></Link>
                     <Link to="/pages/kids/sneakers"><button className="home-button kids-button fill-b">Kids</button></Link>
