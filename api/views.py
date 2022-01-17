@@ -15,7 +15,7 @@ import smtplib
 import os
 from dotenv import load_dotenv
 
-from . import semail 
+from . import semail
 load_dotenv()
 class GetProducts(APIView):
     def get(self,request,format=None):

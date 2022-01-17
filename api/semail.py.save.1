@@ -6,7 +6,7 @@ import base64
 from email import encoders
 
 #needed for attachment
-import smtplib  
+import smtplib
 import mimetypes
 from email import encoders
 from email.message import Message
@@ -18,7 +18,7 @@ from email.mime.text import MIMEText
 from email.mime.application import MIMEApplication
 #List of all mimetype per extension: http://help.dottoro.com/lapuadlp.php  or http://mime.ritey.com/
 
-from apiclient import errors, discovery #needed for gmail service
+from apiclient import errors, discovery  #needed for gmail service
 
 
 def get_credentials():
@@ -27,7 +27,7 @@ def get_credentials():
     credential_dir = os.path.join(home_dir, '.credentials') # >>C:\Users\Me\.credentials   (it's a folder)
     if not os.path.exists(credential_dir):
         os.makedirs(credential_dir)  #create folder if doesnt exist
-    credential_path = os.path.join(credential_dir, 'cred.json')
+    credential_path = os.path.join(credential_dir, 'cred send mail.json')
 
     #Store the credential
     store = oauth2client.file.Storage(credential_path)
@@ -43,6 +43,7 @@ def get_credentials():
         # Create a flow object. (it assists with OAuth 2.0 steps to get user authorization + credentials)
         flow = client.flow_from_clientsecrets(CLIENT_SECRET_FILE, SCOPES)
         flow.user_agent = APPLICATION_NAME
+
         credentials = tools.run_flow(flow, store)
 
     return credentials
@@ -98,7 +99,6 @@ def send_Message_without_attachment(service, user_id, body, message_text_plain):
 
 
 def main(subject,message_text_html,sender,to):
-    print("bvgfdb")
     message_text_plain  = ''
     attached_file=False
     create_message_and_send(sender, to, subject, message_text_plain, message_text_html, attached_file)
