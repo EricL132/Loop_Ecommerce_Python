@@ -71,20 +71,20 @@
 }
 
 .mens-button{
-    --color : #56a6d4;
-    --hover: #7db3d2;
+    --color : #745fd1;
+    --hover: #988bd1;
     --font: white;
 }
 
 .womens-button{
-    --color :  #d64c7b;
-    --hover: #d77697;
+    --color :  #745fd1;
+    --hover: #988bd1;
     --font: white;
 }
 
 .kids-button{
-    --color :  #4cd686;
-    --hover: #82c39e;
+    --color :  #745fd1;
+    --hover: #988bd1;
     --font: white;
 }
 
