@@ -207,7 +207,11 @@ export default function RightCartInfo() {
                                 <Link to="/pages/checkout"><button id="checkout-button">Checkout</button></Link>
                             </div>
                             : null}
+<<<<<<< HEAD
+                        
+=======
     
+>>>>>>> 821853ff173f629b844054f2cd8bfc585cc98f3e
 
                     </div>
 

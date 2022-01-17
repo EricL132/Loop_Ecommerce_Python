@@ -16,7 +16,7 @@ html{
   margin-top: 60px;
 }
 .bottom_message{
-  position: static;
+  position: relative;
   bottom: 0;
   width: 100%;
 }
