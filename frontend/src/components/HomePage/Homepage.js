@@ -58,17 +58,17 @@ export default function HomePage(props) {
 
     return (
         <div id="home-container">
-            {products && currentShowing!==undefined ?
+            {products && currentShowing!==undefined &&
                 <img id="featured-item" alt="" draggable="false" src={products[currentShowing].image} onClick={goToItem}></img>
-                : null}
+                }
 
 
             <div className="home-mid-container">
                 <span className="coupon-span">Use code JGFNB3 for 20% off</span>
                 <div>
-                    <Link to="/pages/men/sneakers"><button className="home-button mens-button">Mens</button></Link>
-                    <Link to="/pages/women/sneakers"><button className="home-button womens-button">Womens</button></Link>
-                    <Link to="/pages/kids/sneakers"><button className="home-button kids-button">Kids</button></Link>
+                    <Link to="/pages/men/sneakers"><button className="home-button mens-button fill-b">Mens</button></Link>
+                    <Link to="/pages/women/sneakers"><button className="home-button womens-button fill-b">Womens</button></Link>
+                    <Link to="/pages/kids/sneakers"><button className="home-button kids-button fill-b">Kids</button></Link>
                 </div>
 
             </div>
