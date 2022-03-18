@@ -113,7 +113,6 @@ describe("add to cart slow", () => {
             .its("store")
             .invoke("getState")
             .then((state) => {
-                console.log(state);
                 expect(state.bagCountReducer).to.be.a("number").and.equal(3);
                 expect(state.cartReducer.cart)
                     .to.be.a("object")
