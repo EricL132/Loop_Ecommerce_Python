@@ -146,7 +146,7 @@ export default function ProductsPage(props) {
                 </div>
                 <div className="products-container">
                     <div className="sort-by-container">
-                        <div className="sort-right-container">
+                        <div className="sort-container">
                             <label id="sort-label">Sort By:</label>
                             <select id="sort-option" name="sort-option" onChange={selectSortChange}>
                                 <option value="0">Featured</option>
