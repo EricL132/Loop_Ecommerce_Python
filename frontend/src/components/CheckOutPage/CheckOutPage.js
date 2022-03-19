@@ -6,12 +6,13 @@ import { Link } from 'react-router-dom'
 import { useHistory } from "react-router"
 import { showCartInfo } from "../../redux/actions"
 import updateCartInfo from "../utils/updateCartInfo"
+import createPaypalCheckout from '../utils/createPaypalCheckout'
+import confirmPaypalCheckout from "../utils/confirmPaypalCheckout"
 export default function CheckOutPage() {
     const cartInfo = useSelector(state => state.cartReducer.cart)
     const loggedIn = useSelector(state => state.loggedReducer)
     const [subTotal, setSubTotal] = useState(0)
     const dispatch = useDispatch()
-    const paypal = useRef()
     const [coupon, setCoupon] = useState()
     const [errorMessage, setErrorMessage] = useState()
     const [couponApplied, setCouponApplied] = useState()
@@ -31,6 +32,10 @@ export default function CheckOutPage() {
     const [InPayment, setInPayment] = useState()
     const [checkedOut,setCheckedOut] = useState()
     const [pageLoaded,setPageLoaded] = useState(false)
+    const totalAmountEle = useRef()
+    const paypal = useRef()
+    const paypalButtonContainerEle = useRef()
+    const paypalContainerEle = useRef()
     const updateSubTotal = useCallback(() => {
         let total = 0
         Object.entries(cartInfo).map((item) => {
@@ -46,7 +51,7 @@ export default function CheckOutPage() {
         fetch(`/api/coupon/?code=${coupon}`).then(async res => {
             if (res.ok) {
                 const code = await res.json()
-                document.getElementById("total_amount").style.textDecoration = "line-through"
+                totalAmountEle.current.style.textDecoration = "line-through"
                 setDiscountTotal(total - (total * (code.discount / 100)))
                 setCouponApplied(code.discount)
             } else {
@@ -60,8 +65,9 @@ export default function CheckOutPage() {
 
     function cancelCoupon() {
         setDiscountTotal()
-        document.getElementById("total_amount").style.textDecoration = ""
         setCouponApplied()
+        setCoupon()
+        totalAmountEle.current.style.textDecoration = ""
     }
     function ValidateCheckOut() {
         setPaymentError()
@@ -71,8 +77,8 @@ export default function CheckOutPage() {
                 return false
             }
         }
-        document.getElementById("payment_button").style.display = "none"
-        document.getElementsByClassName("paypal_container")[0].style.height = "300px"
+        paypalButtonContainerEle.current.style.display = "none"
+        paypalContainerEle.current.style.height = "300px"
         setInPayment(true)
     }
 
@@ -101,83 +107,12 @@ export default function CheckOutPage() {
 
 
             const Button = window.paypal.Buttons({
-                createOrder: function (data, actions) {
-                    /* const stockCheck = checkCartStock()
-                    console.log(stockCheck)
-                    if (discountTotal && stockCheck) {
-                        return actions.order.create({
-                            purchase_units: [
-                                {
-                                    amount: {
-                                        value: discountTotal,
-                                    },
-                                },
-                            ],
-                        });
-                    } else {
-                        if (stockCheck) {
-                            return actions.order.create({
-                                purchase_units: [
-                                    {
-                                        amount: {
-                                            value: total,
-                                        },
-                                    },
-                                ],
-                            });
-                        }
-
-                    } */
-                    if(couponApplied){
-                        customerInfo["coupon"] = coupon
-                    }
-                    customerInfo["cart"] = cartInfo
-                    return fetch('/api/createorder', {
-                        method: 'post', headers: { "content-type": "application/json" }, body: JSON.stringify(customerInfo)
-                    }).then(function (res) {
-                        return res.json();
-                    }).then(function (orderData) {
-                        if (orderData.status===false) {
-                            localStorage.setItem("cart", JSON.stringify(orderData.cart))
-                            updateCartInfo(dispatch)
-                            history.push("/")
-                            return false
-                        }
-                        return orderData.id;
-                    });
-
-
+                createOrder: function () {
+                    return createPaypalCheckout(couponApplied,coupon,cartInfo,customerInfo,updateCartInfo,history)
                 },
 
-                onApprove: function (data, actions) {
-                    /* return actions.order.capture().then((details) => {
-                        setCustomerInfo(prev => ({ ...prev, ["details"]: details }))
-                        setCustomerInfo(prev => ({ ...prev, ["cart"]: cartInfo }))
-                        setCheckout(true)
-                    }) */
-                    return fetch('/api/checkout/' + data.orderID + '/capture/', {
-                        method: 'post'
-                    }).then(function (res) {
-                        return res.json();
-                    }).then(function (orderData) {
-                        var errorDetail = Array.isArray(orderData.details) && orderData.details[0];
-
-                        if (errorDetail && errorDetail.issue === 'INSTRUMENT_DECLINED') {
-                            return actions.restart();
-                        }
-
-                        if (errorDetail) {
-                            var msg = 'Sorry, your transaction could not be processed.';
-                            if (errorDetail.description) msg += '\n\n' + errorDetail.description;
-                            if (orderData.debug_id) msg += ' (' + orderData.debug_id + ')';
-                            return alert(msg);
-                        }
-                        setCheckedOut(true)
-                        localStorage.removeItem("cart")
-                        updateCartInfo(dispatch)
-                        closeCart()
-                        history.push(`/order/${orderData.order_id}`)
-                    });
+                onApprove: function (data) {
+                    return confirmPaypalCheckout(data,setCheckedOut,updateCartInfo,dispatch,closeCart,history)
                 }
             })
             Button.render(paypal.current)
@@ -186,20 +121,10 @@ export default function CheckOutPage() {
     }, [discountTotal, total, InPayment,couponApplied])
 
 
-    async function checkCartStock() {
-        await fetch("api/stock", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(cartInfo) }).then((res) => res.json()).then(data => {
-            if (data.status === false) {
-                localStorage.setItem("cart", JSON.stringify(data.cart))
-                updateCartInfo(dispatch)
-                history.push("/")
-                return false
-            }
-        })
-        return true
-    }
+
 
     function closeCart(){
-        dispatch(showCartInfo())
+        dispatch(showCartInfo('DONT_SHOW_CART'))
     }
     return (
         <>
@@ -273,10 +198,10 @@ export default function CheckOutPage() {
                         </form>
 
                     </div>
-                    <div className="paypal_container" >
+                    <div className="paypal_container" ref={paypalContainerEle}>
                         <div className="buttons_container" ref={paypal}>
                         </div>
-                        <div id="payment_button">
+                        <div id="payment_button" ref={paypalButtonContainerEle}>
                             <button className="payment_options_button" onClick={ValidateCheckOut}>Continue To Payment</button>
                         </div>
                         <span className="payment_error">{paymentError}</span>
@@ -307,7 +232,7 @@ export default function CheckOutPage() {
                             < div className="summary_bottom_container">
                                 <h3>Items: {Object.keys(cartInfo).length}</h3>
                                 <h3>Subtotal: ${subTotal}</h3>
-                                <h3 >Total:<span id="total_amount"> ${total}</span> {discountTotal ?
+                                <h3 >Total:<span id="total_amount" ref={totalAmountEle}> ${total}</span> {discountTotal ?
                                     <span>${discountTotal.toFixed(2)}</span>
                                     : null} </h3>
                                 <div className="coupon_container">

@@ -1,6 +1,6 @@
 import './RightCartInfo.css'
 import { useDispatch, useSelector } from 'react-redux'
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import { updateCart, DecrementBagCount, IncrementBagCount } from '../../redux/actions/index'
 import { showCartInfo } from '../../redux/actions/index'
 import updateCartInfo from '../utils/updateCartInfo'
@@ -11,6 +11,7 @@ export default function RightCartInfo() {
 
     const [subTotal, setSubTotal] = useState(0)
     const [errorMessage, setErrorMessage] = useState()
+    const leftContainerEle = useRef()
     const dispatch = useDispatch()
     let bagNum = useSelector(state => state.bagCountReducer)
     const updateSubTotal = useCallback(() => {
@@ -30,10 +31,10 @@ export default function RightCartInfo() {
     function closeOverlay(e) {
         if (showInfo) {
             if (e.target.id === "cartInfo-overlay" || e.target.id === "cartInfo-close") {
-                document.getElementById("left-container").classList.add("slideRightAni")
+                leftContainerEle.current.classList.add("slideRightAni")
                 setTimeout(() => {
-                    document.getElementById("left-container").classList.remove("slideRightAni")
-                    dispatch(showCartInfo())
+                    leftContainerEle.current.classList.remove("slideRightAni")
+                    dispatch(showCartInfo('DONT_SHOW_CART'))
                 }, 400)
                 removeQuantityZero()
             }
@@ -151,7 +152,7 @@ export default function RightCartInfo() {
         <>
             {showInfo ?
                 <div id="cartInfo-overlay" onMouseDown={closeOverlay}>
-                    <div id="left-container">
+                    <div id="left-container" ref={leftContainerEle}>
                         <div className="top-row">
                             <h1>Shopping Cart</h1>
                             <button id="cartInfo-close" className="nav-buttons">Close</button>

@@ -1,7 +1,7 @@
 import './Navbar.css'
 import { useDispatch, useSelector } from 'react-redux'
 import { showCartInfo, LoggedIn,screenWidth } from '../../redux/actions/index'
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { useHistory } from 'react-router'
 import updateCartInfo from '../utils/updateCartInfo'
 import { Link } from 'react-router-dom'
@@ -11,6 +11,8 @@ export default function Navbar(props) {
     const dispatch = useDispatch()
     const history = useHistory()
     const width = useSelector(state=>state.screenWidth)
+    const searchHeaderEle = useRef()
+    const overlayEle = useRef()
     useEffect(() => {
         function handleResize() {
             dispatch(screenWidth(window.innerWidth))
@@ -21,19 +23,17 @@ export default function Navbar(props) {
     }, [width]);
     
     function handleSearchOverlay(e) {
-        const current = document.getElementById("background-overlay").style.display
-
-        if (current === "block") {
+        if (overlayEle.current.style.display === "block") {
             if (e.target.id === "background-overlay" || e.target.id === "close-background-overlay-button" || e.key === "Enter") {
-                document.getElementById("search-header").classList.add("slideUpAni")
+                searchHeaderEle.current.classList.add("slideUpAni")
                 setTimeout(() => {
-                    document.getElementById("background-overlay").style.display = "none"
-                    document.getElementById("search-header").classList.remove("slideUpAni")
+                    overlayEle.current.style.display = "none"
+                    searchHeaderEle.current.classList.remove("slideUpAni")
                 }, 400)
 
             }
         } else {
-            document.getElementById("background-overlay").style.display = "block"
+            overlayEle.current.style.display = "block"
         }
     }
 
@@ -118,7 +118,7 @@ export default function Navbar(props) {
                             <Link to="/account/info"><button className="nav-buttons nav-buttons-underline">Account</button></Link>
                             : <Link to="/account/login"><button className="nav-buttons nav-buttons-underline">Account</button></Link>}
 
-                        <button className="nav-buttons nav-buttons-underline" onClick={() => dispatch(showCartInfo())}>Bag ({bagNum})</button>
+                        <button className="nav-buttons nav-buttons-underline" onClick={() => dispatch(showCartInfo('REVERSE_CARTINFO'))}>Bag ({bagNum})</button>
                     </div> : <div className="dropdown">
                         <button className="dropbtn">
                             <i className="fas fa-bars"></i>
@@ -128,15 +128,15 @@ export default function Navbar(props) {
                             {userLoggedIn ?
                                 <Link to="/account/info"><button className="nav-buttons nav-buttons-underline" style={{color:'black'}}>Account</button></Link>
                                 : <Link to="/account/login"><button className="nav-buttons nav-buttons-underline" style={{color:'black'}}>Account</button></Link>}
-                            <button className="nav-buttons nav-buttons-underline" onClick={() => dispatch(showCartInfo())} style={{color:'black'}}>Bag ({bagNum})</button>
+                            <button className="nav-buttons nav-buttons-underline" onClick={() => dispatch(showCartInfo('REVERSE_CARTINFO'))} style={{color:'black'}}>Bag ({bagNum})</button>
                         </div>
                     </div>}
 
 
 
 
-                <div id="background-overlay" onMouseDown={handleSearchOverlay}>
-                    <div id="search-header">
+                <div id="background-overlay" onMouseDown={handleSearchOverlay} ref={overlayEle}>
+                    <div id="search-header" ref={searchHeaderEle}>
                         <input placeholder="Search..." onKeyDown={handleSearch}></input>
                         <button id="close-background-overlay-button" className="nav-buttons nav-buttons-underline" onClick={handleSearchOverlay}>Close</button>
                     </div>
