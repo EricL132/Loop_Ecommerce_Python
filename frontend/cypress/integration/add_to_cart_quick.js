@@ -3,48 +3,38 @@
 const cartObjects = {
     0: {
         0: {
-            id: 71,
-            name: "COURT RALLYE SLIP X STAR WARS SHOES",
-            image: "https://assets.adidas.com/images/h_840,f_auto,q_auto:sensitive,fl_lossy/c2b42bdf6bdc4bf7874bad19017e7c13_9366/Court_Rallye_Slip_x_Star_Wars_Shoes_Black_FY5312_01_standard.jpg",
+            id: 45,
+            name: "ULTRABOOST DNA 1.0 SHOES",
+            image: "https://assets.adidas.com/images/h_840,f_auto,q_auto:sensitive,fl_lossy/cdfdf1409e054322b9e0ac6d011da5e2_9366/Ultraboost_DNA_1.0_Shoes_Green_H05264_01_standard.jpg",
             images: [
                 "https://assets.adidas.com/images/h_840",
                 "f_auto",
                 "q_auto:sensitive",
-                "fl_lossy",
-                "c_fill",
-                "g_auto/c2b42bdf6bdc4bf7874bad19017e7c13_9366/Court_Rallye_Slip_x_Star_Wars_Shoes_Black_FY5312_01_standard.jpg",
+                "fl_lossy/cdfdf1409e054322b9e0ac6d011da5e2_9366/Ultraboost_DNA_1.0_Shoes_Green_H05264_01_standard.jpg",
                 "https://assets.adidas.com/images/h_840",
                 "f_auto",
                 "q_auto:sensitive",
-                "fl_lossy",
-                "c_fill",
-                "g_auto/80aaf09c02924918bcf1ad19017dbace_9366/Court_Rallye_Slip_x_Star_Wars_Shoes_Black_FY5312_011_hover_standard.jpg",
+                "fl_lossy/02705e8729c7435e9bb9ac6d01265a01_9366/Ultraboost_DNA_1.0_Shoes_Green_H05264_02_standard.jpg",
                 "https://assets.adidas.com/images/h_840",
                 "f_auto",
                 "q_auto:sensitive",
-                "fl_lossy",
-                "c_fill",
-                "g_auto/e4ff0366604049feb5e4ad190183402c_9366/Court_Rallye_Slip_x_Star_Wars_Shoes_Black_FY5312_012_hover_standard.jpg",
+                "fl_lossy/ac3cfbfce4a84b598864ac6d011963ac_9366/Ultraboost_DNA_1.0_Shoes_Green_H05264_03_standard.jpg",
                 "https://assets.adidas.com/images/h_840",
                 "f_auto",
                 "q_auto:sensitive",
-                "fl_lossy",
-                "c_fill",
-                "g_auto/a8935c7d91804e07a7baad19017e5ee6_9366/Court_Rallye_Slip_x_Star_Wars_Shoes_Black_FY5312_02_standard.jpg",
+                "fl_lossy/a14abd8e93004e4b9706ac6d0115d8f0_9366/Ultraboost_DNA_1.0_Shoes_Green_H05264_04_standard.jpg",
                 "https://assets.adidas.com/images/h_840",
                 "f_auto",
                 "q_auto:sensitive",
-                "fl_lossy",
-                "c_fill",
-                "g_auto/4a8e8d93f6d14114a295ad19017e3b72_9366/Court_Rallye_Slip_x_Star_Wars_Shoes_Black_FY5312_03_standard.jpg",
+                "fl_lossy/44bcb47866b04e739aa4ac6d0119f6ef_9366/Ultraboost_DNA_1.0_Shoes_Green_H05264_05_standard.jpg",
             ],
-            price: 60,
-            stock: 64,
+            price: 180,
+            stock: 1,
             itemCategory: "mens",
             itemType: "sneakers",
-            size: "9.5",
-            productID: "e1UFVNjx",
-            colors: null,
+            size: "6.0",
+            productID: "h4HMDzyc",
+            colors: "Bahia Mint / Eqt Green / Cloud White",
             quantity: 1,
         },
     },
@@ -70,7 +60,7 @@ const cartObjects = {
                 "q_80/07442ede-f502-4c9e-b47c-dd5da2cbd448/sportswear-womens-full-zip-fleece-hoodie-bg6b74.png",
             ],
             price: 75,
-            stock: 11,
+            stock: 1,
             itemCategory: "womens",
             itemType: "sweaters",
             size: "large",
@@ -101,7 +91,7 @@ const cartObjects = {
                 "q_80/469a549f-81fb-4f84-bfd5-e8d01827e2cb/air-force-1-le-big-kids-shoe-3JNSvS.png",
             ],
             price: 80,
-            stock: 5,
+            stock: 1,
             itemCategory: "kids",
             itemType: "sneakers",
             size: "8.5",
@@ -131,6 +121,8 @@ describe("adding to cart quick", () => {
             .its("store")
             .invoke("getState")
             .then((state) => {
+                console.log(state);
+                state.cartReducer.cart[0].stock = 1;
                 expect(state.bagCountReducer).to.be.a("number").and.equal(1);
                 expect(state.cartReducer.cart).to.be.a("object").and.to.deep.equal(cartObjects[0]);
             });
@@ -153,6 +145,8 @@ describe("adding to cart quick", () => {
             .its("store")
             .invoke("getState")
             .then((state) => {
+                state.cartReducer.cart[0].stock = 1;
+                state.cartReducer.cart[1].stock = 1;
                 expect(state.bagCountReducer).to.be.a("number").and.equal(2);
                 expect(state.cartReducer.cart)
                     .to.be.a("object")
@@ -174,6 +168,9 @@ describe("adding to cart quick", () => {
             .its("store")
             .invoke("getState")
             .then((state) => {
+                state.cartReducer.cart[0].stock = 1;
+                state.cartReducer.cart[1].stock = 1;
+                state.cartReducer.cart[2].stock = 1;
                 expect(state.bagCountReducer).to.be.a("number").and.equal(3);
                 expect(state.cartReducer.cart)
                     .to.be.a("object")

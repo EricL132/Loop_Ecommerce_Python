@@ -33,7 +33,7 @@ export default function RightCartInfo() {
                 document.getElementById("left-container").classList.add("slideRightAni")
                 setTimeout(() => {
                     document.getElementById("left-container").classList.remove("slideRightAni")
-                    dispatch(showCartInfo())
+                    dispatch(showCartInfo('DONT_SHOW_CART'))
                 }, 400)
                 removeQuantityZero()
             }

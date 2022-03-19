@@ -118,7 +118,7 @@ export default function Navbar(props) {
                             <Link to="/account/info"><button className="nav-buttons nav-buttons-underline">Account</button></Link>
                             : <Link to="/account/login"><button className="nav-buttons nav-buttons-underline">Account</button></Link>}
 
-                        <button className="nav-buttons nav-buttons-underline" onClick={() => dispatch(showCartInfo())}>Bag ({bagNum})</button>
+                        <button className="nav-buttons nav-buttons-underline" onClick={() => dispatch(showCartInfo('REVERSE_CARTINFO'))}>Bag ({bagNum})</button>
                     </div> : <div className="dropdown">
                         <button className="dropbtn">
                             <i className="fas fa-bars"></i>
@@ -128,7 +128,7 @@ export default function Navbar(props) {
                             {userLoggedIn ?
                                 <Link to="/account/info"><button className="nav-buttons nav-buttons-underline" style={{color:'black'}}>Account</button></Link>
                                 : <Link to="/account/login"><button className="nav-buttons nav-buttons-underline" style={{color:'black'}}>Account</button></Link>}
-                            <button className="nav-buttons nav-buttons-underline" onClick={() => dispatch(showCartInfo())} style={{color:'black'}}>Bag ({bagNum})</button>
+                            <button className="nav-buttons nav-buttons-underline" onClick={() => dispatch(showCartInfo('REVERSE_CARTINFO'))} style={{color:'black'}}>Bag ({bagNum})</button>
                         </div>
                     </div>}
 

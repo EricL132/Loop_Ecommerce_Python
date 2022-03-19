@@ -17,9 +17,9 @@ export const DecrementBagCount = ()=>{
     }
 }
 
-export const showCartInfo = ()=>{
+export const showCartInfo = (call)=>{
     return {
-        type:'REVERSE_CARTINFO'
+        type: call
     }
 }
 

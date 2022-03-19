@@ -47,5 +47,5 @@ export default function addToCart(e, products, dispatch, id) {
         localStorage.setItem("cart", JSON.stringify({ "0": product }))
     }
     updateCartInfo(dispatch)
-    dispatch(showCartInfo())
+    dispatch(showCartInfo('REVERSE_CARTINFO'))
 }
