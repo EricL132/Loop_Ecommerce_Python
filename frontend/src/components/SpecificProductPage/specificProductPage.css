@@ -52,20 +52,20 @@
     padding: 1rem;
 }
 
-.product-name {
+.product-info-container-s .product-name {
     font-weight: normal;
     font-size: 30px;
     margin-top: -10px;
     width: fit-content;
 }
 
-.product-price {
+.product-info-container-s .product-price {
     font-weight: bold;
     font-size: 18px;
     width: fit-content;
 }
 
-.product-type {
+.product-info-container-s .product-type {
     font-weight: normal;
     font-size: 15px;
     margin-top: 0;

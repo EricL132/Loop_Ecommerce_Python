@@ -1,9 +1,8 @@
 import "./ResetPage.css"
 import { Link } from 'react-router-dom'
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { useHistory } from 'react-router'
 import { useDispatch } from 'react-redux'
-import { LoggedIn } from '../../redux/actions/index'
 
 export default function ResetPage(props) {
     const [formInfo, setFormInfo] = useState({
@@ -12,24 +11,23 @@ export default function ResetPage(props) {
     })
     const [errorMessage, setErrorMessage] = useState()
     const history = useHistory()
-    const dispatch = useDispatch()
     const [token,setToken] = useState()
+    const fieldEle = useRef()
+    const resetButtonEle = useRef()
     function Reset(e) {
         e.preventDefault()
         setErrorMessage()
-        const field = document.getElementById("forgot_field_set")
-        const button = document.getElementsByClassName("reset_button")[0]
         for (var i in formInfo) {
             if (!formInfo[i]) return setErrorMessage("Invalid Login Info")
         }
         if(formInfo["password"].length<6) return setErrorMessage("Password must be at least 6 characters")
         if(formInfo["password"]!==formInfo["cpassword"]) return setErrorMessage("Password and Confirm password must be the same")
-        field.disabled = true
-        button.classList = "reset_button_disabled"
+        fieldEle.current.disabled = true
+        resetButtonEle.current.classList = "reset_button_disabled"
         fetch(`/api/reset/${token}`, { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify(formInfo) }).then((res) => {
             if (!res.ok) {
-                field.disabled = false
-                button.classList = "reset_button"
+                fieldEle.current.disabled = false
+                resetButtonEle.current.classList = "reset_button"
             }
             return res.text()
         }).then((data) => {
@@ -58,11 +56,11 @@ export default function ResetPage(props) {
             <form id="login_container" onChange={changeInfo}>
 
                 <h1 id="login_h1">Reset<Link to="/account/login"><button id="register">Login</button></Link></h1>
-                <fieldset id="forgot_field_set">
+                <fieldset id="forgot_field_set" ref={fieldEle}>
                     <input id="password" type="password" className="login_input" placeholder="Password"></input>
                     <input id="cpassword" type="password" className="login_input" placeholder="Confirm password"></input>
 
-                    <button className="reset_button" onClick={Reset}>Change</button>
+                    <button className="reset_button" onClick={Reset} ref={resetButtonEle}>Change</button>
                     <span className="login_error">{errorMessage}</span>
                 </fieldset>
             </form>

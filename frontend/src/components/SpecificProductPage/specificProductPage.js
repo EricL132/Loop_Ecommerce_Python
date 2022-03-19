@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import { useDispatch } from 'react-redux'
 import addToCart from '../utils/addToCart'
 import './specificProductPage.css'
@@ -8,6 +8,7 @@ export default function SpecificProductPage() {
     const [currentImage, setCurrentImage] = useState()
     const [sizeSelected, setSizeSelected] = useState()
     const [errorMessage, setErrorMessage] = useState()
+    const selectedSizeEle = useRef()
     const dispatch = useDispatch()
     function getProduct() {
         let productID = window.location.pathname.split("/")
@@ -21,30 +22,14 @@ export default function SpecificProductPage() {
     function changeCurrentImage(e) {
         setCurrentImage(e.target.src)
     }
-    function nextPhoto() {
-        const currentphoto = document.getElementById("product-image").src
-        const index = product[0].images.indexOf(currentphoto)
-        if (index === product[0].images.length - 1) {
-            setCurrentImage(product[0].images[0])
-        } else {
-            setCurrentImage(product[0].images[index + 1])
-        }
-    }
 
-    function previousPhoto() {
-        const currentphoto = document.getElementById("product-image").src
-        const index = product[0].images.indexOf(currentphoto)
-        if (index === 0) {
-            setCurrentImage(product[0].images[product.images.length - 1])
-        } else {
-            setCurrentImage(product[0].images[index - 1])
-        }
-    }
+
     function selectSize(e) {
         if (sizeSelected) {
-            document.getElementsByClassName("size_selected")[0].classList.remove("size_selected")
+            selectedSizeEle.current.classList.remove("size_selected")
         }
         setSizeSelected(e.target)
+        selectedSizeEle.current = e.target
         e.target.classList.add("size_selected")
         setErrorMessage()
 

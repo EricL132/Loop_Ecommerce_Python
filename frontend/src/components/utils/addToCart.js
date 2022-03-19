@@ -12,8 +12,12 @@ export default function addToCart(e, products, dispatch, id) {
         item = e.getAttribute("item")
     }
     let product;
-    if (products[item].length === 1) {
-        product = products[item]
+    
+    //Specific products page only has one array of the products
+    //Goes to if statement if addingfrom product page
+    //else looks through object to find item with correct id
+    if (!Array.isArray(products[0])) {
+        product = [products[item]]
     } else {
         if (Array.isArray(products[item])) {
             product = products[item].filter((item) => {
@@ -24,7 +28,10 @@ export default function addToCart(e, products, dispatch, id) {
         }
 
     }
+
+    //filter above returns an array so the correct item is on the first index
     product = product[0]
+    //Adds item to cart and updates localstorage with infomation
     if (cart && Object.keys(cart).length>0) {
         for (var i of Object.keys(cart)) {
             if (cart[i].id === product.id) {

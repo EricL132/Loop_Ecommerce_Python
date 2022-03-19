@@ -1,7 +1,7 @@
 import './Navbar.css'
 import { useDispatch, useSelector } from 'react-redux'
 import { showCartInfo, LoggedIn,screenWidth } from '../../redux/actions/index'
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { useHistory } from 'react-router'
 import updateCartInfo from '../utils/updateCartInfo'
 import { Link } from 'react-router-dom'
@@ -11,6 +11,8 @@ export default function Navbar(props) {
     const dispatch = useDispatch()
     const history = useHistory()
     const width = useSelector(state=>state.screenWidth)
+    const searchHeaderEle = useRef()
+    const overlayEle = useRef()
     useEffect(() => {
         function handleResize() {
             dispatch(screenWidth(window.innerWidth))
@@ -21,19 +23,17 @@ export default function Navbar(props) {
     }, [width]);
     
     function handleSearchOverlay(e) {
-        const current = document.getElementById("background-overlay").style.display
-
-        if (current === "block") {
+        if (overlayEle.current.style.display === "block") {
             if (e.target.id === "background-overlay" || e.target.id === "close-background-overlay-button" || e.key === "Enter") {
-                document.getElementById("search-header").classList.add("slideUpAni")
+                searchHeaderEle.current.classList.add("slideUpAni")
                 setTimeout(() => {
-                    document.getElementById("background-overlay").style.display = "none"
-                    document.getElementById("search-header").classList.remove("slideUpAni")
+                    overlayEle.current.style.display = "none"
+                    searchHeaderEle.current.classList.remove("slideUpAni")
                 }, 400)
 
             }
         } else {
-            document.getElementById("background-overlay").style.display = "block"
+            overlayEle.current.style.display = "block"
         }
     }
 
@@ -135,8 +135,8 @@ export default function Navbar(props) {
 
 
 
-                <div id="background-overlay" onMouseDown={handleSearchOverlay}>
-                    <div id="search-header">
+                <div id="background-overlay" onMouseDown={handleSearchOverlay} ref={overlayEle}>
+                    <div id="search-header" ref={searchHeaderEle}>
                         <input placeholder="Search..." onKeyDown={handleSearch}></input>
                         <button id="close-background-overlay-button" className="nav-buttons nav-buttons-underline" onClick={handleSearchOverlay}>Close</button>
                     </div>

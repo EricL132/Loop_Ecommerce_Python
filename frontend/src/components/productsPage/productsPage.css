@@ -105,6 +105,10 @@
     margin: 1.4rem;
 }
 
+.product-container:hover  > .product-cart{
+    display: block;
+}
+
 .product_image {
     width: 300px;
     height: 270px;

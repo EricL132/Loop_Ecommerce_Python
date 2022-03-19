@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useState,useRef } from "react";
 import RightCartInfo from "../RightCartInfo/RightCartInfo";
 import { useHistory } from "react-router";
 import { Link } from "react-router-dom";
@@ -7,6 +7,7 @@ import "./Homepage.css";
 export default function HomePage(props) {
     const [products, setProducts] = useState();
     const [currentShowing, setCurrentShowing] = useState();
+    const bottomContainerEle = useRef();
     const history = useHistory();
     function getFeature() {
         fetch("/api/feature")
@@ -27,11 +28,12 @@ export default function HomePage(props) {
                 photo = currentShowing + 1;
                 setCurrentShowing(photo);
             }
-            let con = document.getElementById("bottom-container-images");
             document
                 .getElementsByClassName("selected_different_feature_button")[0]
                 .classList.remove("selected_different_feature_button");
-            con.childNodes[photo].classList.add("selected_different_feature_button");
+            bottomContainerEle.current.childNodes[photo].classList.add(
+                "selected_different_feature_button"
+            );
         }
     }, [currentShowing, products]);
 
@@ -84,7 +86,7 @@ export default function HomePage(props) {
                 </div>
             </div>
             {products ? (
-                <div id="bottom-container-images">
+                <div id="bottom-container-images" ref={bottomContainerEle}>
                     {products.map((product, i) => {
                         if (i === 0) {
                             return (

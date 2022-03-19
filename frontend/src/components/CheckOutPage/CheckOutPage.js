@@ -13,7 +13,6 @@ export default function CheckOutPage() {
     const loggedIn = useSelector(state => state.loggedReducer)
     const [subTotal, setSubTotal] = useState(0)
     const dispatch = useDispatch()
-    const paypal = useRef()
     const [coupon, setCoupon] = useState()
     const [errorMessage, setErrorMessage] = useState()
     const [couponApplied, setCouponApplied] = useState()
@@ -33,7 +32,10 @@ export default function CheckOutPage() {
     const [InPayment, setInPayment] = useState()
     const [checkedOut,setCheckedOut] = useState()
     const [pageLoaded,setPageLoaded] = useState(false)
-    const [orderID,setOrderID] = useState()
+    const totalAmountEle = useRef()
+    const paypal = useRef()
+    const paypalButtonContainerEle = useRef()
+    const paypalContainerEle = useRef()
     const updateSubTotal = useCallback(() => {
         let total = 0
         Object.entries(cartInfo).map((item) => {
@@ -49,7 +51,7 @@ export default function CheckOutPage() {
         fetch(`/api/coupon/?code=${coupon}`).then(async res => {
             if (res.ok) {
                 const code = await res.json()
-                document.getElementById("total_amount").style.textDecoration = "line-through"
+                totalAmountEle.current.style.textDecoration = "line-through"
                 setDiscountTotal(total - (total * (code.discount / 100)))
                 setCouponApplied(code.discount)
             } else {
@@ -63,8 +65,9 @@ export default function CheckOutPage() {
 
     function cancelCoupon() {
         setDiscountTotal()
-        document.getElementById("total_amount").style.textDecoration = ""
         setCouponApplied()
+        setCoupon()
+        totalAmountEle.current.style.textDecoration = ""
     }
     function ValidateCheckOut() {
         setPaymentError()
@@ -74,8 +77,8 @@ export default function CheckOutPage() {
                 return false
             }
         }
-        document.getElementById("payment_button").style.display = "none"
-        document.getElementsByClassName("paypal_container")[0].style.height = "300px"
+        paypalButtonContainerEle.current.style.display = "none"
+        paypalContainerEle.current.style.height = "300px"
         setInPayment(true)
     }
 
@@ -195,10 +198,10 @@ export default function CheckOutPage() {
                         </form>
 
                     </div>
-                    <div className="paypal_container" >
+                    <div className="paypal_container" ref={paypalContainerEle}>
                         <div className="buttons_container" ref={paypal}>
                         </div>
-                        <div id="payment_button">
+                        <div id="payment_button" ref={paypalButtonContainerEle}>
                             <button className="payment_options_button" onClick={ValidateCheckOut}>Continue To Payment</button>
                         </div>
                         <span className="payment_error">{paymentError}</span>
@@ -229,7 +232,7 @@ export default function CheckOutPage() {
                             < div className="summary_bottom_container">
                                 <h3>Items: {Object.keys(cartInfo).length}</h3>
                                 <h3>Subtotal: ${subTotal}</h3>
-                                <h3 >Total:<span id="total_amount"> ${total}</span> {discountTotal ?
+                                <h3 >Total:<span id="total_amount" ref={totalAmountEle}> ${total}</span> {discountTotal ?
                                     <span>${discountTotal.toFixed(2)}</span>
                                     : null} </h3>
                                 <div className="coupon_container">
