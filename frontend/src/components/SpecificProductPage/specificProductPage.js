@@ -69,12 +69,6 @@ export default function SpecificProductPage() {
                     <>
                         <div className="left-product-container">
                             <div className="product-photos-container">
-                                {product["images"] ?
-                                    <>
-                                        <button className="photo-button left-button" onClick={previousPhoto}><i className="fas fa-arrow-left"></i></button>
-                                        <button className="photo-button right-button" onClick={nextPhoto}><i className="fas fa-arrow-right"></i></button>
-                                    </>
-                                    : null}
                                 {currentImage && currentImage.includes("nike") && (product[0].itemType !== "socks" && product[0].itemType !== "sunglasses" || currentImage.includes("nike"))  ?
                                     <img id="product-image" alt="" className="product-image" src={currentImage} style={{ height: "700px", marginTop: "-20px" }}></img>
                                     :

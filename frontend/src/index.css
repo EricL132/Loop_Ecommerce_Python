@@ -1,31 +1,40 @@
-body, html, #root {
-  margin: 0;
-  background-color: rgb(230, 230, 230);
-
+body,
+html,
+#root {
+    margin: 0;
+    background-color: rgb(230, 230, 230);
+    font-family: Arial, Helvetica, sans-serif;
 }
 
-:root{
-  --error_red : rgb(210, 0, 0);
+:root {
+    --error_red: rgb(210, 0, 0);
 }
 
 * {
-  box-sizing: border-box;
+    box-sizing: border-box;
 }
 
-html{
-  overflow-y:overlay;
-
+html {
+    overflow-y: overlay;
 }
 .main {
-  margin-top: 60px;
+    margin-top: 60px;
 }
-.bottom_message{
-  position: relative;
-  bottom: 0;
-  width: 100%;
+.bottom_message {
+    position: relative;
+    width: fit-content;
+    bottom: 0;
 }
 
-.bottom_message span{
-  text-align: center;
-  display: block;
+.bottom_message span {
+    text-align: center;
+    display: block;
+}
+
+@media (max-width: 1200px) {
+    .bottom_message {
+        width: 80%;
+        left: 50%;
+        transform: translateX(-50%);
+    }
 }

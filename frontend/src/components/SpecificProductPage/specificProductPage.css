@@ -1,16 +1,16 @@
-
-.product-page-mid{
+.product-page-mid {
     width: 1230px;
 }
+
 .product-photos-container {
     position: relative;
+    height: fit-content;
     width: 600px;
     float: left;
 }
 
 .product-page-mid .product-image {
     width: 100%;
-    height: 600px;
 }
 
 .photo-button {
@@ -20,37 +20,20 @@
     cursor: pointer;
     display: none;
 }
-.right-button {
-    right: 1rem;
-    top: 50%;
-    transform: translateY(-50%);
-}
-
-.left-button {
-    left: 1rem;
-    top: 50%;
-    transform: translateY(-50%);
-}
-
-
-.product-photos-container:hover > .photo-button {
-    display: block;
-}
 
 .all-photos-container {
     width: 600px;
-    height: 125px;
+    height: fit-content;
     background-color: transparent;
-    position: absolute;
-    bottom: 0;
-
+    position: relative;
+    bottom: 3rem;
 }
 
-.left-product-container{
+.left-product-container {
     position: relative;
-    height: 680px;
+    height: fit-content;
     float: left;
-    margin:2rem;
+    margin: 2rem;
 }
 
 .smaller-product-image {
@@ -58,10 +41,9 @@
     height: 100%;
     background-color: white;
     cursor: pointer;
-    border: 1px solid rgba(0, 0, 0, .25);
-
+    border: 1px solid rgba(0, 0, 0, 0.25);
 }
-.product-info-container-s{
+.product-info-container-s {
     width: 500px;
     height: 500px;
     background-color: rgba;
@@ -70,48 +52,47 @@
     padding: 1rem;
 }
 
-
-.product-info-container-s .product-name{
+.product-name {
     font-weight: normal;
     font-size: 30px;
     margin-top: -10px;
     width: fit-content;
 }
 
-.product-info-container-s .product-price{
+.product-price {
     font-weight: bold;
     font-size: 18px;
     width: fit-content;
 }
 
-.product-info-container-s .product-type{
+.product-type {
     font-weight: normal;
     font-size: 15px;
     margin-top: 0;
     width: fit-content;
 }
 
-.select-size-span{
+.select-size-span {
     font-size: 15px;
     font-weight: bold;
 }
 
-.sizes-available-container{
-    width: 500px;
+.sizes-available-container {
+    width: 100%;
     height: 80px;
     margin-top: 10px;
 }
 
-.size-container{
+.size-container {
     width: 100px;
     height: 40px;
     background-color: white;
-    border: 1px solid rgba(0, 0, 0, .2);
+    border: 1px solid rgba(0, 0, 0, 0.2);
     float: left;
     position: relative;
 }
 
-.size-span{
+.size-span {
     font-size: 15px;
     text-align: center;
     width: 100%;
@@ -122,12 +103,12 @@
     border: none;
 }
 
-.size-span:hover{
+.size-span:hover {
     background-color: black;
     color: white;
 }
 
-.add-to-bag-button{
+.add-to-bag-button {
     cursor: pointer;
     outline: none;
     border: none;
@@ -137,12 +118,81 @@
     width: 300px;
 }
 
-.add-to-bag-button:hover{
-    color: rgba(255, 255, 255, .9);
+.add-to-bag-button:hover {
+    color: rgba(255, 255, 255, 0.9);
 }
 
-.product-info-container-s .size_selected{
+.product-info-container-s .size_selected {
     color: white;
     background-color: black;
 }
-    
+
+@media (max-width: 1200px) {
+    .product-page-mid {
+        width: 100%;
+        display: flex;
+        align-items: center;
+        flex-direction: column;
+    }
+}
+
+@media (max-width: 700px) {
+    .all-photos-container {
+        width: 400px;
+        bottom: 1rem;
+    }
+    .product-photos-container {
+        width: 400px;
+    }
+
+    .smaller-product-image {
+        width: 80px;
+        height: 70px;
+    }
+    .product-info-container-s{
+        width: 420px;
+        margin-top: 0;
+    }
+}
+
+
+@media (max-width: 500px) {
+    .all-photos-container {
+        width: 300px;
+    }
+    .product-photos-container {
+        width: 300px;
+    }
+
+    .smaller-product-image {
+        width: 60px;
+        height: 50px;
+    }
+    .product-info-container-s{
+        width: 320px;
+    }
+    .add-to-bag-button{
+        width: 100%;
+    }
+    .product-name{
+        font-size: 20px;
+    }
+}
+
+
+@media (max-width: 390px) {
+    .all-photos-container {
+        width: 200px;
+    }
+    .product-photos-container {
+        width: 200px;
+    }
+
+    .smaller-product-image {
+        width: 40px;
+        height: 40px;
+    }
+    .product-info-container-s{
+        width: 230px;
+    }
+}
