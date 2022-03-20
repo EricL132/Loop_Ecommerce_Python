@@ -1,10 +1,10 @@
 #login_container{
     width: 300px;
     height: 400px;
-    position: absolute;
+    position: relative;
     left: 50%;
     transform: translateX(-50%);
-    margin-top: 3rem;
+    margin-top: 6rem;
 
 }
 
@@ -13,6 +13,10 @@
     border-bottom: 1px solid rgba(0, 0, 0, .5);
     margin-top: 0;
     margin-bottom: 0;
+}
+
+.login-header{
+    width: 100%;
 }
 
 .login_input{
