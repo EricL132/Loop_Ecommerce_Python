@@ -22,20 +22,19 @@ from apiclient import errors, discovery #needed for gmail service
 
 
 def get_credentials():
+
     # If needed create folder for credential
     home_dir = os.path.expanduser('~') #>> C:\Users\Me
     credential_dir = os.path.join(home_dir, '.credentials') # >>C:\Users\Me\.credentials   (it's a folder)
     if not os.path.exists(credential_dir):
         os.makedirs(credential_dir)  #create folder if doesnt exist
     credential_path = os.path.join(credential_dir, 'cred.json')
-
     #Store the credential
     store = oauth2client.file.Storage(credential_path)
     credentials = store.get()
-
     if not credentials or credentials.invalid:
         CLIENT_SECRET_FILE = 'credentials.json'
-        APPLICATION_NAME = 'HerokuEmail'
+        APPLICATION_NAME = 'Send Gmail'
         #The scope URL for read/write access to a user's calendar data  
 
         SCOPES = 'https://www.googleapis.com/auth/gmail.send'
@@ -52,7 +51,6 @@ def get_credentials():
 
 ## Get creds, prepare message and send it
 def create_message_and_send(sender, to, subject,  message_text_plain, message_text_html, attached_file):
-
     credentials = get_credentials()
     # Create an httplib2.Http object to handle our HTTP requests, and authorize it using credentials.authorize()
     http = httplib2.Http()
@@ -98,7 +96,6 @@ def send_Message_without_attachment(service, user_id, body, message_text_plain):
 
 
 def main(subject,message_text_html,sender,to):
-    print("bvgfdb")
     message_text_plain  = ''
     attached_file=False
     create_message_and_send(sender, to, subject, message_text_plain, message_text_html, attached_file)
