@@ -24,9 +24,12 @@ export default function ForgotPassword() {
                 fieldEle.current.disabled = false
                 resetButtonEle.current.classList = "reset_button"
             }
-            return res.text()
+            return res.json()
         }).then((data) => {
-            setErrorMessage(data)
+            if(data?.error){
+                return setErrorMessage(data.error)
+            }
+            setErrorMessage(data.message)
         })
     }
 

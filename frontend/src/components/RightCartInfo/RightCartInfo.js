@@ -31,11 +31,15 @@ export default function RightCartInfo() {
     function closeOverlay(e) {
         if (showInfo) {
             if (e.target.id === "cartInfo-overlay" || e.target.id === "cartInfo-close") {
+
+                
                 leftContainerEle.current.classList.add("slideRightAni")
                 setTimeout(() => {
-                    leftContainerEle.current.classList.remove("slideRightAni")
                     dispatch(showCartInfo('DONT_SHOW_CART'))
                 }, 400)
+
+
+
                 removeQuantityZero()
             }
         }

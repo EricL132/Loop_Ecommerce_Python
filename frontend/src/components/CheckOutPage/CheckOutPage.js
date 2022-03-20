@@ -53,10 +53,15 @@ export default function CheckOutPage() {
                 const code = await res.json()
                 totalAmountEle.current.style.textDecoration = "line-through"
                 setDiscountTotal(total - (total * (code.discount / 100)))
-                setCouponApplied(code.discount)
-            } else {
-                setErrorMessage(await res.text())
+                return setCouponApplied(code.discount)
+            } 
+            return res.json()
+        
+        }).then((data)=>{
+            if(data?.error){
+                return setErrorMessage(data.error)
             }
+            setErrorMessage(data)
         })
     }
     function couponChange(e) {
@@ -86,9 +91,6 @@ export default function CheckOutPage() {
         setCustomerInfo(prev => ({ ...prev, [e.target.id]: e.target.value }))
     }
 
-    function handleEditCart() {
-        history.push("/")
-    }
     useEffect(() => {
         if (cartInfo) {
             updateSubTotal()
@@ -210,7 +212,7 @@ export default function CheckOutPage() {
                 </div>
 
                 <div className="order_summary_container">
-                    <h1 className="shipping_header summary_header">Order Summary <button onClick={handleEditCart} className="account_button">Edit Cart</button></h1>
+                    <h1 className="shipping_header summary_header">Order Summary</h1>
                     {cartInfo ?
                         <>
                             {Object.entries(cartInfo).map((item, i) => {

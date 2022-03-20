@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react"
 import "./OrderSummary.css"
 import { Link } from "react-router-dom"
-import RightCartInfo from "../RightCartInfo/RightCartInfo"
 export default function OrderSummary(props) {
     const [orderInfo, setOrderInfo] = useState()
     const [orderid, setorderid] = useState()
@@ -85,7 +84,6 @@ export default function OrderSummary(props) {
                         </div>
                     </div >
 
-                    <RightCartInfo></RightCartInfo>
                     </>
                     : null
             }

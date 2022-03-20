@@ -31,10 +31,10 @@ export default function LoginPage() {
                     dispatch(LoggedIn());
                     history.push("/account/info");
                 }
-                return res.text();
+                return res.json();
             })
             .then((data) => {
-                setErrorMessage(data);
+                setErrorMessage(data.error);
             });
     }
 

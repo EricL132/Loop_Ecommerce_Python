@@ -27,11 +27,13 @@ export default function RegisterPage() {
             body: JSON.stringify(formInfo),
         })
             .then((res) => {
-                if (res.ok) history.push("/account/info");
-                return res.text();
+                if (res.ok) return history.push("/account/info");
+                return res.json();
             })
             .then((data) => {
-                setErrorMessage(data);
+                if(data?.error){
+                    setErrorMessage(data.error);
+                }
             });
     }
 

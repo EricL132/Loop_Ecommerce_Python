@@ -2,7 +2,6 @@
 import { useCallback, useEffect, useState } from "react"
 import "./productsPage.css"
 import { useHistory } from 'react-router'
-import RightCartInfo from '../RightCartInfo/RightCartInfo'
 import ProductsContainer from './productsContainer'
 export default function ProductsPage(props) {
     const [productsToShow, setProductsToShow] = useState()
@@ -163,7 +162,6 @@ export default function ProductsPage(props) {
 
                 </div>
             </div >
-            <RightCartInfo></RightCartInfo>
         </>
     )
 }

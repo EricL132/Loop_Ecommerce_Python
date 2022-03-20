@@ -1,5 +1,4 @@
 import { useCallback, useEffect, useState,useRef } from "react";
-import RightCartInfo from "../RightCartInfo/RightCartInfo";
 import { useHistory } from "react-router";
 import { Link } from "react-router-dom";
 import "./Homepage.css";
@@ -110,7 +109,6 @@ export default function HomePage(props) {
                 </div>
             ) : null}
 
-            <RightCartInfo updateCartInfo={props.updateCartInfo}></RightCartInfo>
         </div>
     );
 }

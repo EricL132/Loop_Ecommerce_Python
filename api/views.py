@@ -73,13 +73,13 @@ class Register(APIView):
     def post(self,request,format=None):
         for i in request.data:
             if not request.data[i]:
-                return Response('Please fill out all info',status=status.HTTP_403_FORBIDDEN)
+                return Response({'error':'Please fill out all info'},status=status.HTTP_403_FORBIDDEN)
         if not '@' in request.data['email'] or not '.' in request.data['email']:
-            return Response('Invalid Email',status=status.HTTP_403_FORBIDDEN)
+            return Response({'error':'Invalid Email'},status=status.HTTP_403_FORBIDDEN)
         if len(request.data['password'])<6:
-            return Response('Password must be at least 6 characters',status=status.HTTP_403_FORBIDDEN)
+            return Response({'error':'Password must be at least 6 characters'},status=status.HTTP_403_FORBIDDEN)
         if len(User.objects.filter(username=request.data['email']))>0:
-            return Response('Email already registered',status=status.HTTP_403_FORBIDDEN)
+            return Response({'error':'Email already registered'},status=status.HTTP_403_FORBIDDEN)
         if not self.request.session.exists(self.request.session.session_key):
             self.request.session.create()
             
@@ -89,7 +89,7 @@ class Register(APIView):
         token.id = user.id
         token.save()
         self.request.session['auth'] = token.key
-        return Response('Registered',status=status.HTTP_200_OK)
+        return Response({'message':'Registered'},status=status.HTTP_200_OK)
 class Login(APIView):
     def post(self,request,format=None):
         email = request.data["email"].lower()
@@ -105,16 +105,16 @@ class Login(APIView):
             token.save()
             self.request.session["auth"]=token.key
             return Response({},status=status.HTTP_200_OK)
-        return Response('Invalid Email/Password',status=status.HTTP_403_FORBIDDEN)
+        return Response({'error':'Invalid Email/Password'},status=status.HTTP_403_FORBIDDEN)
 
 class Forgot(APIView):
     def post(self,request,format=None):
         if request.data["email"]==None:
-            return Response('Invalid Information',status=status.HTTP_403_FORBIDDEN)
+            return Response({'error':'Invalid Information'},status=status.HTTP_403_FORBIDDEN)
         email = request.data["email"].lower()
         user = User.objects.filter(email=email)
         if len(user)==0:
-            return Response('Email not registered',status=status.HTTP_403_FORBIDDEN)
+            return Response({'error':'Email not registered'},status=status.HTTP_403_FORBIDDEN)
         user = user[0]
         token = ResetToken.objects.filter(user=user)
         if len(token)>0:
@@ -129,23 +129,23 @@ class Forgot(APIView):
         #     msg = f'Subject:{subject}\n\n{body}'
         #     smtp.sendmail(os.getenv("EMAIL_ADDRESS"),user.email,msg)
         semail.main("Forgot password","Reset Link: {}{}".format(os.getenv("WEBLINK"),token),"moomeowmoo1@gmail.com",user.email)
-        return Response('Email Sent',status=status.HTTP_200_OK)
+        return Response({'message':'Email Sent'},status=status.HTTP_200_OK)
             
 class Reset(APIView):
     def post(self,request,token,format=None):
         if len(request.data['password'])<6:
-            return Response('Password must be at least 6 characters',status=status.HTTP_403_FORBIDDEN)
+            return Response({'error':'Password must be at least 6 characters'},status=status.HTTP_403_FORBIDDEN)
         if request.data['password']!= request.data['cpassword']:
-            return Response('Password and Confirm password must be the same',status=status.HTTP_403_FORBIDDEN)
+            return Response({'error':'Password and Confirm password must be the same'},status=status.HTTP_403_FORBIDDEN)
         token = ResetToken.objects.filter(token=token)
         if len(token)==0:
-            return Response('Invalid Token',status=status.HTTP_403_FORBIDDEN)
+            return Response({'error':'Invalid Token'},status=status.HTTP_403_FORBIDDEN)
         token = token[0]
         user = token.user
         user.set_password(request.data['password'])
         user.save()
         token.delete()
-        return Response('Password Changed',status=status.HTTP_200_OK)      
+        return Response({'message':'Password Changed'},status=status.HTTP_200_OK)      
 
 class GetAccountInfo(APIView):
     def get(self,request,format=None):
@@ -196,7 +196,7 @@ class CheckCoupon(APIView):
         if len(code)>0:
             return Response(list(code)[0],status=status.HTTP_200_OK)
         else:
-            return Response('Invalid Discount Code',status=status.HTTP_404_NOT_FOUND)
+            return Response({'error':'Invalid Discount Code'},status=status.HTTP_404_NOT_FOUND)
 
 
 

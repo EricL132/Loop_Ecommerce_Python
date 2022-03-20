@@ -26,6 +26,7 @@
     position: relative;
     overflow: auto;
     overscroll-behavior: contain;
+    transition: width 1s;
     animation: slideLeft .5s ease-in-out;
 }
 .slideRightAni{

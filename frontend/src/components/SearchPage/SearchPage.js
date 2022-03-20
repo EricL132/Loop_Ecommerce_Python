@@ -1,7 +1,6 @@
 import { useCallback, useEffect, useState } from "react"
 import "./SearchPage.css"
 import ProductsContainer from '../productsPage/productsContainer'
-import RightCartInfo from "../RightCartInfo/RightCartInfo"
 
 export default function SearchPage(){
     const [productsToShow, setProductsToShow] = useState()
@@ -46,7 +45,6 @@ export default function SearchPage(){
             <h1 className="search_header">Search: {window.location.search.split("=")[1]}</h1>
             <ProductsContainer productsToShow={productsToShow}></ProductsContainer>
         </div>
-        <RightCartInfo></RightCartInfo>
         </>
 
     )

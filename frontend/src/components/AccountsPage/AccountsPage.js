@@ -3,7 +3,6 @@ import "./AccountsPage.css"
 import { useHistory } from 'react-router'
 import { useDispatch, useSelector } from 'react-redux'
 import { LoggedIn } from '../../redux/actions/index'
-import RightCartInfo from "../RightCartInfo/RightCartInfo"
 import { Link } from "react-router-dom"
 export default function AccountPage() {
     const history = useHistory()
@@ -73,7 +72,7 @@ export default function AccountPage() {
                     </>
                     : null}
             </div>
-            <RightCartInfo></RightCartInfo>
+
         </>
     )
 }

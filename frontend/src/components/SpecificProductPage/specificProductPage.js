@@ -2,7 +2,6 @@ import { useEffect, useRef, useState } from "react"
 import { useDispatch } from 'react-redux'
 import addToCart from '../utils/addToCart'
 import './specificProductPage.css'
-import RightCartInfo from '../RightCartInfo/RightCartInfo'
 export default function SpecificProductPage() {
     const [product, setProduct] = useState()
     const [currentImage, setCurrentImage] = useState()
@@ -118,7 +117,6 @@ export default function SpecificProductPage() {
 
 
             </div>
-            <RightCartInfo></RightCartInfo>
         </>
     )
 }
