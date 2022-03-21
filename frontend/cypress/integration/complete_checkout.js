@@ -54,7 +54,7 @@ describe("complete checkout", () => {
         //go to home page
         cy.visit("http://localhost:3000");
         //go to mens page
-        cy.get("#nav-pages-container>button").eq(0).click();
+        cy.get("#nav-pages-container> a").eq(0).click();
         //click different shoe size
         cy.get(".product-size-container > span").eq(3).click();
         //add item to cart

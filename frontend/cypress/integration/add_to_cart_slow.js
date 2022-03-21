@@ -61,7 +61,7 @@ describe("add to cart slow", () => {
         //go to home page
         cy.visit("http://localhost:3000");
         //go to mens page
-        cy.get("#nav-pages-container>button").eq(0).click();
+        cy.get("#nav-pages-container > a").eq(0).click();
         //go to product page
         cy.get(".product_image").eq(1).click();
         //select size
@@ -81,7 +81,7 @@ describe("add to cart slow", () => {
             name: /close/i,
         }).click();
         //go to womens page
-        cy.get("#nav-pages-container>button").eq(1).click();
+        cy.get("#nav-pages-container > a").eq(1).click();
         //go to sunglasses category
         cy.get('li[name="sunglasses"]').should("be.visible").click({ force: true });
         cy.findByRole("heading", { name: /rb3016 clubmaster classic/i }).should("be.visible");
@@ -105,7 +105,7 @@ describe("add to cart slow", () => {
             name: /close/i,
         }).click();
         //go to kids page
-        cy.get("#nav-pages-container>button").eq(2).click();
+        cy.get("#nav-pages-container > a").eq(2).click();
         cy.get('li[name="socks"]').should("be.visible").click({ force: true });
         cy.get(".product-container").eq(0).click();
         cy.get(".size-container").eq(0).click();

@@ -107,7 +107,7 @@ describe("adding to cart quick", () => {
         //go to home page
         cy.visit("http://localhost:3000");
         //go to mens page
-        cy.get("#nav-pages-container>button").eq(0).click();
+        cy.get("#nav-pages-container > a").eq(0).click();
         //click different shoe size
         cy.get(".product-size-container > span").eq(3).click();
         //add item to cart
@@ -130,7 +130,7 @@ describe("adding to cart quick", () => {
             name: /close/i,
         }).click();
         //go to womens page
-        cy.get("#nav-pages-container>button").eq(1).click();
+        cy.get("#nav-pages-container > a").eq(1).click();
         //go to sweaters category
         cy.get('li[name="sweaters"]').should("be.visible").click({ force: true });
         cy.findByRole("heading", { name: /women's full\-zip fleece/i }).should("be.visible");
@@ -156,7 +156,7 @@ describe("adding to cart quick", () => {
             name: /close/i,
         }).click();
         //go to kids page
-        cy.get("#nav-pages-container>button").eq(2).click();
+        cy.get("#nav-pages-container > a").eq(2).click();
         //add to cart
         cy.get(".product-container")
             .eq(0)
