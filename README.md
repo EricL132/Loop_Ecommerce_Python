@@ -1,18 +1,69 @@
-# Ecommerse Platform
-#### Live demo on https://shop.erics.software/
-Site may take 30 seconds to render on first request due to free plan on hosting platform  
-## Home Page
-## ![](https://i.gyazo.com/fc61dba2add0f47ef5637975a754e5aa.png)
-## Products Page
-## ![](https://i.gyazo.com/b9c34b0af66b27d9eba4bfb8b962f85f.png)
-## Specific Product Page
-## ![](https://i.gyazo.com/aa57bd6d44aa21e72a7f4994a81bd2d9.png)
-## Account Page
-## ![](https://i.gyazo.com/62d832ffef05325558ac60cfb2fa4fe4.png)
-## Bag Info
-#### Can be accessed on any page
-## ![](https://i.gyazo.com/80d55b897ea47a93cd500157546a2cd4.png)
-## Checkout page
-## ![](https://i.gyazo.com/adcdbc61b21074907689b0ad9714f9f6.png)
-## Order Summary
-## ![](https://i.gyazo.com/187b1616afc9bbdfd9f3f0585a25ffb7.png)
+# Loops
+Web application developed to learn the workflow of an ecommerce platform
+# Live Demo 
+https://shop.erics.software/
+# Installation
+Clone the repository with the below command
+```
+git clone https://github.com/EricL132/Loop_Ecommerce_Python.git
+cd Loop_Ecommerce_Python
+```
+Create virtual environment for python
+```
+python -m venv env
+source env/Scripts/activate
+pip install -r requirements.txt
+```
+## Setup environment varibles
+Create .env file
+```
+cd . > .env
+```
+Contents of .env
+```
+WEBLINK=Link for reseting password example => https://domain.com/account/reset/
+SECRETKEY=Secret key for django applications => Used in settings.py, More info below
+DATABASE_PASSWORD=database password => Used in settings.py
+PAYPALCLIENT=Paypal client => More info below
+PAYPALSECRET=Paypal secret => More info below
+```
+## Secret Key
+Run command in terminal
+```
+python -c "import secrets; print(secrets.token_urlsafe())"
+```
+
+## Paypal Client & Secret
+Go to https://developer.paypal.com/ and login  
+Go to https://developer.paypal.com/developer/applications/create  
+After creating new app you should see client and secret key
+
+## Database
+Create postgres database  
+Change name of database in settings.py  
+Run below command to create database tables
+```
+python manage.py makemigrations
+```
+Fill in table with data  
+/api/models.py  
+api_product => Products  
+api_featured => Featured products on home screen
+## Starting Server
+```
+Python manage.py runserver
+```
+## Starting Client
+```
+cd frontend
+npm install
+npm start
+```
+
+# Technologies
+- JavaScript
+- Python
+- React
+- Django
+- Paypal-SDK
+- Google Cloud Platform

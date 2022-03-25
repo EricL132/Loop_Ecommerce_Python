@@ -47,7 +47,7 @@ function App() {
                 <Route path="*" component={NotFound}></Route>
             </Switch>
             <BottomMessage></BottomMessage>
-            {location.pathname!="/pages/checkout" && <RightCartInfo></RightCartInfo>}
+            {location.pathname != "/pages/checkout" && <RightCartInfo></RightCartInfo>}
         </Router>
     );
 }
