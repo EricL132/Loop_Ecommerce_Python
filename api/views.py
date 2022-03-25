@@ -52,13 +52,6 @@ class GetProduct(APIView):
                 i['images'] = newlist
         return Response(val)
 
-class PopulateOldWithProductID(APIView):
-    productExistCheck = Product.objects.filter()
-    for k in productExistCheck:
-        if k.productID == None:
-            k.productID = randomProductID()
-            k.save()
-    
 
 class GetFeatured(APIView):
     def get(self,request,format=None):
@@ -287,14 +280,18 @@ def checkAuth(token):
 def checkStock(data):
     allInStock = True
     for i in data:
-        product = Product.objects.filter(id=data[i].get("id")).values()
-        if data[i].get("quantity")==0 or data[i].get("quantity") >product[0].get("stock"):
-            data[i]["quantity"] = 0
-            allInStock = False
+        try:
+            product = Product.objects.filter(id=data[i].get("id")).values()
+            if data[i].get("quantity")==0 or data[i].get("quantity") > product[0].get("stock"):
+                data[i]["quantity"] = 0
+                allInStock = False
+        except IndexError:
+            return {"status": False}
     if allInStock==False:
         return {"status":allInStock,"cart":data}
     else:
         return {"status":allInStock}
+        
 def calculateTotal(cart,coupon):
     discount = False
     total = 0

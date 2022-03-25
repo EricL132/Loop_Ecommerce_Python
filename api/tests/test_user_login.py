@@ -3,6 +3,7 @@ from rest_framework import status
 from django.contrib.auth import authenticate
 from rest_framework.authtoken.models import Token
 
+# Test user login endpoint
 class UserLogin(APITestCase):
     def setUp(self):
         self.data = {'email':'applesgo123@ericliao.me','password':'random-password-123','fname':'Eric','lname':'Liao'}
@@ -16,9 +17,18 @@ class UserLogin(APITestCase):
         response = self.client.post('/api/login',self.data)
         user = authenticate(username=self.data['email'],password=self.data['password'])
         token = Token.objects.filter(user=user)[0]
-        self.assertEqul(self.client.session['auth'],token.key)
+        self.assertEqual(self.client.session['auth'],token.key)
         self.assertEqual(response.status_code,status.HTTP_200_OK)
     
+    #Test if user stays logged in or able to get user login status from account route
+    def test_user_stay_login(self):
+        self.client.post('/api/register',self.data)
+        response = self.client.post('/api/login',self.data)
+        responseLogged = self.client.get('/api/account')
+        self.assertEqual(response.status_code,status.HTTP_200_OK)
+        self.assertEqual(responseLogged.status_code,status.HTTP_200_OK)
+
+
     #Test user login with wrong email
     def test_user_login_wrong_email(self):
         #create user

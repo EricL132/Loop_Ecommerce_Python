@@ -4,6 +4,7 @@ from rest_framework import status
 from rest_framework.authtoken.models import Token
 from django.contrib.auth import authenticate
 
+# Test user create account endpoint
 class UserCreated(APITestCase):
     #Test if user is created with all correct info
     def test_create_user(self):
