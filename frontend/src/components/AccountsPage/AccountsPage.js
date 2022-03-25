@@ -27,7 +27,7 @@ export default function AccountPage() {
     }, []);
     return (
         <>
-            <div className="main account_mid_container">
+            <div className="account_mid_container">
                 <h1 className="account_header">
                     My Account
                     <button id="logout" onClick={logOut}>

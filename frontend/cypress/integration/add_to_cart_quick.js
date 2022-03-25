@@ -121,7 +121,6 @@ describe("adding to cart quick", () => {
             .its("store")
             .invoke("getState")
             .then((state) => {
-                console.log(state);
                 state.cartReducer.cart[0].stock = 1;
                 expect(state.bagCountReducer).to.be.a("number").and.equal(1);
                 expect(state.cartReducer.cart).to.be.a("object").and.to.deep.equal(cartObjects[0]);

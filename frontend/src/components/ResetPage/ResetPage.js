@@ -53,7 +53,7 @@ export default function ResetPage(props) {
         getToken()
     },[])
     return (
-        <div className="main">
+        <div>
 
 
             <form id="login_container" onChange={changeInfo}>

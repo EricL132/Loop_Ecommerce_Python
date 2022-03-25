@@ -41,7 +41,7 @@ export default function RegisterPage() {
         setFormInfo((prev) => ({ ...prev, [e.target.id]: e.target.value }));
     }
     return (
-        <div className="main">
+        <div >
             <div id="login_container">
                 <h1 id="login_h1">
                     Register{" "}

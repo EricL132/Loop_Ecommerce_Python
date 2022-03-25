@@ -25,7 +25,7 @@ export default function OrderSummary(props) {
             {
                 orderInfo ?
                 <>
-                    <div className="main mid-container order_mid">
+                    <div className="mid-container order_mid">
 
 
                         < h1 className="heading" > Order Summary</h1 >

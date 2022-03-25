@@ -8,9 +8,18 @@ export default function ProductsPage(props) {
     const [originalProducts, setOriginalProducts] = useState();
     const history = useHistory();
     const getProducts = useCallback(() => {
-        const currentType = location.pathname.split("/").filter((i) => i != "").length == 3 ? window.location.pathname.split("/").pop() : 'sneakers'
-
-
+        let currentType
+        switch(location.pathname.split("/").filter((i) => i != "").length){
+            case 3:
+                currentType = window.location.pathname.split("/").pop()
+                break
+            case 2:
+                currentType = 'sneakers'
+                break
+            default:
+                currentType = false
+        }
+        if(!currentType) history.push('/404')
         fetch(`/api/${props.typeOfPage}?type=${currentType}`)
             .then((res) => res.json())
             .then((data) => {
@@ -104,7 +113,7 @@ export default function ProductsPage(props) {
 
     return (
         <>
-            <div className="main mid-container products-page-mid">
+            <div className="mid-container products-page-mid">
                 <div className="list-container">
                     {props.typeOfPage === "men" ? (
                         <h1 className="section-header">Men</h1>

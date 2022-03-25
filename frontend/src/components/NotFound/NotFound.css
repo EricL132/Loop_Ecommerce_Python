@@ -1,0 +1,14 @@
+.not-found-background{
+    background-image: url('https://images.unsplash.com/photo-1609743522653-52354461eb27');
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+.not-found-container{
+    color: #eee;
+    padding: 10px 30px;
+}
+
+.not-found-container .message-text{
+    font-size: 1.5rem;
+}

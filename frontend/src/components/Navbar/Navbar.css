@@ -1,12 +1,11 @@
 header{
-    
     height: 60px;
     background-color: #121212;
     display: flex;
     align-items: center;
     width: 100%;
     justify-content: space-between;
-    position: fixed;
+    position: static;
     z-index: 100;
     top: 0;
 }

@@ -14,10 +14,8 @@ import ForgotPassword from "./components/FogotPassword/ForgotPassword";
 import ResetPage from "./components/ResetPage/ResetPage";
 import BottomMessage from "./components/BottomMessage/BottomMessage";
 import RightCartInfo from "./components/RightCartInfo/RightCartInfo";
-import { useEffect } from "react";
+import NotFound from "./components/NotFound/NotFound";
 function App() {
-  useEffect(()=>{
-  },[])
     return (
         <Router>
             <Navbar />
@@ -46,6 +44,7 @@ function App() {
                 <Route path="/order/:id" exact component={OrderSummary}></Route>
                 <Route path="/account/reset/:token" exact component={ResetPage}></Route>
                 <Route path="/" exact component={Home}></Route>
+                <Route path="*" component={NotFound}></Route>
             </Switch>
             <BottomMessage></BottomMessage>
             {location.pathname!="/pages/checkout" && <RightCartInfo></RightCartInfo>}

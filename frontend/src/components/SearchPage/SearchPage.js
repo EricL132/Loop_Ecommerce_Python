@@ -41,7 +41,7 @@ export default function SearchPage(){
     },[performSearch])
     return (
         <>
-        <div className="main mid-container" style={{maxWidth:"1750px"}}>
+        <div className="mid-container" style={{maxWidth:"1750px"}}>
             <h1 className="search_header">Search: {window.location.search.split("=")[1]}</h1>
             <ProductsContainer productsToShow={productsToShow}></ProductsContainer>
         </div>

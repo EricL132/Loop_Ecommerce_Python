@@ -37,9 +37,7 @@ export default function ForgotPassword() {
         setFormInfo((prev) => ({ ...prev, [e.target.id]: e.target.value }))
     }
     return (
-        <div className="main">
-
-
+        <div >
             <form id="login_container" onChange={changeInfo}>
 
                 <h1 id="login_h1">Forgot Password <Link to="/account/login"><button id="register">Login</button></Link></h1>

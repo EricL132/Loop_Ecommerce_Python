@@ -45,7 +45,7 @@ export default function LoginPage() {
         e.preventDefault();
     }
     return (
-        <div className="main">
+        <div >
             <div id="login_container">
                 <div className="login-header">
                     <h1 id="login_h1">

@@ -138,7 +138,7 @@ export default function CheckOutPage() {
     }
     return (
         <>
-            <div className="main mid-container checkout_mid">
+            <div className="mid-container checkout_mid">
                 <div className="right_side_container">
                     <div className="customer_info_container">
                         <h1 className="shipping_header">

@@ -1,13 +1,6 @@
 .products-page-mid {
     width: 1300px;
 }
-.mid-container {
-    left: 50%;
-    position: relative;
-    min-height: 800px;
-    transform: translateX(-50%);
-    overflow: auto;
-}
 
 .section-header {
     cursor: default;

@@ -8,6 +8,7 @@ html,
 
 :root {
     --error_red: rgb(210, 0, 0);
+    --dark_12: #121212;
 }
 
 * {
@@ -17,9 +18,23 @@ html,
 html {
     overflow-y: overlay;
 }
+
 .main {
-    margin-top: 60px;
+    height: calc(100vh - 60px);
 }
+.mid-container {
+    left: 50%;
+    position: relative;
+    min-height: 800px;
+    transform: translateX(-50%);
+    overflow: auto;
+}
+.flex-center {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
 .bottom_message {
     position: relative;
     width: 100%;
