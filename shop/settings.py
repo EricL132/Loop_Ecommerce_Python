@@ -27,7 +27,7 @@ SECRET_KEY = os.getenv("SECRETKEY")
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = ['.shop.erics.software','localhost','127.0.0.1']
+ALLOWED_HOSTS = ['.loop.ericliao.me','.shop.erics.software','localhost','127.0.0.1']
 
 
 # Application definition

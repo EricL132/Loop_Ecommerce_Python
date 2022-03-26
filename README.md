@@ -1,7 +1,7 @@
 # Loops
 Web application developed to learn the workflow of an ecommerce platform
 # Live Demo 
-https://shop.erics.software/
+https://loop.ericliao.me/
 # Installation
 Clone the repository with the below command
 ```
